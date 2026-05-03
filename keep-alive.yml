@@ -1,0 +1,15 @@
+name: Keep MyShop API Alive
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Daily at midnight UTC
+  workflow_dispatch:      # Manual trigger
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping MyShop API
+        run: |
+          curl -f https://emltechstudio-myshop-api.hf.space/ping || exit 1
+          echo "✓ MyShop API is awake"

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MyShop — Business Website Builder</title>
+<meta name="description" content="Professional business website in minutes. Simple, affordable, powerful."/>
+<link rel="manifest" href="/manifest.json"/><link rel="icon" href="/icon.svg"/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}:root{--primary:#2563eb;--light:#f0f4f8;--text:#1f2937;--muted:#6b7280;--border:#e5e7eb}
+body{background:#fff;color:var(--text);font-family:Outfit,sans-serif;line-height:1.6}
+nav{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid var(--border);padding:16px 24px;display:flex;justify-content:space-between;align-items:center}
+.logo{font-weight:700;color:var(--primary);font-size:1.1rem;text-decoration:none}
+.nav-cta{padding:10px 20px;background:var(--primary);color:#fff;border-radius:8px;font-weight:600;text-decoration:none;font-size:.85rem}
+
+.hero{min-height:85vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:80px 24px;background:linear-gradient(135deg,#f0f4f8 0%,#fff 100%)}
+h1{font-size:clamp(2rem,6vw,4rem);font-weight:700;line-height:1.1;margin-bottom:20px}
+.highlight{color:var(--primary)}
+.hero p{font-size:1rem;color:var(--muted);max-width:500px;margin:0 auto 40px;line-height:1.7}
+.buttons{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn{padding:12px 28px;border-radius:8px;font-weight:600;text-decoration:none;transition:all .2s;border:none;cursor:pointer;font-size:.95rem}
+.btn-primary{background:var(--primary);color:#fff;box-shadow:0 2px 8px rgba(37,99,235,.2)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(37,99,235,.3)}
+.btn-ghost{background:#fff;color:var(--primary);border:1.5px solid var(--primary)}
+.btn-ghost:hover{background:var(--light)}
+.note{margin-top:24px;font-size:.85rem;color:var(--muted)}
+
+.section{padding:80px 24px;max-width:900px;margin:0 auto}
+.section h2{font-size:clamp(1.6rem,4vw,2.6rem);font-weight:700;text-align:center;margin-bottom:48px;line-height:1.2}
+.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;margin-bottom:80px}
+.feature{padding:28px;border:1px solid var(--border);border-radius:12px;transition:all .3s;background:#fff}
+.feature:hover{border-color:var(--primary);box-shadow:0 4px 12px rgba(37,99,235,.1);transform:translateY(-4px)}
+.feature h3{font-weight:600;margin-bottom:8px;font-size:1rem}
+.feature p{color:var(--muted);font-size:.9rem}
+
+.steps{display:flex;flex-direction:column;gap:36px;margin-top:48px;max-width:700px;margin-left:auto;margin-right:auto}
+.step{display:flex;gap:24px;align-items:flex-start;text-align:left}
+.step-num{width:44px;height:44px;border-radius:50%;background:var(--primary);color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.step h3{font-weight:600;margin-bottom:4px}
+.step p{color:var(--muted);font-size:.9rem}
+
+.pricing{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:48px}
+.price-card{padding:32px;border:1px solid var(--border);border-radius:12px;background:#fff;position:relative}
+.price-card.featured{border:2px solid var(--primary);background:var(--light)}
+.price-card.featured::before{content:'Popular';position:absolute;top:12px;right:12px;background:var(--primary);color:#fff;font-size:.7rem;font-weight:700;padding:4px 12px;border-radius:4px}
+.price-flag{font-size:1.3rem;margin-bottom:8px}
+.price-label{font-weight:600;margin-bottom:2px}
+.price-region{color:var(--muted);font-size:.8rem;margin-bottom:16px}
+.price-amount{font-weight:700;font-size:2rem;color:var(--primary);margin-bottom:24px}
+.price-amount span{font-size:.9rem;color:var(--muted);font-weight:400}
+.perks{list-style:none;margin-bottom:24px}
+.perks li{padding:6px 0;border-bottom:1px solid var(--border);color:#555;font-size:.9rem}
+.perks li::before{content:'✓ ';color:var(--primary);font-weight:700}
+
+footer{padding:40px 24px;text-align:center;color:var(--muted);border-top:1px solid var(--border);background:#f9fafb)}
+footer a{color:var(--primary);text-decoration:none}
+
+@media(max-width:600px){.pricing{grid-template-columns:1fr}.price-card.featured::before{display:none}.buttons{flex-direction:column}.btn{width:100%;text-align:center}.step{gap:16px}.step-num{width:40px;height:40px;font-size:.9rem}}
+</style></head><body>
+
+<nav><a href="/" class="logo">MyShop</a><a href="/app" class="nav-cta">Get Started</a></nav>
+
+<section class="hero">
+<h1>Build your <span class="highlight">business website</span> in minutes</h1>
+<p>No code. No designer needed. Professional, fast, and made for Africa and beyond.</p>
+<div class="buttons"><a href="/app" class="btn btn-primary">Create Your Shop Free</a><a href="#how" class="btn btn-ghost">How It Works</a></div>
+<p class="note">₦1,500/month Nigeria · $5/month International</p>
+</section>
+
+<section class="section">
+<h2>Everything your business needs</h2>
+<div class="features">
+<div class="feature"><h3>Your Own Link</h3><p>Get myshop.afric.site/your-business. Easy to share on WhatsApp, Instagram, everywhere.</p></div>
+<div class="feature"><h3>AI-Powered Copy</h3><p>Tell us about your business. AI writes professional descriptions and taglines automatically.</p></div>
+<div class="feature"><h3>Your Brand Colors</h3><p>Choose your colors and upload your logo. Your page looks like your brand, not a template.</p></div>
+<div class="feature"><h3>Connect Your Catalog</h3><p>Link your WhatsApp catalog or Selar store. Customers buy directly from your page.</p></div>
+<div class="feature"><h3>Mobile First</h3><p>Built for African networks and devices. Fast, simple, works everywhere.</p></div>
+<div class="feature"><h3>See Your Visitors</h3><p>Track how many people visited your shop each month. Simple analytics, no confusion.</p></div>
+</div>
+</section>
+
+<section class="section" id="how">
+<h2>How It Works</h2>
+<div class="steps">
+<div class="step"><div class="step-num">1</div><div><h3>Tell Us About Your Business</h3><p>Fill in your name, description, logo, social links. Our AI improves your copy automatically.</p></div></div>
+<div class="step"><div class="step-num">2</div><div><h3>Preview Your Shop</h3><p>See exactly how your page looks. Edit anything you want before going live.</p></div></div>
+<div class="step"><div class="step-num">3</div><div><h3>Activate & Share</h3><p>Pay monthly subscription. Your link goes live instantly. Start getting customers.</p></div></div>
+</div>
+</section>
+
+<section class="section">
+<h2>Simple Monthly Pricing</h2>
+<div class="pricing">
+<div class="price-card"><div class="price-flag">🇳🇬</div><div class="price-label">Nigerian Businesses</div><div class="price-region">Billed in Naira</div><div class="price-amount">₦1,500 <span>/ month</span></div><ul class="perks"><li>Your business link</li><li>AI copywriting</li><li>Logo & brand colors</li><li>Catalog integration</li><li>Visitor analytics</li><li>Free preview</li></ul><a href="/app" class="btn btn-primary" style="width:100%">Start Now</a></div>
+<div class="price-card featured"><div class="price-flag">🌍</div><div class="price-label">International Businesses</div><div class="price-region">Billed in USD</div><div class="price-amount">$5 <span>/ month</span></div><ul class="perks"><li>Your business link</li><li>AI copywriting</li><li>Logo & brand colors</li><li>Catalog integration</li><li>Visitor analytics</li><li>Free preview</li></ul><a href="/app" class="btn btn-primary" style="width:100%">Start Now</a></div>
+</div>
+</section>
+
+<footer>
+<p style="margin-bottom:12px;font-weight:500">MyShop by <a href="https://emltechstudio.site" target="_blank">EML Tech Studio</a></p>
+<p style="font-size:.85rem"><a href="https://myshop.afric.site">Dashboard</a> · <a href="/install">Install App</a> · <a href="https://emltechstudio.site">About</a></p>
+<p style="margin-top:12px;color:#999;font-size:.8rem">© 2026 EML Tech Studio</p>
+</footer>
+
+<script>if('serviceWorker'in navigator)navigator.serviceWorker.register('/sw.js');</script>
+</body></html>

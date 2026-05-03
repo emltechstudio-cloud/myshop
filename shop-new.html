@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Shop</title>
+<link rel="manifest" href="/manifest.json"/><link rel="icon" href="/icon.svg"/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}:root{--primary:#000;--secondary:#fff;--text:#1f2937;--muted:#6b7280}
+body{font-family:Outfit,sans-serif;background:#fff;color:var(--text);line-height:1.6}
+
+.loading{min-height:100vh;display:flex;align-items:center;justify-content:center;background:#f9fafb;color:var(--muted);font-size:.9rem}
+
+.hero{min-height:50vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px;text-align:center;position:relative}
+.hero-logo{width:120px;height:120px;border-radius:12px;object-fit:cover;margin-bottom:20px;box-shadow:0 4px 12px rgba(0,0,0,.1)}
+.hero h1{font-weight:700;font-size:clamp(1.6rem,5vw,2.8rem);line-height:1.1;margin-bottom:8px;color:var(--text)}
+.hero .tagline{font-size:.95rem;color:var(--muted);margin-bottom:12px}
+.hero .location{font-size:.85rem;color:#999}
+
+.section{padding:40px 20px;max-width:600px;margin:0 auto}
+.section p{color:var(--muted);line-height:1.8;margin-bottom:12px}
+
+.contacts{display:flex;flex-wrap:wrap;gap:10px;padding:24px 20px;justify-content:center;max-width:600px;margin:20px auto 0}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 18px;border-radius:8px;border:1px solid #e5e7eb;color:#1f2937;text-decoration:none;font-size:.85rem;font-weight:500;transition:all .2s;cursor:pointer}
+.btn:hover{transform:translateY(-2px);box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.btn.whatsapp{background:rgba(37,211,102,.08);border-color:rgba(37,211,102,.3);color:#25d366}
+.btn.phone{background:rgba(59,130,246,.08);border-color:rgba(59,130,246,.3);color:#3b82f6}
+.btn.facebook{background:rgba(59,89,152,.08);border-color:rgba(59,89,152,.3);color:#3b5998}
+.btn.instagram{background:rgba(217,119,6,.08);border-color:rgba(217,119,6,.3);color:#d97706}
+.btn.tiktok{background:rgba(0,0,0,.08);border-color:rgba(0,0,0,.3);color:#000}
+.btn.catalog{background:rgba(168,85,247,.08);border-color:rgba(168,85,247,.3);color:#a855f7}
+
+footer{padding:32px 20px;text-align:center;color:#999;font-size:.8rem;border-top:1px solid#e5e7eb;background:#f9fafb}
+footer a{color:#666;text-decoration:none}
+footer a:hover{color:#000}
+
+.error-box{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center}
+.error-box h1{font-size:2.5rem;font-weight:700;color:#dc2626;margin-bottom:12px}
+.error-box p{color:var(--muted);margin-bottom:20px}
+.error-box a{display:inline-block;padding:11px 24px;background:#2563eb;color:#fff;text-decoration:none;border-radius:8px;font-weight:600;font-size:.85rem}
+
+@media(max-width:600px){.contacts{gap:8px}.btn{font-size:.8rem;padding:9px 14px}.hero-logo{width:100px;height:100px}}
+</style></head><body>
+
+<div class="loading" id="loading">Finding your shop...</div>
+
+<div id="shopContainer" style="display:none">
+<div class="hero" id="heroSection">
+<img id="shopLogo" class="hero-logo" alt="Logo" style="display:none"/>
+<h1 id="shopName"></h1>
+<div class="tagline" id="shopTagline"></div>
+<div class="location" id="shopLocation"></div>
+</div>
+
+<div class="section"><p id="shopDesc"></p></div>
+
+<div class="contacts" id="contactsBar"></div>
+
+<footer>
+<p style="margin-bottom:8px">Powered by <strong>MyShop</strong> · <a href="https://emltechstudio.site" target="_blank">EML Tech Studio</a></p>
+<p><a href="https://myshop.afric.site" target="_blank">Create your shop on MyShop →</a></p>
+</footer>
+</div>
+
+<div id="errorContainer" style="display:none">
+<div class="error-box">
+<h1>404</h1>
+<p>This shop doesn't exist or hasn't been activated.</p>
+<a href="https://myshop.afric.site">← Back to MyShop</a>
+</div>
+</div>
+
+<script>
+const API='https://emltechstudio-myshop-api.hf.space';
+
+async function loadShop(){
+  let slug=window.location.pathname.split('/').filter(Boolean).pop()||'';
+  if(!slug){showError();return}
+  try{
+    const r=await fetch(`${API}/shop/live/${slug}`);
+    if(!r.ok){showError();return}
+    const d=await r.json();renderShop(d);
+  }catch(e){showError()}
+}
+
+function renderShop(d){
+  const sj=d.shop_json||{};const p=sj.brand_colors?.primary||'#000';const s=sj.brand_colors?.secondary||'#fff';
+  document.documentElement.style.setProperty('--primary',p);document.documentElement.style.setProperty('--secondary',s);
+  const rgb=p.slice(1);const r=parseInt(rgb.slice(0,2),16);const g=parseInt(rgb.slice(2,4),16);const b=parseInt(rgb.slice(4,6),16);
+  const bright=(r*299+g*587+b*114)/1000;document.documentElement.style.setProperty('--text',bright>128?'#000':'#fff');
+
+  document.getElementById('heroSection').style.background=s;if(sj.logo_url){document.getElementById('shopLogo').src=sj.logo_url;document.getElementById('shopLogo').style.display='block'}
+  document.getElementById('shopName').textContent=sj.business_name||'Welcome';document.getElementById('shopTagline').textContent=sj.tagline||'';document.getElementById('shopLocation').textContent=sj.location||'';
+  document.getElementById('shopDesc').textContent=sj.description||'';
+
+  const socials=sj.socials||{};const cb=document.getElementById('contactsBar');cb.innerHTML='';
+  if(sj.phone){const tel=sj.phone.replace(/\D/g,'');const link=sj.phone.startsWith('+')?`tel:${sj.phone}`:`tel:+${tel}`;cb.innerHTML+=`<a href="${link}" class="btn phone">☎️ Call</a>`}
+  if(socials.whatsapp){cb.innerHTML+=`<a href="${socials.whatsapp}" target="_blank" class="btn whatsapp">💬 WhatsApp</a>`}
+  if(socials.facebook){cb.innerHTML+=`<a href="${socials.facebook}" target="_blank" class="btn facebook">f Facebook</a>`}
+  if(socials.instagram){cb.innerHTML+=`<a href="${socials.instagram}" target="_blank" class="btn instagram">📷 Insta</a>`}
+  if(socials.tiktok){cb.innerHTML+=`<a href="${socials.tiktok}" target="_blank" class="btn tiktok">♪ TikTok</a>`}
+  if(sj.catalog_url){cb.innerHTML+=`<a href="${sj.catalog_url}" target="_blank" class="btn catalog">🛍️ Shop</a>`}
+  if(sj.email){cb.innerHTML+=`<a href="mailto:${sj.email}" class="btn phone">✉️ Email</a>`}
+
+  document.title=`${sj.business_name}`;
+  document.getElementById('loading').style.display='none';document.getElementById('shopContainer').style.display='block';
+}
+
+function showError(){document.getElementById('loading').style.display='none';document.getElementById('errorContainer').style.display='block'}
+
+loadShop();
+</script>
+</body>
+</html>
