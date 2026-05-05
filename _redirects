@@ -1,6 +1,30 @@
-# Netlify redirects for SPA
-/shop/*    /shop.html    200
-/app/*     /app.html     200
-/referral/* /referral.html 200
-/install   /install.html 200
-/*         /index.html   200
+# Netlify redirects - MUST be first line
+# Shop pages: /shopname -> shop.html (shop.html reads slug from path)
+/shop.html?slug=*    /shop.html?slug=:splat    200
+
+# Direct shop access: /shopname (no .html) -> shop.html
+# This is the KEY redirect - any path that looks like a shop slug
+# We use a 200 rewrite so shop.html can read the original URL path
+
+# Specific known pages first (exact matches)
+/              /index.html    200
+/index.html    /index.html    200
+/app.html      /app.html      200
+/install.html  /install.html  200
+/referral.html /referral.html 200
+/404.html      /404.html      200
+/manifest.json /manifest.json 200
+/sw.js         /sw.js         200
+/icon.svg      /icon.svg      200
+/apple-touch-icon.png  /apple-touch-icon.png  200
+
+# Shop demo via query param
+/shop.html     /shop.html     200
+
+# Any single-segment path that is NOT a file -> treat as shop slug
+# This catches /mystore, /johns-shop, etc.
+# The 200 rewrite keeps the URL in browser, shop.html reads the path
+/:slug         /shop.html     200
+
+# Fallback for everything else
+/*             /index.html    200
