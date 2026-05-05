@@ -98,7 +98,7 @@
             cursor: pointer;
         }
 
-        /* ===== HERO / HEADER ===== */
+        /* ===== HERO ===== */
         .hero {
             padding: 120px 24px 60px;
             text-align: center;
@@ -245,7 +245,7 @@
         }
         .about-meta i { color: var(--brand); }
 
-        /* ===== PRODUCTS / CATALOG ===== */
+        /* ===== PRODUCTS ===== */
         .products-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -323,6 +323,46 @@
         .catalog-fallback p {
             color: #a16207;
             margin-bottom: 20px;
+        }
+
+        /* ===== WHATSAPP CATALOG CTA ===== */
+        .wa-catalog-cta {
+            background: linear-gradient(135deg, #25d366, #128c7e);
+            color: white;
+            padding: 32px;
+            border-radius: 20px;
+            text-align: center;
+            margin-top: 24px;
+        }
+        .wa-catalog-cta h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .wa-catalog-cta p {
+            opacity: 0.9;
+            margin-bottom: 16px;
+            font-size: 0.95rem;
+        }
+        .wa-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: white;
+            color: #128c7e;
+            padding: 14px 28px;
+            border-radius: 50px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .wa-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
         }
 
         /* ===== SOCIAL LINKS ===== */
@@ -609,6 +649,11 @@
                 };
             }
 
+            function isWhatsAppUrl(url) {
+                if (!url) return false;
+                return url.includes('wa.me') || url.includes('whatsapp.com') || url.includes('api.whatsapp');
+            }
+
             function renderShop(shop) {
                 const json = shop.shop_json || shop;
                 const primary = json.brand_colors?.primary || '#1e40af';
@@ -620,7 +665,12 @@
                 const waMsg = encodeURIComponent('Hi ' + (json.business_name || 'there') + ', I found your shop on MyShop and I\'m interested in your products.');
                 const waLink = waNum ? 'https://wa.me/' + waNum + '?text=' + waMsg : '#';
 
-                // Build nav links based on what sections exist
+                // Check if catalog is WhatsApp (cannot iframe)
+                const hasCatalog = !!json.catalog_url;
+                const isWACatalog = isWhatsAppUrl(json.catalog_url);
+                const hasRealCatalog = hasCatalog && !isWACatalog;
+
+                // Build nav links
                 let navLinks = '';
                 if (json.description) navLinks += '<a href="#about">About</a>';
                 navLinks += '<a href="#catalog">Catalog</a>';
@@ -639,11 +689,11 @@
                     sections += '</div></div></section>';
                 }
 
-                // CATALOG / PRODUCTS
+                // CATALOG
                 sections += '<section class="section" id="catalog"><div class="section-title fade-in"><i class="fa-solid fa-bag-shopping"></i> Catalog <div class="line"></div></div>';
 
                 if (slug === 'demo') {
-                    // Show fake products for demo
+                    // Demo: show fake products
                     sections += '<div class="products-grid">';
                     const demoProducts = [
                         { name: "Silk Evening Dress", price: "₦45,000", emoji: "👗", badge: "Best Seller" },
@@ -654,25 +704,26 @@
                         { name: "Wrist Watch", price: "₦55,000", emoji: "⌚", badge: "Premium" }
                     ];
                     demoProducts.forEach(function(p, i) {
-                        sections += '<a href="#" class="product-card fade-in" style="animation-delay:' + (i * 0.1) + 's"><div class="product-img">' + p.emoji + '</div><div class="product-info"><div class="product-name">' + p.name + '</div><div class="product-price">' + p.price + '</div>' + (p.badge ? '<span class="product-badge">' + p.badge + '</span>' : '') + '</div></a>';
+                        sections += '<div class="product-card fade-in" style="animation-delay:' + (i * 0.1) + 's"><div class="product-img">' + p.emoji + '</div><div class="product-info"><div class="product-name">' + p.name + '</div><div class="product-price">' + p.price + '</div>' + (p.badge ? '<span class="product-badge">' + p.badge + '</span>' : '') + '</div></div>';
                     });
                     sections += '</div>';
-
-                    // WhatsApp catalog CTA
                     if (waNum) {
-                        sections += '<div style="text-align:center;margin-top:32px;"><a href="' + waLink + '" target="_blank" class="action-btn whatsapp" style="display:inline-flex;"><i class="fa-brands fa-whatsapp"></i> Browse Full Catalog on WhatsApp</a></div>';
+                        sections += '<div style="text-align:center;margin-top:32px;"><a href="' + waLink + '" target="_blank" rel="noopener noreferrer" class="action-btn whatsapp" style="display:inline-flex;"><i class="fa-brands fa-whatsapp"></i> Order on WhatsApp</a></div>';
                     }
-                } else if (json.catalog_url) {
-                    // Real shop: embed their catalog
+                } else if (hasRealCatalog) {
+                    // Real embeddable catalog (Selar, Shopify)
                     sections += '<iframe src="' + json.catalog_url + '" class="catalog-frame fade-in" title="Catalog"></iframe>';
                     if (waNum) {
-                        sections += '<div style="text-align:center;margin-top:24px;"><a href="' + waLink + '" target="_blank" class="action-btn whatsapp" style="display:inline-flex;"><i class="fa-brands fa-whatsapp"></i> Also Available on WhatsApp Catalog</a></div>';
+                        sections += '<div style="text-align:center;margin-top:24px;"><a href="' + waLink + '" target="_blank" rel="noopener noreferrer" class="action-btn whatsapp" style="display:inline-flex;"><i class="fa-brands fa-whatsapp"></i> Also Available on WhatsApp</a></div>';
                     }
+                } else if (isWACatalog) {
+                    // WhatsApp catalog - cannot iframe, show CTA
+                    sections += '<div class="catalog-fallback fade-in"><h3><i class="fa-brands fa-whatsapp"></i> WhatsApp Catalog</h3><p>This seller\'s catalog is on WhatsApp. Tap below to browse and order directly.</p><a href="' + json.catalog_url + '" target="_blank" rel="noopener noreferrer" class="wa-btn"><i class="fa-brands fa-whatsapp"></i> View Catalog on WhatsApp</a></div>';
                 } else {
                     // No catalog at all
                     sections += '<div class="catalog-fallback fade-in"><h3><i class="fa-solid fa-store"></i> Catalog Coming Soon</h3><p>This seller is setting up their catalog. Reach out directly to place an order.</p>';
                     if (waNum) {
-                        sections += '<a href="' + waLink + '" target="_blank" class="action-btn whatsapp" style="display:inline-flex;"><i class="fa-brands fa-whatsapp"></i> Order via WhatsApp</a>';
+                        sections += '<a href="' + waLink + '" target="_blank" rel="noopener noreferrer" class="wa-btn"><i class="fa-brands fa-whatsapp"></i> Order via WhatsApp</a>';
                     }
                     sections += '</div>';
                 }
@@ -725,7 +776,7 @@
                 html += '</div></header>';
 
                 html += '<div class="quick-actions">';
-                if (json.catalog_url || slug === 'demo') {
+                if (hasRealCatalog || slug === 'demo') {
                     html += '<a href="#catalog" class="action-btn primary"><i class="fa-solid fa-bag-shopping"></i> Browse Catalog</a>';
                 }
                 if (waNum) {

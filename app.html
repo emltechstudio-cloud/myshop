@@ -9,7 +9,7 @@
     <link rel="icon" type="image/svg+xml" href="/icon.svg">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         *{margin:0;padding:0;box-sizing:border-box;}
         :root{
@@ -20,8 +20,6 @@
         }
         body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh;}
         .container{max-width:960px;margin:0 auto;padding:24px;}
-
-        /* Cards */
         .card{background:var(--card);border-radius:24px;padding:32px;box-shadow:var(--shadow);border:1px solid var(--border);margin-bottom:20px;}
         .card-narrow{max-width:520px;margin:40px auto;}
         h1{font-size:1.8rem;font-weight:800;margin-bottom:6px;color:var(--brand-dark);}
@@ -38,6 +36,14 @@
         .input-group{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
         @media(max-width:640px){.input-group{grid-template-columns:1fr;}}
 
+        /* Password toggle */
+        .password-wrap{position:relative;}
+        .password-wrap input{padding-right:44px;}
+        .password-toggle{
+            position:absolute;right:12px;top:12px;background:none;border:none;
+            color:var(--text2);cursor:pointer;font-size:1.1rem;padding:4px;
+        }
+
         /* Buttons */
         .btn{
             width:100%;padding:14px;background:var(--brand);color:white;font-weight:700;
@@ -50,7 +56,6 @@
         .btn-outline:hover{background:var(--brand);color:white;}
         .btn-success{background:var(--success);}
         .btn-success:hover{background:#15803d;}
-        .btn-danger{background:var(--danger);}
         .btn-sm{padding:10px 20px;font-size:.9rem;width:auto;}
         .btn-group{display:flex;gap:12px;}
         .btn-group .btn{flex:1;}
@@ -84,32 +89,38 @@
         .stat-card{background:linear-gradient(135deg,var(--brand-dark),var(--brand));color:white;padding:24px;border-radius:16px;text-align:center;}
         .stat-card h3{font-size:2rem;font-weight:900;}
         .stat-card p{font-size:.9rem;opacity:.85;margin-top:4px;}
-        .stat-card.stars{background:linear-gradient(135deg,#f59e0b,#d97706);}
-        .stat-card.referrals{background:linear-gradient(135deg,#10b981,#059669);}
 
         /* Preview iframe */
         .preview-frame{width:100%;height:560px;border:1px solid var(--border);border-radius:16px;background:white;}
+
+        /* Logo upload */
+        .logo-upload-area{
+            border:2px dashed var(--border);border-radius:16px;padding:32px;
+            text-align:center;cursor:pointer;transition:all .2s;margin-bottom:14px;
+            background:#f8fafc;
+        }
+        .logo-upload-area:hover{border-color:var(--brand-light);background:#eff6ff;}
+        .logo-upload-area.has-image{border-style:solid;border-color:var(--success);background:#f0fdf4;}
+        .logo-preview-img{width:100px;height:100px;border-radius:20px;object-fit:cover;border:2px solid var(--border);margin-bottom:8px;}
+        .logo-upload-text{color:var(--text2);font-size:.9rem;}
+        .logo-upload-text i{font-size:1.5rem;color:var(--brand);margin-bottom:8px;display:block;}
+        #logo-file-input{display:none;}
 
         /* Social inputs */
         .social-input{position:relative;}
         .social-input i{position:absolute;left:14px;top:14px;color:var(--text2);font-size:1rem;}
         .social-input input{padding-left:40px;}
 
-        /* Referral card */
-        .referral-card{background:linear-gradient(135deg,#fef3c7,#fde68a);padding:24px;border-radius:16px;text-align:center;margin-bottom:20px;}
-        .referral-card h3{font-size:1.2rem;font-weight:700;color:#92400e;margin-bottom:8px;}
-        .referral-code{display:inline-block;background:white;padding:12px 28px;border-radius:12px;font-family:monospace;font-size:1.3rem;font-weight:700;color:var(--text);letter-spacing:1px;border:2px dashed #f59e0b;margin:8px 0;}
-        .stars-info{background:#fffbeb;padding:16px;border-radius:12px;border:1px solid #fde68a;margin-top:16px;}
-        .stars-info h4{color:#92400e;margin-bottom:6px;}
-        .stars-info ul{list-style:none;padding:0;font-size:.9rem;color:#78350f;}
-        .stars-info li{padding:4px 0;display:flex;align-items:center;gap:8px;}
-
         /* Activation */
-        .price-tag{font-size:2.5rem;font-weight:900;color:var(--brand);text-align:center;margin:16px 0;}
-        .price-tag span{font-size:1rem;font-weight:400;color:var(--text2);}
-        .plan-card{background:var(--card);padding:28px;border-radius:20px;border:2px solid var(--border);text-align:center;margin-bottom:16px;transition:all .2s;}
+        .plan-card{background:var(--card);padding:32px;border-radius:20px;border:2px solid var(--border);text-align:center;margin-bottom:16px;transition:all .2s;}
         .plan-card:hover{border-color:var(--brand-light);transform:translateY(-2px);}
         .plan-card.featured{border-color:var(--brand-light);background:linear-gradient(135deg,#eff6ff,#ffffff);}
+        .plan-flag{font-size:2rem;margin-bottom:4px;}
+        .plan-name{font-size:1.2rem;font-weight:700;margin-bottom:4px;}
+        .plan-price{font-size:2.5rem;font-weight:900;color:var(--brand);margin:12px 0;}
+        .plan-price span{font-size:1rem;font-weight:400;color:var(--text2);}
+        .plan-desc{color:var(--text2);font-size:.9rem;margin-bottom:16px;}
+        .plan-note{background:#fef3c7;padding:12px;border-radius:10px;font-size:.85rem;color:#92400e;margin-top:12px;}
 
         /* Edit form sections */
         .form-section{margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--border);}
@@ -152,7 +163,10 @@
         <label>Email</label>
         <input type="email" id="login-email" placeholder="you@example.com">
         <label>Password</label>
-        <input type="password" id="login-password" placeholder="••••••••">
+        <div class="password-wrap">
+            <input type="password" id="login-password" placeholder="••••••••">
+            <button type="button" class="password-toggle" onclick="togglePassword('login-password',this)"><i class="fa-solid fa-eye"></i></button>
+        </div>
         <button class="btn" onclick="login()" id="login-btn"><i class="fa-solid fa-arrow-right"></i> Sign In</button>
         <p style="text-align:center;margin-top:16px;font-size:.9rem;color:var(--text2);">
             <a href="#" onclick="showRegister()" style="color:var(--brand);text-decoration:none;font-weight:600;">Create a shop</a> · 
@@ -175,7 +189,10 @@
         <div id="recovery-step2" class="hidden">
             <div id="rec-questions"></div>
             <label>New Password</label>
-            <input type="password" id="rec-new-password" placeholder="Min 6 characters">
+            <div class="password-wrap">
+                <input type="password" id="rec-new-password" placeholder="Min 6 characters">
+                <button type="button" class="password-toggle" onclick="togglePassword('rec-new-password',this)"><i class="fa-solid fa-eye"></i></button>
+            </div>
             <div class="btn-group">
                 <button class="btn btn-outline" onclick="showLogin()">Back</button>
                 <button class="btn" onclick="resetPassword()"><i class="fa-solid fa-rotate"></i> Reset Password</button>
@@ -243,40 +260,34 @@
             <button class="btn" onclick="nextStep(2)">Continue <i class="fa-solid fa-arrow-right"></i></button>
         </div>
 
-        <!-- Step 2: Branding & Socials -->
+        <!-- Step 2: Logo + Branding + Socials + Catalog -->
         <div id="step2" class="hidden">
             <div class="form-section">
-                <h3><i class="fa-solid fa-image"></i> Logo</h3>
-                <input type="file" id="logo-file" accept="image/*" onchange="uploadLogo()">
-                <div id="logo-preview-container" style="text-align:center;display:none;margin-bottom:14px;">
-                    <img id="logo-preview-img" style="width:100px;height:100px;border-radius:20px;object-fit:cover;border:2px solid var(--border);" src="" alt="Logo Preview">
-                    <p id="logo-status" style="font-size:.85rem;color:var(--success);margin-top:6px;"></p>
+                <h3><i class="fa-solid fa-image"></i> Your Logo</h3>
+                <div class="logo-upload-area" id="logo-upload-area" onclick="document.getElementById('logo-file-input').click()">
+                    <div id="logo-upload-content">
+                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                        <div class="logo-upload-text">Click to upload your logo</div>
+                        <div style="font-size:.8rem;color:var(--text3);margin-top:4px;">JPG, PNG, SVG — max 2MB</div>
+                    </div>
+                    <img id="logo-preview-img" class="logo-preview-img hidden" src="" alt="Logo preview">
+                    <div id="logo-status" style="font-size:.85rem;color:var(--success);margin-top:8px;display:none;"></div>
                 </div>
+                <input type="file" id="logo-file-input" accept="image/*" onchange="uploadLogo()">
                 <input type="hidden" id="reg-logo-url" value="">
             </div>
             <div class="form-section">
                 <h3><i class="fa-solid fa-store"></i> Catalog</h3>
                 <label>Catalog URL (Selar, Shopify, etc.)</label>
-                <input type="url" id="reg-catalog" placeholder="https://selar.co/...">
+                <input type="url" id="reg-catalog" placeholder="https://selar.co/your-store">
+                <p style="font-size:.8rem;color:var(--text2);margin-top:-10px;margin-bottom:14px;">Leave empty if you only sell via WhatsApp</p>
             </div>
             <div class="form-section">
                 <h3><i class="fa-solid fa-share-nodes"></i> Social Media</h3>
-                <div class="social-input">
-                    <i class="fa-brands fa-facebook-f"></i>
-                    <input type="url" id="reg-fb" placeholder="facebook.com/yourpage">
-                </div>
-                <div class="social-input">
-                    <i class="fa-brands fa-instagram"></i>
-                    <input type="url" id="reg-ig" placeholder="instagram.com/yourhandle">
-                </div>
-                <div class="social-input">
-                    <i class="fa-brands fa-tiktok"></i>
-                    <input type="url" id="reg-tt" placeholder="tiktok.com/@yourhandle">
-                </div>
-                <div class="social-input">
-                    <i class="fa-brands fa-x-twitter"></i>
-                    <input type="url" id="reg-tw" placeholder="x.com/yourhandle">
-                </div>
+                <div class="social-input"><i class="fa-brands fa-facebook-f"></i><input type="url" id="reg-fb" placeholder="facebook.com/yourpage"></div>
+                <div class="social-input"><i class="fa-brands fa-instagram"></i><input type="url" id="reg-ig" placeholder="instagram.com/yourhandle"></div>
+                <div class="social-input"><i class="fa-brands fa-tiktok"></i><input type="url" id="reg-tt" placeholder="tiktok.com/@yourhandle"></div>
+                <div class="social-input"><i class="fa-brands fa-x-twitter"></i><input type="url" id="reg-tw" placeholder="x.com/yourhandle"></div>
             </div>
             <div class="btn-group">
                 <button class="btn btn-outline" onclick="prevStep(1)"><i class="fa-solid fa-arrow-left"></i> Back</button>
@@ -284,18 +295,26 @@
             </div>
         </div>
 
-        <!-- Step 3: Security -->
+        <!-- Step 3: Password -->
         <div id="step3" class="hidden">
             <div class="form-section">
                 <h3><i class="fa-solid fa-lock"></i> Create Password</h3>
                 <label>Password *</label>
-                <input type="password" id="reg-password" placeholder="Min 6 characters">
+                <div class="password-wrap">
+                    <input type="password" id="reg-password" placeholder="Min 6 characters">
+                    <button type="button" class="password-toggle" onclick="togglePassword('reg-password',this)"><i class="fa-solid fa-eye"></i></button>
+                </div>
+                <label>Confirm Password *</label>
+                <div class="password-wrap">
+                    <input type="password" id="reg-password-confirm" placeholder="Type again">
+                    <button type="button" class="password-toggle" onclick="togglePassword('reg-password-confirm',this)"><i class="fa-solid fa-eye"></i></button>
+                </div>
             </div>
             <div class="form-section">
                 <h3><i class="fa-solid fa-gift"></i> Referral (Optional)</h3>
                 <label>Who referred you?</label>
                 <input type="text" id="reg-ref" placeholder="REF-XXXX or friend's code">
-                <p style="font-size:.85rem;color:var(--text2);margin-top:-8px;">If someone shared MyShop with you, enter their code. They'll earn Stars!</p>
+                <p style="font-size:.85rem;color:var(--text2);margin-top:-8px;">If someone shared MyShop with you, enter their code.</p>
             </div>
             <div class="btn-group">
                 <button class="btn btn-outline" onclick="prevStep(2)"><i class="fa-solid fa-arrow-left"></i> Back</button>
@@ -347,7 +366,6 @@
                 <div class="tab" onclick="switchTab('edit',this)">Edit</div>
                 <div class="tab" onclick="switchTab('activate',this)">Activate</div>
                 <div class="tab" onclick="switchTab('referrals',this)">Referrals</div>
-                <div class="tab" onclick="switchTab('stars',this)">⭐ Stars</div>
             </div>
 
             <div id="tab-content"></div>
@@ -363,6 +381,19 @@ let currentStep = 1;
 let uploadedLogoUrl = '';
 let shopData = null;
 let recoveryQuestions = [];
+
+// Password toggle
+window.togglePassword = function(inputId, btn) {
+    const input = document.getElementById(inputId);
+    const icon = btn.querySelector('i');
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.className = 'fa-solid fa-eye-slash';
+    } else {
+        input.type = 'password';
+        icon.className = 'fa-solid fa-eye';
+    }
+};
 
 // Screen management
 function hideAll(){
@@ -398,23 +429,48 @@ function showMsg(id, text, type='error'){
 
 // Logo upload
 async function uploadLogo(){
-    const fileInput = document.getElementById('logo-file');
+    const fileInput = document.getElementById('logo-file-input');
     const file = fileInput.files[0];
     if(!file) return;
+
+    // Preview immediately
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const img = document.getElementById('logo-preview-img');
+        img.src = e.target.result;
+        img.classList.remove('hidden');
+        document.getElementById('logo-upload-content').classList.add('hidden');
+        document.getElementById('logo-upload-area').classList.add('has-image');
+    };
+    reader.readAsDataURL(file);
+
     const email = document.getElementById('reg-email').value.trim();
-    if(!email){ showMsg('reg-msg','Please enter your email first (Step 1)','error'); fileInput.value=''; return; }
+    if(!email){ 
+        showMsg('reg-msg','Please enter your email first (Step 1)','error'); 
+        fileInput.value=''; 
+        return; 
+    }
+
     const formData = new FormData();
     formData.append('file', file);
+
+    const statusEl = document.getElementById('logo-status');
+    statusEl.textContent = 'Uploading...';
+    statusEl.style.display = 'block';
+
     try{
-        const res = await fetch(`${API}/shop/upload`, {method:'POST', headers:{'email':email}, body:formData});
+        const res = await fetch(API + '/shop/upload', {method:'POST', headers:{'email':email}, body:formData});
         if(!res.ok) throw new Error('Upload failed');
         const data = await res.json();
         uploadedLogoUrl = data.url;
         document.getElementById('reg-logo-url').value = data.url;
-        document.getElementById('logo-preview-container').style.display = 'block';
-        document.getElementById('logo-preview-img').src = data.url;
-        document.getElementById('logo-status').textContent = '✓ Logo uploaded';
-    }catch(e){ showMsg('reg-msg','Logo upload error: '+e.message,'error'); fileInput.value=''; }
+        statusEl.textContent = '✓ Logo uploaded successfully';
+        statusEl.style.color = 'var(--success)';
+    }catch(e){ 
+        showMsg('reg-msg','Logo upload error: ' + e.message,'error'); 
+        statusEl.textContent = '✗ Upload failed';
+        statusEl.style.color = 'var(--danger)';
+    }
 }
 
 // Auth
@@ -424,7 +480,7 @@ async function login(){
     const btn = document.getElementById('login-btn');
     btn.disabled = true;
     try{
-        const res = await fetch(`${API}/auth/login`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password})});
+        const res = await fetch(API + '/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password})});
         if(!res.ok) throw new Error('Invalid email or password');
         const data = await res.json();
         session = data;
@@ -438,6 +494,7 @@ async function register(){
     const email = document.getElementById('reg-email').value.trim();
     const name = document.getElementById('reg-name').value.trim();
     const password = document.getElementById('reg-password').value;
+    const passwordConfirm = document.getElementById('reg-password-confirm').value;
     const phone = document.getElementById('reg-phone').value.trim();
     const location = document.getElementById('reg-location').value.trim();
     const country = document.getElementById('reg-country').value;
@@ -445,12 +502,17 @@ async function register(){
     const tagline = document.getElementById('reg-tagline').value.trim();
     const catalog = document.getElementById('reg-catalog').value.trim();
     const ref = document.getElementById('reg-ref').value.trim();
+
+    if(password !== passwordConfirm){ showMsg('reg-msg','Passwords do not match','error'); return; }
+    if(password.length < 6){ showMsg('reg-msg','Password must be at least 6 characters','error'); return; }
+
     const secQs = [
         {question:document.getElementById('sec-q1').value.trim(),answer:document.getElementById('sec-a1').value.trim()},
         {question:document.getElementById('sec-q2').value.trim(),answer:document.getElementById('sec-a2').value.trim()},
         {question:document.getElementById('sec-q3').value.trim(),answer:document.getElementById('sec-a3').value.trim()}
     ];
     if(!email||!name||!password||!phone||!secQs[0].question||!secQs[0].answer){ showMsg('reg-msg','Please fill all required fields','error'); return; }
+
     const body = {
         email, password, business_name:name, description:desc, tagline, phone, location, country,
         logo_url: uploadedLogoUrl || '', catalog_url: catalog, referred_by: ref,
@@ -462,7 +524,7 @@ async function register(){
         brand_primary: '#1e40af', brand_secondary: '#ffffff'
     };
     try{
-        const res = await fetch(`${API}/auth/register`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+        const res = await fetch(API + '/auth/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
         const data = await res.json();
         if(!res.ok) throw new Error(data.detail || 'Registration failed');
         showMsg('reg-msg','✓ Shop created! Redirecting to sign in...','success');
@@ -477,13 +539,13 @@ async function fetchSecurityQuestions(){
     const email = document.getElementById('rec-email').value.trim();
     if(!email){ showMsg('recovery-msg','Enter your email','error'); return; }
     try{
-        const res = await fetch(`${API}/auth/security-questions?email=${encodeURIComponent(email)}`);
+        const res = await fetch(API + '/auth/security-questions?email=' + encodeURIComponent(email));
         if(!res.ok) throw new Error('Account not found');
         const data = await res.json();
         recoveryQuestions = data.questions || [];
         let html = '';
         recoveryQuestions.forEach((q,i)=>{
-            html += `<div class="recovery-q"><p>Q${i+1}: ${q.question}</p><input type="text" id="rec-ans-${i}" placeholder="Your answer"></div>`;
+            html += '<div class="recovery-q"><p>Q' + (i+1) + ': ' + q.question + '</p><input type="text" id="rec-ans-' + i + '" placeholder="Your answer"></div>';
         });
         document.getElementById('rec-questions').innerHTML = html;
         document.getElementById('recovery-step1').classList.add('hidden');
@@ -495,17 +557,16 @@ async function resetPassword(){
     const email = document.getElementById('rec-email').value.trim();
     const newPassword = document.getElementById('rec-new-password').value;
     if(!newPassword || newPassword.length<6){ showMsg('recovery-msg','Password must be at least 6 characters','error'); return; }
-    // Try each question until one works
     for(let i=0;i<recoveryQuestions.length;i++){
-        const answer = document.getElementById(`rec-ans-${i}`).value.trim();
+        const answer = document.getElementById('rec-ans-'+i).value.trim();
         if(!answer) continue;
         try{
-            const verifyRes = await fetch(`${API}/auth/verify-security-answer`,{
+            const verifyRes = await fetch(API + '/auth/verify-security-answer',{
                 method:'POST', headers:{'Content-Type':'application/json'},
                 body:JSON.stringify({email, question_index:i, answer})
             });
             if(!verifyRes.ok) continue;
-            const resetRes = await fetch(`${API}/auth/reset-password`,{
+            const resetRes = await fetch(API + '/auth/reset-password',{
                 method:'POST', headers:{'Content-Type':'application/json'},
                 body:JSON.stringify({email, new_password:newPassword, question_index:i, answer})
             });
@@ -523,18 +584,17 @@ async function switchTab(tab, el){
     document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
     if(el) el.classList.add('active');
     const content = document.getElementById('tab-content');
-    content.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text2);"><div class="spinner" style="margin:0 auto 16px;"></div>Loading...</div>';
+    content.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text2);"><div class="spinner" style="margin:0 auto 16px;width:32px;height:32px;"></div>Loading...</div>';
     if(tab==='overview') await loadOverview();
     else if(tab==='preview') await loadPreview();
     else if(tab==='edit') await loadEdit();
     else if(tab==='activate') await loadActivate();
     else if(tab==='referrals') await loadReferrals();
-    else if(tab==='stars') await loadStars();
 }
 
 async function fetchShop(){
     if(!session) return {};
-    const res = await fetch(`${API}/shop/preview/${session.slug}?email=${encodeURIComponent(session.email)}`);
+    const res = await fetch(API + '/shop/preview/' + session.slug + '?email=' + encodeURIComponent(session.email));
     shopData = await res.json();
     return shopData;
 }
@@ -546,47 +606,36 @@ async function loadOverview(){
     const statusColor = isActive ? 'var(--success)' : 'var(--warning)';
     const statusIcon = isActive ? 'fa-circle-check' : 'fa-clock';
     document.getElementById('dash-title').textContent = json.business_name || 'Your Shop';
-    document.getElementById('dash-url').innerHTML = `<a href="/${shop.slug}" target="_blank" style="color:var(--brand);text-decoration:none;">myshop.afric.site/${shop.slug}</a>`;
+    document.getElementById('dash-url').innerHTML = '<a href="/' + shop.slug + '" target="_blank" style="color:var(--brand);text-decoration:none;">myshop.afric.site/' + shop.slug + '</a>';
 
-    document.getElementById('tab-content').innerHTML = `
-        <div class="stats-grid">
-            <div class="stat-card">
-                <h3><i class="fa-solid ${statusIcon}"></i></h3>
-                <p style="text-transform:capitalize;font-weight:700;">${shop.status || 'Pending'}</p>
-                <p style="font-size:.8rem;">Shop Status</p>
-            </div>
-            <div class="stat-card">
-                <h3>${shop.visit_count || 0}</h3>
-                <p>Total Visits</p>
-            </div>
-            <div class="stat-card referrals">
-                <h3><i class="fa-solid fa-users"></i></h3>
-                <p>Referral Program</p>
-                <p style="font-size:.8rem;">Invite & Earn Stars</p>
-            </div>
-            <div class="stat-card stars">
-                <h3>⭐</h3>
-                <p>Stars Balance</p>
-                <p style="font-size:.8rem;">Earn more by referring</p>
-            </div>
-        </div>
-        <div class="card">
-            <h3><i class="fa-solid fa-link"></i> Your Hub Link</h3>
-            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;">
-                <input type="text" value="https://myshop.afric.site/${shop.slug}" readonly style="flex:1;margin-bottom:0;background:#f1f5f9;" id="hub-link">
-                <button class="btn btn-sm" onclick="copyLink()" style="width:auto;"><i class="fa-regular fa-copy"></i> Copy</button>
-                <a href="/${shop.slug}" target="_blank" class="btn btn-outline btn-sm" style="width:auto;text-decoration:none;"><i class="fa-solid fa-arrow-up-right-from-square"></i> Open</a>
-            </div>
-            ${!isActive ? `<div class="msg msg-info show" style="margin-top:16px;"><i class="fa-solid fa-triangle-exclamation"></i> Your shop is <strong>pending</strong>. Go to the <strong>Activate</strong> tab to make it live.</div>` : ''}
-        </div>
-        <div class="card">
-            <h3><i class="fa-solid fa-bolt"></i> Quick Actions</h3>
-            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;">
-                <button class="btn btn-sm" onclick="switchTab('edit', document.querySelectorAll('.tab')[2])" style="width:auto;"><i class="fa-solid fa-pen"></i> Edit Shop</button>
-                <button class="btn btn-outline btn-sm" onclick="switchTab('preview', document.querySelectorAll('.tab')[1])" style="width:auto;"><i class="fa-solid fa-eye"></i> Preview</button>
-                <button class="btn btn-success btn-sm" onclick="switchTab('referrals', document.querySelectorAll('.tab')[4])" style="width:auto;"><i class="fa-solid fa-gift"></i> Refer & Earn</button>
-            </div>
-        </div>`;
+    document.getElementById('tab-content').innerHTML = 
+        '<div class="stats-grid">' +
+            '<div class="stat-card">' +
+                '<h3><i class="fa-solid ' + statusIcon + '"></i></h3>' +
+                '<p style="text-transform:capitalize;font-weight:700;">' + (shop.status || 'Pending') + '</p>' +
+                '<p style="font-size:.8rem;">Shop Status</p>' +
+            '</div>' +
+            '<div class="stat-card">' +
+                '<h3>' + (shop.visit_count || 0) + '</h3>' +
+                '<p>Total Visits</p>' +
+            '</div>' +
+        '</div>' +
+        '<div class="card">' +
+            '<h3><i class="fa-solid fa-link"></i> Your Hub Link</h3>' +
+            '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;">' +
+                '<input type="text" value="https://myshop.afric.site/' + shop.slug + '" readonly style="flex:1;margin-bottom:0;background:#f1f5f9;" id="hub-link">' +
+                '<button class="btn btn-sm" onclick="copyLink()" style="width:auto;"><i class="fa-regular fa-copy"></i> Copy</button>' +
+                '<a href="/' + shop.slug + '" target="_blank" class="btn btn-outline btn-sm" style="width:auto;text-decoration:none;"><i class="fa-solid fa-arrow-up-right-from-square"></i> Open</a>' +
+            '</div>' +
+            (isActive ? '' : '<div class="msg msg-info show" style="margin-top:16px;"><i class="fa-solid fa-triangle-exclamation"></i> Your shop is <strong>pending</strong>. Go to the <strong>Activate</strong> tab to make it live.</div>') +
+        '</div>' +
+        '<div class="card">' +
+            '<h3><i class="fa-solid fa-bolt"></i> Quick Actions</h3>' +
+            '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;">' +
+                '<button class="btn btn-sm" onclick="switchTab(\'edit\', document.querySelectorAll(\'.tab\')[2])" style="width:auto;"><i class="fa-solid fa-pen"></i> Edit Shop</button>' +
+                '<button class="btn btn-outline btn-sm" onclick="switchTab(\'preview\', document.querySelectorAll(\'.tab\')[1])" style="width:auto;"><i class="fa-solid fa-eye"></i> Preview</button>' +
+            '</div>' +
+        '</div>';
 }
 
 function copyLink(){
@@ -601,55 +650,55 @@ function copyLink(){
 
 async function loadPreview(){
     if(!session) return;
-    document.getElementById('tab-content').innerHTML = `<iframe src="/${session.slug}" class="preview-frame" title="Preview"></iframe>`;
+    document.getElementById('tab-content').innerHTML = '<iframe src="/' + session.slug + '" class="preview-frame" title="Preview"></iframe>';
 }
 
 async function loadEdit(){
     const shop = await fetchShop();
     const json = shop.shop_json || shop;
     const socials = json.socials || {};
-    document.getElementById('tab-content').innerHTML = `
-        <div class="card">
-            <div id="edit-msg" class="msg"></div>
-            <div class="form-section">
-                <h3><i class="fa-solid fa-briefcase"></i> Business Info</h3>
-                <label>Business Name</label>
-                <input type="text" id="edit-name" value="${esc(json.business_name || '')}">
-                <label>Tagline</label>
-                <input type="text" id="edit-tagline" value="${esc(json.tagline || '')}">
-                <label>Description</label>
-                <textarea id="edit-desc" rows="3">${esc(json.description || '')}</textarea>
-            </div>
-            <div class="form-section">
-                <h3><i class="fa-solid fa-location-dot"></i> Contact</h3>
-                <div class="input-group">
-                    <div><label>Phone</label><input type="tel" id="edit-phone" value="${esc(json.phone || '')}"></div>
-                    <div><label>Email</label><input type="email" id="edit-email" value="${esc(json.email || shop.email || '')}"></div>
-                </div>
-                <label>Location</label>
-                <input type="text" id="edit-location" value="${esc(json.location || '')}">
-            </div>
-            <div class="form-section">
-                <h3><i class="fa-solid fa-store"></i> Catalog</h3>
-                <label>Catalog URL (Selar, Shopify)</label>
-                <input type="url" id="edit-catalog" value="${esc(json.catalog_url || '')}">
-                <label>Logo URL</label>
-                <input type="url" id="edit-logo" value="${esc(json.logo_url || '')}">
-            </div>
-            <div class="form-section">
-                <h3><i class="fa-solid fa-share-nodes"></i> Social Media</h3>
-                <div class="social-input"><i class="fa-brands fa-facebook-f"></i><input type="url" id="edit-fb" value="${esc(socials.facebook || '')}" placeholder="facebook.com/..."></div>
-                <div class="social-input"><i class="fa-brands fa-instagram"></i><input type="url" id="edit-ig" value="${esc(socials.instagram || '')}" placeholder="instagram.com/..."></div>
-                <div class="social-input"><i class="fa-brands fa-tiktok"></i><input type="url" id="edit-tt" value="${esc(socials.tiktok || '')}" placeholder="tiktok.com/..."></div>
-                <div class="social-input"><i class="fa-brands fa-x-twitter"></i><input type="url" id="edit-tw" value="${esc(socials.twitter || '')}" placeholder="x.com/..."></div>
-            </div>
-            <div class="form-section">
-                <h3><i class="fa-solid fa-palette"></i> Brand Color</h3>
-                <label>Primary Color</label>
-                <input type="color" id="edit-color" value="${json.brand_colors?.primary || '#1e40af'}" style="height:48px;padding:4px;">
-            </div>
-            <button class="btn" onclick="saveEdit()"><i class="fa-solid fa-floppy-disk"></i> Save Changes</button>
-        </div>`;
+    document.getElementById('tab-content').innerHTML = 
+        '<div class="card">' +
+            '<div id="edit-msg" class="msg"></div>' +
+            '<div class="form-section">' +
+                '<h3><i class="fa-solid fa-briefcase"></i> Business Info</h3>' +
+                '<label>Business Name</label>' +
+                '<input type="text" id="edit-name" value="' + esc(json.business_name || '') + '">' +
+                '<label>Tagline</label>' +
+                '<input type="text" id="edit-tagline" value="' + esc(json.tagline || '') + '">' +
+                '<label>Description</label>' +
+                '<textarea id="edit-desc" rows="3">' + esc(json.description || '') + '</textarea>' +
+            '</div>' +
+            '<div class="form-section">' +
+                '<h3><i class="fa-solid fa-location-dot"></i> Contact</h3>' +
+                '<div class="input-group">' +
+                    '<div><label>Phone</label><input type="tel" id="edit-phone" value="' + esc(json.phone || '') + '"></div>' +
+                    '<div><label>Email</label><input type="email" id="edit-email" value="' + esc(json.email || shop.email || '') + '"></div>' +
+                '</div>' +
+                '<label>Location</label>' +
+                '<input type="text" id="edit-location" value="' + esc(json.location || '') + '">' +
+            '</div>' +
+            '<div class="form-section">' +
+                '<h3><i class="fa-solid fa-store"></i> Catalog</h3>' +
+                '<label>Catalog URL (Selar, Shopify)</label>' +
+                '<input type="url" id="edit-catalog" value="' + esc(json.catalog_url || '') + '">' +
+                '<label>Logo URL</label>' +
+                '<input type="url" id="edit-logo" value="' + esc(json.logo_url || '') + '">' +
+            '</div>' +
+            '<div class="form-section">' +
+                '<h3><i class="fa-solid fa-share-nodes"></i> Social Media</h3>' +
+                '<div class="social-input"><i class="fa-brands fa-facebook-f"></i><input type="url" id="edit-fb" value="' + esc(socials.facebook || '') + '" placeholder="facebook.com/..."></div>' +
+                '<div class="social-input"><i class="fa-brands fa-instagram"></i><input type="url" id="edit-ig" value="' + esc(socials.instagram || '') + '" placeholder="instagram.com/..."></div>' +
+                '<div class="social-input"><i class="fa-brands fa-tiktok"></i><input type="url" id="edit-tt" value="' + esc(socials.tiktok || '') + '" placeholder="tiktok.com/..."></div>' +
+                '<div class="social-input"><i class="fa-brands fa-x-twitter"></i><input type="url" id="edit-tw" value="' + esc(socials.twitter || '') + '" placeholder="x.com/..."></div>' +
+            '</div>' +
+            '<div class="form-section">' +
+                '<h3><i class="fa-solid fa-palette"></i> Brand Color</h3>' +
+                '<label>Primary Color</label>' +
+                '<input type="color" id="edit-color" value="' + (json.brand_colors?.primary || '#1e40af') + '" style="height:48px;padding:4px;">' +
+            '</div>' +
+            '<button class="btn" onclick="saveEdit()"><i class="fa-solid fa-floppy-disk"></i> Save Changes</button>' +
+        '</div>';
 }
 
 async function saveEdit(){
@@ -671,7 +720,7 @@ async function saveEdit(){
         brand_primary: document.getElementById('edit-color').value
     };
     try{
-        const res = await fetch(`${API}/shop/edit/${session.slug}`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+        const res = await fetch(API + '/shop/edit/' + session.slug, {method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)});
         const data = await res.json();
         if(!res.ok) throw new Error(data.detail || 'Update failed');
         showMsg('edit-msg','✓ Changes saved successfully!','success');
@@ -679,88 +728,85 @@ async function saveEdit(){
     }catch(e){ showMsg('edit-msg', e.message, 'error'); }
 }
 
+// ACTIVATION - Clean, no backdoor button, just payment links
 async function loadActivate(){
     try{
-        const res = await fetch(`${API}/payment/selar-urls`);
+        const res = await fetch(API + '/payment/selar-urls');
         const urls = await res.json();
         const shop = await fetchShop();
         const isActive = shop.status === 'active';
-        document.getElementById('tab-content').innerHTML = `
-            <div class="card" style="text-align:center;">
-                <h2><i class="fa-solid fa-rocket"></i> Activate Your Shop</h2>
-                ${isActive ? '<div class="msg msg-success show"><i class="fa-solid fa-circle-check"></i> Your shop is already <strong>active</strong>!</div>' : ''}
-                <p style="color:var(--text2);margin:16px 0;">Choose your plan and pay securely via Selar. Your hub goes live instantly.</p>
-            </div>
-            <div class="plan-card">
-                <div style="font-size:2rem;margin-bottom:4px;">🇳🇬</div>
-                <h3>Nigeria — Monthly</h3>
-                <div class="price-tag">₦1,500<span>/mo</span></div>
-                <p style="color:var(--text2);font-size:.9rem;margin-bottom:16px;">One-time payment. Expires after 31 days.</p>
-                <a href="${urls.manual || '#' }" target="_blank" class="btn" style="display:block;text-decoration:none;"><i class="fa-solid fa-credit-card"></i> Pay ₦1,500 on Selar</a>
-            </div>
-            <div class="plan-card featured">
-                <div style="font-size:2rem;margin-bottom:4px;">🌍</div>
-                <h3>International — Monthly</h3>
-                <div class="price-tag">$5<span>/mo</span></div>
-                <p style="color:var(--text2);font-size:.9rem;margin-bottom:16px;">Auto-renews every month. Cancel anytime.</p>
-                <a href="${urls.auto || '#' }" target="_blank" class="btn" style="display:block;text-decoration:none;"><i class="fa-solid fa-credit-card"></i> Pay $5 on Selar</a>
-            </div>
-            <div class="card" style="text-align:center;">
-                <h3><i class="fa-solid fa-check-double"></i> Already Paid?</h3>
-                <p style="color:var(--text2);margin-bottom:16px;">If you've completed payment on Selar, click below to activate your shop.</p>
-                <button class="btn btn-success" onclick="confirmActivation()"><i class="fa-solid fa-bolt"></i> Activate Now</button>
-            </div>`;
-    }catch(e){
-        document.getElementById('tab-content').innerHTML = `<div class="card"><p style="color:var(--danger);">Error loading payment options. Please refresh.</p></div>`;
-    }
-}
 
-async function confirmActivation(){
-    if(!session) return;
-    try{
-        const res = await fetch(`${API}/payment/activate/confirm`,{
-            method:'POST', headers:{'Content-Type':'application/json'},
-            body:JSON.stringify({email:session.email, sub_type:'manual'})
-        });
-        const data = await res.json();
-        if(!res.ok) throw new Error(data.detail || 'Activation failed');
-        showMsg('tab-content-msg','✓ Shop activated!','success');
-        loadOverview();
-    }catch(e){ alert('Activation error: ' + e.message); }
+        document.getElementById('tab-content').innerHTML = 
+            '<div class="card" style="text-align:center;">' +
+                '<h2><i class="fa-solid fa-rocket"></i> Activate Your Shop</h2>' +
+                (isActive ? '<div class="msg msg-success show"><i class="fa-solid fa-circle-check"></i> Your shop is already <strong>active</strong>!</div>' : '') +
+                '<p style="color:var(--text2);margin:16px 0;">Choose your plan and pay securely via Selar. Your hub goes live instantly after payment.</p>' +
+            '</div>' +
+            '<div class="plan-card">' +
+                '<div class="plan-flag">🇳🇬</div>' +
+                '<div class="plan-name">Nigeria — One-Time</div>' +
+                '<div class="plan-price">₦1,500<span>/mo</span></div>' +
+                '<p class="plan-desc">Pay once. Active for 31 days. Renew manually.</p>' +
+                '<a href="' + (urls.manual || '#') + '" target="_blank" rel="noopener noreferrer" class="btn" style="display:block;text-decoration:none;"><i class="fa-solid fa-credit-card"></i> Pay ₦1,500 on Selar</a>' +
+                '<div class="plan-note"><i class="fa-solid fa-circle-info"></i> You will be redirected to Selar to complete payment.</div>' +
+            '</div>' +
+            '<div class="plan-card featured">' +
+                '<div class="plan-flag">🌍</div>' +
+                '<div class="plan-name">International — Auto-Renewal</div>' +
+                '<div class="plan-price">$5<span>/mo</span></div>' +
+                '<p class="plan-desc">Auto-renews every month. Cancel anytime on Selar.</p>' +
+                '<a href="' + (urls.auto || '#') + '" target="_blank" rel="noopener noreferrer" class="btn" style="display:block;text-decoration:none;"><i class="fa-solid fa-credit-card"></i> Pay $5 on Selar</a>' +
+                '<div class="plan-note"><i class="fa-solid fa-rotate"></i> Subscription renews automatically. Manage on Selar.</div>' +
+            '</div>' +
+            '<div class="card" style="text-align:center;">' +
+                '<h3><i class="fa-solid fa-circle-question"></i> Already Paid?</h3>' +
+                '<p style="color:var(--text2);margin-bottom:16px;">If you completed payment on Selar, your shop will activate automatically within 2 minutes. Refresh this page to check.</p>' +
+                '<button class="btn btn-outline" onclick="loadActivate()"><i class="fa-solid fa-rotate"></i> Check Status</button>' +
+            '</div>';
+    }catch(e){
+        document.getElementById('tab-content').innerHTML = '<div class="card"><p style="color:var(--danger);">Error loading payment options. Please refresh.</p></div>';
+    }
 }
 
 async function loadReferrals(){
     if(!session) return;
     try{
-        const res = await fetch(`${API}/shop/referrals?email=${encodeURIComponent(session.email)}&password=${encodeURIComponent(session.password)}`);
+        const res = await fetch(API + '/shop/referrals?email=' + encodeURIComponent(session.email) + '&password=' + encodeURIComponent(session.password));
         const ref = await res.json();
-        document.getElementById('tab-content').innerHTML = `
-            <div class="referral-card">
-                <h3><i class="fa-solid fa-gift"></i> Your Referral Code</h3>
-                <div class="referral-code">${ref.referral_code || 'N/A'}</div>
-                <p style="color:#78350f;font-size:.9rem;">Share this code with friends. When they activate their shop, you earn <strong>⭐ Stars</strong>!</p>
-                <button class="btn btn-sm" style="width:auto;margin-top:10px;" onclick="copyRef('${ref.referral_code || ''}')"><i class="fa-regular fa-copy"></i> Copy Code</button>
-            </div>
-            <div class="stats-grid">
-                <div class="stat-card referrals">
-                    <h3>${ref.total_referred || 0}</h3>
-                    <p>People Referred</p>
-                </div>
-                <div class="stat-card stars">
-                    <h3>${(ref.total_referred || 0) * 10}</h3>
-                    <p>Stars Earned</p>
-                </div>
-            </div>
-            <div class="card">
-                <h3><i class="fa-solid fa-share-nodes"></i> Share Your Link</h3>
-                <p style="color:var(--text2);margin:10px 0;font-size:.9rem;">Share your shop link anywhere. Anyone who signs up through your page counts toward your referrals.</p>
-                <div style="display:flex;gap:10px;flex-wrap:wrap;">
-                    <input type="text" value="https://myshop.afric.site/?ref=${ref.referral_code || ''}" readonly style="flex:1;margin-bottom:0;background:#f1f5f9;">
-                    <button class="btn btn-sm" onclick="navigator.clipboard.writeText(this.previousElementSibling.value);this.innerHTML='<i class=\'fa-solid fa-check\'></i> Copied!';setTimeout(()=>this.innerHTML='<i class=\'fa-regular fa-copy\'></i> Copy',2000)" style="width:auto;">Copy</button>
-                </div>
-            </div>`;
+        document.getElementById('tab-content').innerHTML = 
+            '<div class="card" style="background:linear-gradient(135deg,#fef3c7,#fde68a);text-align:center;">' +
+                '<h3 style="color:#92400e;margin-bottom:8px;"><i class="fa-solid fa-gift"></i> Your Referral Code</h3>' +
+                '<div style="display:inline-block;background:white;padding:12px 28px;border-radius:12px;font-family:monospace;font-size:1.3rem;font-weight:700;color:var(--text);letter-spacing:1px;border:2px dashed #f59e0b;margin:8px 0;">' + (ref.referral_code || 'N/A') + '</div>' +
+                '<p style="color:#78350f;font-size:.9rem;">Share this code with friends. When they activate their shop, you earn Stars!</p>' +
+                '<button class="btn btn-sm" style="width:auto;margin-top:10px;background:#92400e;" onclick="copyRef(\'' + (ref.referral_code || '') + '\')\"><i class="fa-regular fa-copy"></i> Copy Code</button>' +
+            '</div>' +
+            '<div class="stats-grid">' +
+                '<div class="stat-card" style="background:linear-gradient(135deg,#10b981,#059669);">' +
+                    '<h3>' + (ref.total_referred || 0) + '</h3>' +
+                    '<p>People Referred</p>' +
+                '</div>' +
+                '<div class="stat-card" style="background:linear-gradient(135deg,#f59e0b,#d97706);">' +
+                    '<h3>' + ((ref.total_referred || 0) * 10) + '</h3>' +
+                    '<p>Stars Earned</p>' +
+                '</div>' +
+            '</div>' +
+            '<div class="card">' +
+                '<h3><i class="fa-solid fa-share-nodes"></i> Share Your Link</h3>' +
+                '<p style="color:var(--text2);margin:10px 0;font-size:.9rem;">Share your shop link anywhere. Anyone who signs up through your page counts toward your referrals.</p>' +
+                '<div style="display:flex;gap:10px;flex-wrap:wrap;">' +
+                    '<input type="text" value="https://myshop.afric.site/?ref=' + (ref.referral_code || '') + '" readonly style="flex:1;margin-bottom:0;background:#f1f5f9;">' +
+                    '<button class="btn btn-sm" onclick="navigator.clipboard.writeText(this.previousElementSibling.value);this.innerHTML=\'<i class=\\\'fa-solid fa-check\\\'></i> Copied!\';setTimeout(()=>this.innerHTML=\'<i class=\\\'fa-regular fa-copy\\\'></i> Copy\',2000)" style="width:auto;">Copy</button>' +
+                '</div>' +
+            '</div>' +
+            '<div class="card">' +
+                '<h3><i class="fa-solid fa-star"></i> Stars Program</h3>' +
+                '<p style="color:var(--text2);margin:10px 0;">Stars are coming soon! You\'re already earning them — they\'ll be redeemable for free months, featured badges, and more.</p>' +
+                '<div style="background:#f0fdf4;padding:16px;border-radius:12px;border:1px solid #bbf7d0;">' +
+                    '<p style="color:#166534;font-size:.9rem;"><i class="fa-solid fa-clock"></i> <strong>Coming soon:</strong> Redeem Stars for free subscriptions, priority support, and homepage features.</p>' +
+                '</div>' +
+            '</div>';
     }catch(e){
-        document.getElementById('tab-content').innerHTML = `<div class="card"><p style="color:var(--danger);">Error loading referrals. ${e.message}</p></div>`;
+        document.getElementById('tab-content').innerHTML = '<div class="card"><p style="color:var(--danger);">Error loading referrals. ' + e.message + '</p></div>';
     }
 }
 
@@ -768,59 +814,6 @@ function copyRef(code){
     navigator.clipboard.writeText(code);
     event.target.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
     setTimeout(()=>event.target.innerHTML = '<i class="fa-regular fa-copy"></i> Copy Code', 2000);
-}
-
-async function loadStars(){
-    if(!session) return;
-    try{
-        const res = await fetch(`${API}/shop/referrals?email=${encodeURIComponent(session.email)}&password=${encodeURIComponent(session.password)}`);
-        const ref = await res.json();
-        const stars = (ref.total_referred || 0) * 10;
-        document.getElementById('tab-content').innerHTML = `
-            <div class="stats-grid">
-                <div class="stat-card stars">
-                    <h3 style="font-size:3rem;">⭐ ${stars}</h3>
-                    <p>Your Stars Balance</p>
-                </div>
-            </div>
-            <div class="card">
-                <h3><i class="fa-solid fa-star"></i> What Are Stars?</h3>
-                <p style="color:var(--text2);margin:10px 0;line-height:1.7;">Stars are MyShop's reward currency. You earn them by referring other sellers to the platform. They can't be bought — only earned.</p>
-            </div>
-            <div class="card">
-                <h3><i class="fa-solid fa-wand-magic-sparkles"></i> What You Can Do With Stars</h3>
-                <ul style="list-style:none;padding:0;margin-top:12px;">
-                    <li style="padding:10px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;">
-                        <span style="background:#fef3c7;color:#92400e;padding:4px 12px;border-radius:8px;font-weight:700;font-size:.85rem;">⭐ 50</span>
-                        <span><strong>Featured Badge</strong> — Get a "Featured" badge on your hub</span>
-                    </li>
-                    <li style="padding:10px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;">
-                        <span style="background:#fef3c7;color:#92400e;padding:4px 12px;border-radius:8px;font-weight:700;font-size:.85rem;">⭐ 100</span>
-                        <span><strong>Priority Support</strong> — Jump to the front of the support queue</span>
-                    </li>
-                    <li style="padding:10px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;">
-                        <span style="background:#fef3c7;color:#92400e;padding:4px 12px;border-radius:8px;font-weight:700;font-size:.85rem;">⭐ 150</span>
-                        <span><strong>Hub Boost</strong> — Your shop appears in "Featured Shops" on our homepage for 14 days</span>
-                    </li>
-                    <li style="padding:10px 0;display:flex;align-items:center;gap:12px;">
-                        <span style="background:#fef3c7;color:#92400e;padding:4px 12px;border-radius:8px;font-weight:700;font-size:.85rem;">⭐ 300</span>
-                        <span><strong>Annual Pass</strong> — 3 free months of MyShop subscription</span>
-                    </li>
-                </ul>
-            </div>
-            <div class="card">
-                <h3><i class="fa-solid fa-chart-line"></i> How to Earn More</h3>
-                <div style="display:flex;gap:12px;align-items:center;margin-top:12px;padding:16px;background:#f0fdf4;border-radius:12px;border:1px solid #bbf7d0;">
-                    <div style="font-size:2rem;">🎁</div>
-                    <div>
-                        <p style="font-weight:700;color:#166534;">Refer a seller, earn 10 Stars</p>
-                        <p style="color:#15803d;font-size:.9rem;">Share your referral code. When they activate their shop, you both win.</p>
-                    </div>
-                </div>
-            </div>`;
-    }catch(e){
-        document.getElementById('tab-content').innerHTML = `<div class="card"><p style="color:var(--danger);">Error loading stars. ${e.message}</p></div>`;
-    }
 }
 
 function esc(str){ return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
