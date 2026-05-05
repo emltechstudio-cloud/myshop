@@ -8,174 +8,311 @@
     <link rel="manifest" href="/manifest.json">
     <link rel="icon" type="image/svg+xml" href="/icon.svg">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         *{margin:0;padding:0;box-sizing:border-box;}
         :root {
+            --brand-primary: #1e40af;
+            --brand-dark: #1e3a8a;
             --bg: #f8fafc;
-            --card-bg: #ffffff;
+            --white: #ffffff;
             --text: #0f172a;
             --text-secondary: #475569;
             --border: #e2e8f0;
-            --radius: 20px;
-            --brand-primary: #1e40af;
-            --brand-secondary: #ffffff;
+            --shadow: 0 4px 20px rgba(0,0,0,0.06);
         }
         body {
             font-family: 'Inter', sans-serif;
             background: var(--bg);
             color: var(--text);
-            padding: 24px;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             -webkit-font-smoothing: antialiased;
+            margin: 0;
         }
-        .hub {
-            max-width: 700px;
-            width: 100%;
-            background: var(--card-bg);
-            border-radius: 28px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.05);
-            padding: 40px 32px;
-            border: 1px solid var(--border);
+        
+        /* HEADER/NAV */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
         }
-        .header {
+        .nav-brand {
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: var(--brand-primary);
+        }
+        .nav-menu {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+        .nav-menu a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+        .nav-menu a:hover {
+            color: var(--brand-primary);
+        }
+        .nav-menu a.active {
+            color: var(--brand-primary);
+            font-weight: 700;
+        }
+        
+        /* HERO BANNER */
+        .hero-banner {
+            background: linear-gradient(135deg, var(--brand-dark), var(--brand-primary));
+            color: var(--white);
+            padding: 60px 24px;
             text-align: center;
-            margin-bottom: 32px;
+            position: relative;
+            overflow: hidden;
         }
-        .logo {
-            width: 80px;
-            height: 80px;
-            border-radius: 20px;
+        .hero-banner::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .hero-logo {
+            width: 120px;
+            height: 120px;
+            border-radius: 30px;
             object-fit: cover;
-            margin-bottom: 16px;
-            border: 2px solid var(--border);
-            background: #f1f5f9;
-            display: inline-block;
+            margin: 0 auto 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.1);
+            display: block;
         }
         .business-name {
-            font-size: 2.2rem;
+            font-size: 2.5rem;
             font-weight: 800;
             letter-spacing: -0.5px;
-            color: var(--brand-primary);
-            margin-bottom: 4px;
+            margin-bottom: 8px;
         }
         .tagline {
-            color: var(--text-secondary);
             font-size: 1.1rem;
             font-weight: 500;
+            opacity: 0.95;
         }
-        .description {
-            background: #f1f5f9;
-            padding: 20px;
+        
+        /* MAIN CONTAINER */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+        
+        /* SECTIONS */
+        section {
+            margin-bottom: 60px;
+        }
+        section h2 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            color: var(--text);
+            letter-spacing: -0.4px;
+        }
+        
+        /* ABOUT */
+        .about-section {
+            background: var(--white);
+            padding: 32px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+        }
+        .about-section p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            line-height: 1.8;
+            margin-bottom: 16px;
+        }
+        
+        /* SERVICES GRID */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .service-card {
+            background: var(--white);
+            padding: 24px;
             border-radius: 16px;
-            margin: 24px 0;
-            color: var(--text);
-            font-size: 1rem;
-            line-height: 1.7;
-        }
-        .contact-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin: 24px 0;
-        }
-        .contact-btn {
-            flex: 1;
-            min-width: 140px;
-            padding: 14px 18px;
-            border-radius: 50px;
-            font-weight: 600;
-            text-align: center;
-            text-decoration: none;
-            background: var(--brand-primary);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            font-size: 1rem;
+            border: 1px solid var(--border);
             transition: all 0.2s;
-            border: none;
-            cursor: pointer;
         }
-        .contact-btn.secondary {
-            background: white;
-            color: var(--brand-primary);
-            border: 2px solid var(--brand-primary);
+        .service-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow);
+            border-color: var(--brand-primary);
         }
-        .contact-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-        }
-        .catalog-section {
-            margin: 32px 0 20px;
-        }
-        .catalog-section h3 {
-            font-size: 1.3rem;
+        .service-card h3 {
             font-weight: 700;
-            margin-bottom: 12px;
             color: var(--text);
+            margin-bottom: 8px;
+        }
+        .service-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        /* CATALOG */
+        .catalog-section {
+            background: var(--white);
+            padding: 32px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
         }
         .catalog-frame {
             width: 100%;
-            height: 500px;
+            height: 600px;
             border: 1px solid var(--border);
             border-radius: 16px;
-            background: white;
+            background: var(--bg);
+            margin-top: 20px;
         }
-        .social-links {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
+        
+        /* CONTACT */
+        .contact-section {
+            background: var(--white);
+            padding: 32px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+        }
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             gap: 16px;
-            margin: 24px 0 0;
+            margin-bottom: 24px;
         }
-        .social-icon {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            background: #f1f5f9;
+        .contact-info {
+            padding: 16px;
+            background: var(--bg);
+            border-radius: 12px;
+            font-size: 0.95rem;
+        }
+        .contact-info strong {
             color: var(--brand-primary);
-            font-size: 1.2rem;
-            text-decoration: none;
-            transition: all 0.2s;
+            display: block;
+            margin-bottom: 4px;
         }
-        .social-icon:hover {
-            background: var(--brand-primary);
-            color: white;
-            transform: scale(1.1);
-        }
-        .footer {
-            margin-top: 40px;
-            text-align: center;
-            color: #94a3b8;
-            font-size: 0.85rem;
-        }
-        .footer a {
+        .contact-info a {
             color: var(--brand-primary);
             text-decoration: none;
             font-weight: 600;
         }
+        .contact-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .btn {
+            flex: 1;
+            min-width: 140px;
+            padding: 12px 20px;
+            border-radius: 50px;
+            font-weight: 700;
+            text-align: center;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 0.95rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-primary {
+            background: var(--brand-primary);
+            color: var(--white);
+        }
+        .btn-primary:hover {
+            background: var(--brand-dark);
+            transform: translateY(-2px);
+        }
+        .btn-secondary {
+            background: var(--white);
+            color: var(--brand-primary);
+            border: 2px solid var(--brand-primary);
+        }
+        .btn-secondary:hover {
+            background: var(--brand-primary);
+            color: var(--white);
+            transform: translateY(-2px);
+        }
+        
+        /* SOCIALS */
+        .social-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 24px;
+        }
+        .social-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--bg);
+            color: var(--brand-primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.2s;
+            border: 1px solid var(--border);
+        }
+        .social-btn:hover {
+            background: var(--brand-primary);
+            color: var(--white);
+            transform: scale(1.1);
+            border-color: var(--brand-primary);
+        }
+        
+        /* FOOTER */
+        footer {
+            background: var(--text);
+            color: var(--white);
+            text-align: center;
+            padding: 40px 24px;
+            font-size: 0.85rem;
+        }
+        footer a {
+            color: #60a5fa;
+            text-decoration: none;
+        }
+        footer a:hover {
+            color: var(--white);
+        }
+        
+        /* LOADING & ERROR */
         .loading-state {
             text-align: center;
-            padding: 60px 0;
+            padding: 80px 24px;
             color: var(--text-secondary);
-        }
-        .error-state {
-            text-align: center;
-            padding: 40px;
-            background: #fff;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            max-width: 500px;
-            width: 100%;
         }
         .spinner {
             width: 40px;
@@ -189,62 +326,76 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+        .error-state {
+            text-align: center;
+            padding: 60px 24px;
+            background: var(--white);
+            margin: 40px auto;
+            max-width: 500px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+        }
+        
+        @media(max-width: 768px) {
+            nav { flex-direction: column; gap: 12px; }
+            .nav-menu { width: 100%; flex-direction: column; gap: 8px; }
+            .hero-banner { padding: 40px 20px; }
+            .hero-logo { width: 100px; height: 100px; }
+            .business-name { font-size: 2rem; }
+            .container { padding: 24px 16px; }
+            .contact-grid { grid-template-columns: 1fr; }
+            .services-grid { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
+    <nav>
+        <div class="nav-brand">MyShop</div>
+        <div class="nav-menu">
+            <a href="#home" class="active">Home</a>
+            <a href="#about">About</a>
+            <a href="#services">Services</a>
+            <a href="#contact">Contact</a>
+        </div>
+    </nav>
+
     <div id="hub-content">
         <div class="loading-state">
             <div class="spinner"></div>
-            <p>Loading your hub...</p>
+            <p>Loading shop...</p>
         </div>
     </div>
+
+    <footer>
+        <p>Powered by <a href="/">MyShop</a> — EML Tech Studio</p>
+    </footer>
 
     <script>
         (async function() {
             const API = 'https://emltechstudio-myshop-api.hf.space';
-
-            // ===== SLUG DETECTION =====
-            // Netlify rewrites /:slug to /shop.html with 200 status
-            // So the browser URL stays as /mystore but shop.html loads
-            // We read the ORIGINAL URL path to get the slug
-
+            
             let slug = '';
-            const fullPath = window.location.pathname; // e.g. "/mystore" or "/shop.html" or "/"
+            const fullPath = window.location.pathname;
             const searchParams = new URLSearchParams(window.location.search);
 
-            // Method 1: Query param ?slug=demo (highest priority)
             if (searchParams.has('slug')) {
                 slug = searchParams.get('slug');
             }
-
-            // Method 2: The actual URL path
-            // If path is /shop.html, we might be a rewrite - check if there's a slug in the path before
-            // If path is /mystore, that's the slug directly
             if (!slug) {
                 const pathParts = fullPath.split('/').filter(Boolean);
-                // pathParts[0] could be "mystore" or "shop.html"
                 if (pathParts.length > 0) {
                     const firstPart = pathParts[0];
-                    // If first part is shop.html, check if there's something before it (unlikely with Netlify)
-                    // If first part is a slug like "mystore", use it
                     if (firstPart !== 'shop.html' && firstPart !== 'index.html' && firstPart !== 'app.html') {
                         slug = firstPart;
                     }
                 }
             }
 
-            // Method 3: Check if we're on shop.html but came from a rewrite
-            // Netlify 200 rewrite preserves the original URL in the address bar
-            // So if URL is myshop.afric.site/mystore, fullPath is /mystore
-            // and shop.html loads. slug = "mystore"
-
-            // DEBUG
-            // console.log('Path:', fullPath, 'Slug detected:', slug);
-
             const hubEl = document.getElementById('hub-content');
 
             if (!slug) {
-                hubEl.innerHTML = '<div class="error-state"><h2>No shop specified</h2><p>Please provide a shop slug in the URL like <code>/your-shop-name</code></p><p style="margin-top:16px;"><a href="/" style="color:#1e40af;font-weight:600;">Go to MyShop Home</a></p></div>';
+                hubEl.innerHTML = '<div class="error-state"><h2>No shop specified</h2><p>Please provide a shop slug in the URL like <code>/your-shop-name</code></p><p style="margin-top:16px;"><a href="/" style="color:var(--brand-primary);font-weight:600;">Go to MyShop Home</a></p></div>';
                 return;
             }
 
@@ -257,7 +408,7 @@
                 const res = await fetch(`${API}/shop/live/${slug}`);
                 if (!res.ok) {
                     if (res.status === 404) {
-                        hubEl.innerHTML = '<div class="error-state"><h2>Shop not found</h2><p>The shop "' + slug + '" doesn\'t exist or hasn\'t been activated yet.</p><p style="margin-top:16px;"><a href="/app.html" style="color:#1e40af;font-weight:600;">Create your own hub</a> · <a href="/" style="color:#1e40af;font-weight:600;">Go Home</a></p></div>';
+                        hubEl.innerHTML = '<div class="error-state"><h2>Shop not found</h2><p>The shop "' + slug + '" doesn\'t exist or hasn\'t been activated yet.</p><p style="margin-top:16px;"><a href="/app.html" style="color:var(--brand-primary);font-weight:600;">Create your shop</a> · <a href="/" style="color:var(--brand-primary);font-weight:600;">Home</a></p></div>';
                         return;
                     }
                     throw new Error('Shop not available');
@@ -265,7 +416,7 @@
                 const shop = await res.json();
                 renderShop(shop);
             } catch(e) {
-                hubEl.innerHTML = '<div class="error-state"><h2>Unable to load shop</h2><p>' + e.message + '</p><p style="margin-top:16px;"><a href="/" style="color:#1e40af;font-weight:600;">Go to MyShop Home</a></p></div>';
+                hubEl.innerHTML = '<div class="error-state"><h2>Unable to load shop</h2><p>' + e.message + '</p><p style="margin-top:16px;"><a href="/" style="color:var(--brand-primary);font-weight:600;">Go Home</a></p></div>';
             }
 
             function renderShop(shop) {
@@ -273,65 +424,94 @@
                 const primary = json.brand_colors?.primary || '#1e40af';
                 document.documentElement.style.setProperty('--brand-primary', primary);
 
-                let html = '<div class="hub"><div class="header">';
+                let html = '';
+                
+                // HERO BANNER
+                html += '<div class="hero-banner"><div class="hero-content">';
                 if (json.logo_url) {
-                    html += '<img src="' + json.logo_url + '" alt="' + (json.business_name || 'Shop') + '" class="logo">';
+                    html += '<img src="' + json.logo_url + '" alt="Logo" class="hero-logo">';
                 }
-                html += '<h1 class="business-name">' + (json.business_name || 'My Hub') + '</h1>';
+                html += '<h1 class="business-name">' + (json.business_name || 'My Shop') + '</h1>';
                 if (json.tagline) html += '<p class="tagline">' + json.tagline + '</p>';
-                html += '</div>';
+                html += '</div></div>';
 
+                // MAIN CONTAINER
+                html += '<div class="container">';
+
+                // ABOUT
                 if (json.description) {
-                    html += '<div class="description">' + json.description + '</div>';
+                    html += '<section id="about"><h2>About</h2><div class="about-section"><p>' + json.description + '</p></div></section>';
                 }
 
-                html += '<div class="contact-row">';
+                // SERVICES
+                html += '<section id="services"><h2>Services</h2><div class="services-grid">';
+                html += '<div class="service-card"><h3>Quality Products</h3><p>We bring you carefully selected products that meet the highest standards.</p></div>';
+                html += '<div class="service-card"><h3>Fast Service</h3><p>Get quick responses and seamless service every time you reach out.</p></div>';
+                html += '<div class="service-card"><h3>Easy Ordering</h3><p>Simple, straightforward ordering process with multiple payment options.</p></div>';
+                html += '</div></section>';
+
+                // CATALOG
+                if (json.catalog_url) {
+                    html += '<section id="catalog"><div class="catalog-section"><h2>Browse Catalog</h2>';
+                    html += '<iframe src="' + json.catalog_url + '" class="catalog-frame" title="Catalog"></iframe>';
+                    html += '</div></section>';
+                }
+
+                // CONTACT
+                html += '<section id="contact"><div class="contact-section"><h2>Get in Touch</h2>';
+                html += '<div class="contact-grid">';
                 if (json.phone) {
-                    html += '<a href="tel:' + json.phone + '" class="contact-btn"><i class="fa-solid fa-phone"></i> Call</a>';
-                    const waNum = json.phone.replace(/\D/g, '');
-                    const waMsg = encodeURIComponent('Hi ' + (json.business_name || 'there') + ', I found your shop on MyShop and I\'m interested in your products.');
-                    html += '<a href="https://wa.me/' + waNum + '?text=' + waMsg + '" target="_blank" class="contact-btn secondary"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>';
+                    html += '<div class="contact-info"><strong>Phone</strong><a href="tel:' + json.phone + '">' + json.phone + '</a></div>';
                 }
                 if (json.email) {
-                    html += '<a href="mailto:' + json.email + '" class="contact-btn secondary"><i class="fa-solid fa-envelope"></i> Email</a>';
+                    html += '<div class="contact-info"><strong>Email</strong><a href="mailto:' + json.email + '">' + json.email + '</a></div>';
+                }
+                if (json.location) {
+                    html += '<div class="contact-info"><strong>Location</strong>' + json.location + '</div>';
+                }
+                html += '</div>';
+                
+                html += '<div class="contact-buttons">';
+                if (json.phone) {
+                    html += '<a href="tel:' + json.phone + '" class="btn btn-primary">Call Now</a>';
+                    const waNum = json.phone.replace(/\D/g, '');
+                    const waMsg = encodeURIComponent('Hi ' + (json.business_name || 'there') + ', I found your shop and I\'m interested.');
+                    html += '<a href="https://wa.me/' + waNum + '?text=' + waMsg + '" target="_blank" class="btn btn-secondary">WhatsApp</a>';
+                }
+                if (json.email) {
+                    html += '<a href="mailto:' + json.email + '" class="btn btn-secondary">Email</a>';
                 }
                 html += '</div>';
 
-                if (json.catalog_url) {
-                    html += '<div class="catalog-section"><h3><i class="fa-solid fa-store"></i> Browse Catalog</h3>';
-                    html += '<iframe src="' + json.catalog_url + '" class="catalog-frame" title="Catalog"></iframe></div>';
-                }
-
+                // SOCIALS
                 const socials = json.socials || {};
                 const platforms = { 
-                    facebook: 'fa-brands fa-facebook', 
-                    instagram: 'fa-brands fa-instagram', 
-                    tiktok: 'fa-brands fa-tiktok', 
-                    twitter: 'fa-brands fa-twitter' 
+                    facebook: 'f', 
+                    instagram: '@', 
+                    tiktok: '♪', 
+                    twitter: '𝕏'
                 };
-                let socialHtml = '<div class="social-links">';
-                let hasSocials = false;
+                html += '<div class="social-links">';
                 for (let [key, icon] of Object.entries(platforms)) {
                     if (socials[key]) {
-                        hasSocials = true;
-                        socialHtml += '<a href="' + socials[key] + '" target="_blank" class="social-icon" title="' + key + '"><i class="' + icon + '"></i></a>';
+                        html += '<a href="' + socials[key] + '" target="_blank" class="social-btn" title="' + key + '">' + icon + '</a>';
                     }
                 }
-                socialHtml += '</div>';
-                if (hasSocials) html += socialHtml;
+                html += '</div>';
 
-                html += '</div><div class="footer">Powered by <a href="/">MyShop</a> — EML Tech Studio</div>';
+                html += '</div></section></div>';
                 hubEl.innerHTML = html;
             }
 
             function renderDemoShop() {
                 const demo = {
                     business_name: "Sample Store",
-                    tagline: "Quality products for you",
-                    description: "We bring you the best products directly from our catalog. Browse, shop, and connect with us instantly.",
+                    tagline: "Quality products you can trust",
+                    description: "We bring you the best selection of products directly sourced for quality and value. Browse our full catalog and connect with us today.",
                     logo_url: "/icon.svg",
                     phone: "+2348000000000",
                     email: "hello@samplestore.com",
+                    location: "Lagos, Nigeria",
                     catalog_url: "https://selar.co",
                     brand_colors: { primary: "#1e40af" },
                     socials: { facebook: "https://facebook.com", instagram: "https://instagram.com" }
