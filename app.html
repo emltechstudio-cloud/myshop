@@ -11,7 +11,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        /* Same as before, no changes needed */
         *{margin:0;padding:0;box-sizing:border-box;}
         :root{
             --brand:#1e40af;--brand-light:#3b82f6;--brand-dark:#1e3a8a;
@@ -70,8 +69,6 @@
         .tab.active{color:var(--brand);}
         .tab.active::after{content:'';position:absolute;bottom:-4px;left:0;right:0;height:3px;background:var(--brand);border-radius:2px;}
         .tab:hover{color:var(--brand);}
-        .tab-content{display:none;animation:fadeIn .3s ease;}
-        .tab-content.active{display:block;}
         @keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
 
         .msg{padding:12px 16px;border-radius:12px;margin-bottom:16px;font-size:.9rem;font-weight:500;display:none;}
@@ -97,7 +94,6 @@
         .logo-preview-img{width:100px;height:100px;border-radius:20px;object-fit:cover;border:2px solid var(--border);margin-bottom:8px;}
         .logo-upload-text{color:var(--text2);font-size:.9rem;}
         .logo-upload-text i{font-size:1.5rem;color:var(--brand);margin-bottom:8px;display:block;}
-        #logo-file-input{display:none;}
 
         .social-input{position:relative;}
         .social-input i{position:absolute;left:14px;top:14px;color:var(--text2);font-size:1rem;}
@@ -106,7 +102,6 @@
         .plan-card{background:var(--card);padding:32px;border-radius:20px;border:2px solid var(--border);text-align:center;margin-bottom:16px;transition:all .2s;}
         .plan-card:hover{border-color:var(--brand-light);transform:translateY(-2px);}
         .plan-card.featured{border-color:var(--brand-light);background:linear-gradient(135deg,#eff6ff,#ffffff);}
-        .plan-flag{font-size:2rem;margin-bottom:4px;}
         .plan-name{font-size:1.2rem;font-weight:700;margin-bottom:4px;}
         .plan-price{font-size:2.5rem;font-weight:900;color:var(--brand);margin:12px 0;}
         .plan-price span{font-size:1rem;font-weight:400;color:var(--text2);}
@@ -206,7 +201,7 @@
         </div>
         <div id="reg-msg" class="msg"></div>
 
-        <!-- Step 1: Business Info (includes email) -->
+        <!-- Step 1 -->
         <div id="step1">
             <div class="form-section">
                 <h3><i class="fa-solid fa-briefcase"></i> Business Info</h3>
@@ -246,7 +241,7 @@
             <button class="btn" onclick="nextStep(2)">Continue <i class="fa-solid fa-arrow-right"></i></button>
         </div>
 
-        <!-- Step 2: Logo, Catalog, WhatsApp Catalog, Socials -->
+        <!-- Step 2 -->
         <div id="step2" class="hidden">
             <div class="form-section">
                 <h3><i class="fa-solid fa-image"></i> Your Logo</h3>
@@ -259,7 +254,7 @@
                     <img id="logo-preview-img" class="logo-preview-img hidden" src="" alt="Logo preview">
                     <div id="logo-status" style="font-size:.85rem;color:var(--success);margin-top:8px;display:none;"></div>
                 </div>
-                <input type="file" id="logo-file-input" accept="image/*" onchange="uploadRegLogo()">
+                <input type="file" id="logo-file-input" accept="image/*" onchange="uploadRegLogo()" style="display:none;">
                 <input type="hidden" id="reg-logo-url" value="">
             </div>
             <div class="form-section">
@@ -283,7 +278,7 @@
             </div>
         </div>
 
-        <!-- Step 3: Password -->
+        <!-- Step 3 -->
         <div id="step3" class="hidden">
             <div class="form-section">
                 <h3><i class="fa-solid fa-lock"></i> Create Password</h3>
@@ -310,7 +305,7 @@
             </div>
         </div>
 
-        <!-- Step 4: Security Questions -->
+        <!-- Step 4 -->
         <div id="step4" class="hidden">
             <div class="form-section">
                 <h3><i class="fa-solid fa-shield-halved"></i> Security Questions</h3>
@@ -413,7 +408,6 @@ function showMsg(id, text, type='error'){
     setTimeout(()=>el.classList.remove('show'), 6000);
 }
 
-// Registration logo upload
 async function uploadRegLogo(){
     const fileInput = document.getElementById('logo-file-input');
     const file = fileInput.files[0];
@@ -453,7 +447,6 @@ async function uploadRegLogo(){
     }
 }
 
-// Edit logo upload
 async function uploadEditLogo(){
     const fileInput = document.getElementById('edit-logo-file-input');
     const file = fileInput.files[0];
@@ -501,9 +494,14 @@ async function login(){
     const btn = document.getElementById('login-btn');
     btn.disabled = true;
     try{
-        const res = await fetch(API + '/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password})});
+        const res = await fetch(API + '/auth/login',{
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({email, password})
+        });
         if(!res.ok) throw new Error('Invalid email or password');
         const data = await res.json();
+        data.password = password;
         session = data;
         localStorage.setItem('myshop_session', JSON.stringify(session));
         showDashboard();
@@ -750,8 +748,7 @@ async function saveEdit(){
         const data = await res.json();
         if(!res.ok) throw new Error(data.detail || 'Update failed');
         showMsg('edit-msg','✓ Changes saved successfully!','success');
-        shopData = null;  // Force refresh on next load
-        // Update logo preview if the hidden field changed
+        shopData = null;
         const editLogoPreview = document.getElementById('edit-logo-preview-img');
         const editLogoHidden = document.getElementById('edit-logo-url-hidden');
         if(editLogoPreview && editLogoHidden && editLogoHidden.value) {
@@ -853,4 +850,4 @@ function esc(str){ return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace
 if('serviceWorker'in navigator){navigator.serviceWorker.register('/sw.js');}
 </script>
 </body>
-    </html>
+            </html>
