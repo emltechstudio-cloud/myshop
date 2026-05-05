@@ -842,8 +842,7 @@ async function loadReferrals(){
                 '<p style="color:var(--text2);margin:10px 0;font-size:.9rem;">Share your shop link anywhere. Anyone who signs up through your page counts toward your referrals.</p>' +
                 '<div style="display:flex;gap:10px;flex-wrap:wrap;">' +
                     '<input type="text" value="https://myshop.afric.site/?ref=' + (ref.referral_code || '') + '" readonly style="flex:1;margin-bottom:0;background:#f1f5f9;">' +
-                    '<button class="btn btn-sm" onclick="navigator.clipboard.writeText(this.previousElementSibling.value);this.innerHTML=\'<i class=\\\'fa-solid fa-check\\\'></i> Copied!\';setTimeout(()=>this.innerHTML=\'<i class=\\\'fa-regular fa-copy\\\'></i> Copy\',2000)" style="width:auto;">Copy</button>' +
-                '</div>' +
+                    '<button class="btn btn-sm" onclick="copyShareLink(this)" style="width:auto;">Copy</button>'
             '</div>' +
             '<div class="card">' +
                 '<h3><i class="fa-solid fa-star"></i> Stars Program</h3>' +
@@ -856,7 +855,12 @@ async function loadReferrals(){
         document.getElementById('tab-content').innerHTML = '<div class="card"><p style="color:var(--danger);">Error loading referrals. ' + e.message + '</p></div>';
     }
 }
-2 5
+function copyShareLink(btn) {
+    const input = btn.previousElementSibling;
+    navigator.clipboard.writeText(input.value);
+    btn.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
+    setTimeout(() => btn.innerHTML = '<i class="fa-regular fa-copy"></i> Copy', 2000);
+}
 function copyRef(code){
     navigator.clipboard.writeText(code);
     event.target.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
