@@ -230,22 +230,8 @@
             font-size: 1.05rem;
             line-height: 1.8;
         }
-        .about-meta {
-            display: flex;
-            gap: 20px;
-            margin-top: 20px;
-            flex-wrap: wrap;
-        }
-        .about-meta span {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--text2);
-            font-size: 0.9rem;
-        }
-        .about-meta i { color: var(--brand); }
 
-        /* ===== PRODUCTS ===== */
+        /* ===== PRODUCTS (demo only) ===== */
         .products-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -365,109 +351,50 @@
             box-shadow: 0 8px 20px rgba(0,0,0,0.15);
         }
 
-        /* ===== SOCIAL LINKS ===== */
-        .social-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 16px;
-        }
-        .social-card {
+        /* ===== ICON ROW (contact + socials combined) ===== */
+        .icon-row {
             display: flex;
-            align-items: center;
-            gap: 14px;
-            background: var(--card);
-            padding: 20px;
-            border-radius: 16px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.04);
-            border: 1px solid var(--border);
-            text-decoration: none;
-            color: var(--text);
-            transition: all 0.25s;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin: 24px 0;
         }
-        .social-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-        }
-        .social-icon-box {
-            width: 48px;
-            height: 48px;
-            border-radius: 14px;
+        .icon-btn {
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.3rem;
-            color: white;
-            flex-shrink: 0;
-        }
-        .fb { background: #1877f2; }
-        .ig { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
-        .tt { background: #000; }
-        .tw { background: #1da1f2; }
-        .yt { background: #ff0000; }
-        .wa { background: var(--whatsapp); }
-        .social-info { min-width: 0; }
-        .social-info h4 {
-            font-weight: 700;
-            font-size: 1rem;
-            margin-bottom: 2px;
-        }
-        .social-info p {
-            font-size: 0.85rem;
-            color: var(--text2);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .social-arrow {
-            margin-left: auto;
-            color: var(--text3);
-            font-size: 0.9rem;
-        }
-
-        /* ===== CONTACT ===== */
-        .contact-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            gap: 16px;
-        }
-        .contact-card {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 12px;
-            background: var(--card);
-            padding: 28px 20px;
-            border-radius: 20px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.04);
-            border: 1px solid var(--border);
-            text-decoration: none;
-            color: var(--text);
-            transition: all 0.25s;
-            text-align: center;
-        }
-        .contact-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-        }
-        .contact-icon {
             width: 56px;
             height: 56px;
             border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             color: white;
+            text-decoration: none;
+            transition: all 0.2s;
+            background: var(--brand);
         }
-        .contact-card h4 { font-weight: 700; }
-        .contact-card p {
-            font-size: 0.85rem;
+        .icon-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+        .icon-btn.whatsapp { background: var(--whatsapp); }
+        .icon-btn.email { background: #ea4335; }
+        .icon-btn.facebook { background: #1877f2; }
+        .icon-btn.instagram { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+        .icon-btn.tiktok { background: #000; }
+        .icon-btn.twitter { background: #1da1f2; }
+
+        .icon-label {
+            font-size: 0.8rem;
             color: var(--text2);
-            word-break: break-all;
+            margin-top: 6px;
+            text-align: center;
         }
-        .call-bg { background: var(--brand); }
-        .wa-bg { background: var(--whatsapp); }
-        .email-bg { background: #ea4335; }
+
+        .icon-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
         /* ===== FOOTER ===== */
         .site-footer {
@@ -582,7 +509,6 @@
         (async function() {
             const API = 'https://emltechstudio-myshop-api.hf.space';
 
-            // ---- helper to add https:// if missing ----
             function fixUrl(url) {
                 if (!url) return '#';
                 url = url.trim();
@@ -590,7 +516,6 @@
                 return 'https://' + url;
             }
 
-            // ===== SLUG DETECTION =====
             let slug = '';
             const fullPath = window.location.pathname;
             const searchParams = new URLSearchParams(window.location.search);
@@ -677,22 +602,17 @@
                 const isWACatalog = isWhatsAppUrl(json.catalog_url);
                 const hasRealCatalog = hasCatalog && !isWACatalog;
 
-                // Build nav links
                 let navLinks = '';
                 if (json.description) navLinks += '<a href="#about">About</a>';
                 navLinks += '<a href="#catalog">Catalog</a>';
-                if (json.socials && Object.keys(json.socials).length > 0) navLinks += '<a href="#socials">Socials</a>';
+                if (json.socials && Object.keys(json.socials).length > 0) navLinks += '<a href="#socials">Connect</a>';
                 navLinks += '<a href="#contact">Contact</a>';
 
                 let sections = '';
 
                 // ABOUT
                 if (json.description) {
-                    sections += '<section class="section" id="about"><div class="section-title fade-in"><i class="fa-solid fa-circle-info"></i> About <div class="line"></div></div><div class="about-card fade-in delay-1"><p class="about-text">' + json.description + '</p><div class="about-meta">';
-                    if (json.location) sections += '<span><i class="fa-solid fa-location-dot"></i> ' + json.location + '</span>';
-                    if (json.phone) sections += '<span><i class="fa-solid fa-phone"></i> ' + json.phone + '</span>';
-                    if (json.email) sections += '<span><i class="fa-solid fa-envelope"></i> ' + json.email + '</span>';
-                    sections += '</div></div></section>';
+                    sections += '<section class="section" id="about"><div class="section-title fade-in"><i class="fa-solid fa-circle-info"></i> About <div class="line"></div></div><div class="about-card fade-in delay-1"><p class="about-text">' + json.description + '</p></div></section>';
                 }
 
                 // CATALOG
@@ -731,41 +651,38 @@
                 }
                 sections += '</section>';
 
-                // SOCIALS
+                // SOCIALS (icons only, no text)
                 const socials = json.socials || {};
                 const platforms = {
-                    facebook: { icon: 'fa-brands fa-facebook-f', name: 'Facebook', cls: 'fb' },
-                    instagram: { icon: 'fa-brands fa-instagram', name: 'Instagram', cls: 'ig' },
-                    tiktok: { icon: 'fa-brands fa-tiktok', name: 'TikTok', cls: 'tt' },
-                    twitter: { icon: 'fa-brands fa-x-twitter', name: 'Twitter / X', cls: 'tw' },
-                    youtube: { icon: 'fa-brands fa-youtube', name: 'YouTube', cls: 'yt' }
+                    facebook: { icon: 'fa-brands fa-facebook-f', cls: 'facebook' },
+                    instagram: { icon: 'fa-brands fa-instagram', cls: 'instagram' },
+                    tiktok: { icon: 'fa-brands fa-tiktok', cls: 'tiktok' },
+                    twitter: { icon: 'fa-brands fa-x-twitter', cls: 'twitter' }
                 };
-                let socialHtml = '';
-                let hasSocials = false;
+                let socialIcons = '';
                 for (let [key, cfg] of Object.entries(platforms)) {
                     if (socials[key]) {
-                        hasSocials = true;
                         const safeUrl = fixUrl(socials[key]);
-                        socialHtml += '<a href="' + safeUrl + '" target="_blank" rel="noopener noreferrer" class="social-card fade-in"><div class="social-icon-box ' + cfg.cls + '"><i class="' + cfg.icon + '"></i></div><div class="social-info"><h4>' + cfg.name + '</h4><p>' + safeUrl.replace(/^https?:\/\//, '') + '</p></div><i class="fa-solid fa-arrow-right social-arrow"></i></a>';
+                        socialIcons += '<a href="' + safeUrl + '" target="_blank" rel="noopener noreferrer" class="icon-btn ' + cfg.cls + '" title="' + key + '"><i class="' + cfg.icon + '"></i></a>';
                     }
-                }
-                if (hasSocials) {
-                    sections += '<section class="section" id="socials"><div class="section-title fade-in"><i class="fa-solid fa-share-nodes"></i> Follow Us <div class="line"></div></div><div class="social-grid">' + socialHtml + '</div></section>';
                 }
 
-                // CONTACT
-                if (json.phone || json.email) {
-                    sections += '<section class="section" id="contact"><div class="section-title fade-in"><i class="fa-solid fa-address-card"></i> Contact <div class="line"></div></div><div class="contact-grid">';
-                    if (json.phone) {
-                        sections += '<a href="tel:' + json.phone + '" class="contact-card fade-in"><div class="contact-icon call-bg"><i class="fa-solid fa-phone"></i></div><h4>Call Us</h4><p>' + json.phone + '</p></a>';
-                    }
-                    if (waNum) {
-                        sections += '<a href="' + waLink + '" target="_blank" rel="noopener noreferrer" class="contact-card fade-in delay-1"><div class="contact-icon wa-bg"><i class="fa-brands fa-whatsapp"></i></div><h4>WhatsApp</h4><p>Chat with pre-filled message</p></a>';
-                    }
-                    if (json.email) {
-                        sections += '<a href="mailto:' + json.email + '" class="contact-card fade-in delay-2"><div class="contact-icon email-bg"><i class="fa-solid fa-envelope"></i></div><h4>Email</h4><p>' + json.email + '</p></a>';
-                    }
-                    sections += '</div></section>';
+                // CONTACT (icons only)
+                let contactIcons = '';
+                if (json.phone) {
+                    contactIcons += '<a href="tel:' + json.phone + '" class="icon-btn" title="Call"><i class="fa-solid fa-phone"></i></a>';
+                }
+                if (waNum) {
+                    contactIcons += '<a href="' + waLink + '" target="_blank" rel="noopener noreferrer" class="icon-btn whatsapp" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>';
+                }
+                if (json.email) {
+                    contactIcons += '<a href="mailto:' + json.email + '" class="icon-btn email" title="Email"><i class="fa-solid fa-envelope"></i></a>';
+                }
+
+                // Combine social and contact icons into one row if any exist
+                let iconRow = '';
+                if (socialIcons || contactIcons) {
+                    iconRow = '<section class="section" id="socials"><div class="section-title fade-in"><i class="fa-solid fa-share-nodes"></i> Connect <div class="line"></div></div><div class="icon-row">' + socialIcons + contactIcons + '</div></section>';
                 }
 
                 // BUILD FULL PAGE
@@ -788,12 +705,12 @@
                 html += '</div>';
 
                 html += sections;
+                html += iconRow; // the icon row replaces the old contact/socials sections
 
                 html += '<footer class="site-footer"><p>Powered by <a href="/">MyShop</a> — EML Tech Studio</p><div class="watermark"><img src="/icon.svg" alt=""><span>Get your own hub at <strong>myshop.afric.site</strong></span></div></footer>';
 
                 appEl.innerHTML = html;
 
-                // Navbar scroll effect
                 window.addEventListener('scroll', function() {
                     const nav = document.getElementById('navbar');
                     if (window.scrollY > 20) nav.classList.add('scrolled');
@@ -823,4 +740,4 @@
         })();
     </script>
 </body>
-</html>
+    </html>
