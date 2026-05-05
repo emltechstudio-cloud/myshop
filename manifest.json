@@ -1,21 +1,20 @@
 {
-  "name": "MyShop by EML Tech Studio",
+  "name": "MyShop — Your Business Hub",
   "short_name": "MyShop",
-  "description": "Create your business website in minutes. No code needed.",
-  "start_url": "/",
+  "description": "One link for your business. Catalog, contact, socials — all connected. By EML Tech Studio.",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#0A0A0A",
-  "theme_color": "#00E676",
   "orientation": "portrait-primary",
+  "background_color": "#f8fafc",
+  "theme_color": "#1e40af",
+  "categories": ["business", "productivity", "shopping"],
   "icons": [
-    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" },
-    { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" },
+    { "src": "apple-touch-icon.png", "sizes": "180x180", "type": "image/png", "purpose": "any maskable" }
   ],
   "shortcuts": [
-    {
-      "name": "My Dashboard",
-      "url": "/app",
-      "description": "Manage your shop"
-    }
+    { "name": "My Dashboard", "url": "./app.html", "description": "Manage your shop" },
+    { "name": "Create Shop", "url": "./app.html", "description": "Start your business hub" }
   ]
 }

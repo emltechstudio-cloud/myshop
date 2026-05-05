@@ -1,441 +1,831 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>MyShop Dashboard</title>
-<link rel="manifest" href="/manifest.json"/><link rel="icon" href="/icon.svg"/>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}:root{--primary:#2563eb;--light:#f0f4f8;--text:#1f2937;--muted:#6b7280;--border:#e5e7eb;--red:#dc2626}
-body{background:#f9fafb;font-family:Outfit,sans-serif;color:var(--text);line-height:1.6}
-.screen{display:none;min-height:100vh}.screen.active{display:block}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#1e40af">
+    <title>MyShop Dashboard</title>
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" type="image/svg+xml" href="/icon.svg">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;}
+        :root{
+            --brand:#1e40af;--brand-light:#3b82f6;--brand-dark:#1e3a8a;
+            --bg:#f8fafc;--card:#ffffff;--text:#0f172a;--text2:#475569;--border:#e2e8f0;
+            --radius:20px;--shadow:0 4px 24px rgba(0,0,0,.06);
+            --success:#16a34a;--danger:#dc2626;--warning:#f59e0b;
+        }
+        body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh;}
+        .container{max-width:960px;margin:0 auto;padding:24px;}
 
-/* AUTH */
-.auth-wrap{max-width:440px;margin:0 auto;padding:40px 24px}
-.auth-logo{text-align:center;font-weight:700;font-size:1.3rem;color:var(--primary);margin-bottom:32px}
-.auth-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:36px}
-.auth-title{font-weight:700;font-size:1.4rem;color:var(--text);margin-bottom:8px}
-.auth-sub{color:var(--muted);font-size:.9rem;margin-bottom:28px}
-.msg{padding:12px 16px;border-radius:8px;margin-bottom:16px;display:none;font-size:.85rem}
-.msg.error{background:#fee;border:1px solid #fcc;color:#c00}
-.msg.success{background:#efe;border:1px solid #cfc;color:#080}
-.form-group{margin-bottom:16px}
-label{display:block;font-size:.8rem;font-weight:600;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em}
-input,select,textarea{width:100%;padding:12px;background:#f9fafb;border:1px solid var(--border);border-radius:8px;font-family:Outfit,sans-serif;font-size:.95rem;color:var(--text);outline:none;transition:border .2s}
-input:focus,select:focus{border-color:var(--primary)}
-textarea{resize:vertical;min-height:80px}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.color-row{display:flex;gap:12px;align-items:center}
-input[type=color]{width:48px;height:48px;padding:4px;border-radius:8px}
-.upload-area{border:2px dashed var(--border);border-radius:8px;padding:24px;text-align:center;cursor:pointer;transition:all .2s}
-.upload-area:hover{border-color:var(--primary)}
-.upload-area input{position:absolute;opacity:0;width:0;height:0}
-.upload-area strong{display:block;color:var(--primary);font-weight:600;margin-bottom:4px}
-.upload-area p{color:var(--muted);font-size:.85rem}
-.logo-preview{width:64px;height:64px;border-radius:8px;object-fit:cover;margin:8px auto 0;display:none}
-.step-dots{display:flex;gap:8px;margin-bottom:28px;justify-content:center}
-.dot{width:8px;height:8px;border-radius:50%;background:var(--border);transition:background .3s}
-.dot.active{background:var(--primary)}
-.step-title{font-weight:700;font-size:1.1rem;color:var(--text);margin-bottom:4px}
-.step-sub{color:var(--muted);font-size:.85rem;margin-bottom:20px}
-.btn{width:100%;padding:12px;border:none;border-radius:8px;font-family:Outfit,sans-serif;font-weight:600;cursor:pointer;transition:all .2s;font-size:.95rem}
-.btn-primary{background:var(--primary);color:#fff;box-shadow:0 2px 8px rgba(37,99,235,.15)}
-.btn-primary:hover{opacity:.9;transform:translateY(-1px)}
-.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--text);margin-top:10px}
-.btn-ghost:hover{border-color:var(--primary);color:var(--primary)}
-.auth-switch{text-align:center;margin-top:16px;font-size:.85rem;color:var(--muted)}
-.auth-switch a{color:var(--primary);cursor:pointer;text-decoration:none;font-weight:600}
-.loader{display:none;text-align:center;padding:12px;color:var(--muted);font-size:.8rem}
-.loader.active{display:block}
+        /* Cards */
+        .card{background:var(--card);border-radius:24px;padding:32px;box-shadow:var(--shadow);border:1px solid var(--border);margin-bottom:20px;}
+        .card-narrow{max-width:520px;margin:40px auto;}
+        h1{font-size:1.8rem;font-weight:800;margin-bottom:6px;color:var(--brand-dark);}
+        h2{font-size:1.4rem;font-weight:800;margin-bottom:16px;color:var(--text);}
+        p.sub{color:var(--text2);margin-bottom:24px;font-size:.95rem;}
+        label{font-weight:600;font-size:.88rem;color:var(--text);display:block;margin-bottom:6px;}
+        input,select,textarea{
+            width:100%;padding:12px 14px;border:2px solid var(--border);border-radius:12px;
+            font-size:1rem;font-family:'Inter',sans-serif;outline:none;transition:all .2s;
+            background:#f8fafc;margin-bottom:14px;
+        }
+        input:focus,select:focus,textarea:focus{border-color:var(--brand-light);background:white;}
+        textarea{resize:vertical;min-height:80px;}
+        .input-group{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+        @media(max-width:640px){.input-group{grid-template-columns:1fr;}}
 
-/* DASHBOARD */
-#dashScreen{padding:0}
-.dash-nav{background:#fff;border-bottom:1px solid var(--border);padding:16px 24px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:50}
-.dash-logo{font-weight:700;font-size:1rem;color:var(--primary)}
-.dash-user{font-size:.8rem;color:var(--muted);display:flex;align-items:center;gap:12px}
-.logout-btn{background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:.8rem;padding:4px 8px}
-.logout-btn:hover{color:var(--red)}
-.dash-body{padding:24px;max-width:800px;margin:0 auto}
-.status-box{background:#fff;border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap}
-.shop-url{font-size:.85rem;color:var(--primary);word-break:break-all;font-weight:500}
-.badge{padding:6px 14px;border-radius:20px;font-size:.75rem;font-weight:700;text-transform:uppercase}
-.badge.active{background:#d1fae5;color:#047857}
-.badge.pending{background:#fef3c7;color:#b45309}
-.badge.expired{background:#fee;color:#991b1b}
-.tabs{display:flex;border-bottom:1px solid var(--border);gap:0;overflow-x:auto;margin-bottom:24px}
-.tab{padding:12px 16px;font-size:.85rem;font-weight:500;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all .2s}
-.tab.active{color:var(--primary);border-color:var(--primary)}
-.panel{display:none}.panel.active{display:block}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin-bottom:24px}
-.stat{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center}
-.stat-val{font-weight:700;font-size:1.8rem;color:var(--primary)}
-.stat-lbl{font-size:.75rem;color:var(--muted);margin-top:4px}
-.activate-box{background:var(--light);border:1px solid #bfdbfe;border-radius:12px;padding:24px;text-align:center;margin-bottom:20px}
-.activate-box h3{font-weight:600;color:var(--text);margin-bottom:8px}
-.activate-box p{color:var(--muted);font-size:.9rem;margin-bottom:16px}
-.activate-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-.act-btn{padding:10px 20px;border-radius:8px;font-weight:600;font-size:.85rem;cursor:pointer;text-decoration:none;border:none;transition:all .2s}
-.act-btn.primary{background:var(--primary);color:#fff}
-.act-btn.secondary{background:#fff;border:1px solid var(--primary);color:var(--primary)}
-.act-btn:hover{opacity:.9}
-.preview-frame{background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:16px}
-.preview-header{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;gap:8px;align-items:center;font-size:.75rem;color:var(--muted)}
-.preview-dot{width:10px;height:10px;border-radius:50%;background:#ddd}
-.preview-body{padding:20px;min-height:200px;text-align:center;color:var(--muted);font-size:.85rem}
-.ref-code-box{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px;display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
-.ref-code{font-weight:700;color:var(--primary);font-size:1.1rem;letter-spacing:.1em}
-.copy-btn{padding:8px 16px;background:var(--light);color:var(--primary);border:none;border-radius:6px;font-size:.8rem;cursor:pointer;font-weight:600}
-.copy-btn:hover{background:#dbeafe}
-.ref-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px}
-.ref-stat{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center}
-.ref-stat .val{font-weight:700;font-size:1.5rem;color:var(--primary)}
-.ref-stat .lbl{font-size:.75rem;color:var(--muted);margin-top:4px}
-.powered{text-align:center;padding:20px;color:#999;font-size:.75rem}
+        /* Buttons */
+        .btn{
+            width:100%;padding:14px;background:var(--brand);color:white;font-weight:700;
+            border:none;border-radius:50px;font-size:1rem;cursor:pointer;transition:all .2s;
+            display:inline-flex;align-items:center;justify-content:center;gap:8px;
+        }
+        .btn:hover{background:var(--brand-dark);transform:translateY(-1px);}
+        .btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+        .btn-outline{background:white;color:var(--brand);border:2px solid var(--brand);}
+        .btn-outline:hover{background:var(--brand);color:white;}
+        .btn-success{background:var(--success);}
+        .btn-success:hover{background:#15803d;}
+        .btn-danger{background:var(--danger);}
+        .btn-sm{padding:10px 20px;font-size:.9rem;width:auto;}
+        .btn-group{display:flex;gap:12px;}
+        .btn-group .btn{flex:1;}
 
-@media(max-width:600px){
-  .form-row{grid-template-columns:1fr}
-  .status-box{flex-direction:column;gap:12px;align-items:flex-start}
-  .tabs{gap:4px}
-  .stats{grid-template-columns:1fr}
-  .activate-btns{flex-direction:column;width:100%}
-  .act-btn{width:100%;text-align:center}
-  .ref-stats{grid-template-columns:1fr}
-}
-</style>
+        /* Steps */
+        .step-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+        .step-dot{width:32px;height:32px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;color:var(--text2);transition:all .3s;}
+        .step-dot.active{background:var(--brand);color:white;}
+        .step-line{flex:1;height:3px;background:var(--border);margin:0 8px;border-radius:2px;}
+        .step-line.active{background:var(--brand);}
+
+        /* Tabs */
+        .tab-bar{display:flex;gap:6px;margin-bottom:24px;flex-wrap:wrap;border-bottom:2px solid var(--border);padding-bottom:2px;}
+        .tab{padding:10px 18px;border-radius:12px 12px 0 0;font-weight:600;cursor:pointer;transition:all .2s;border:none;background:none;color:var(--text2);font-size:.9rem;position:relative;}
+        .tab.active{color:var(--brand);}
+        .tab.active::after{content:'';position:absolute;bottom:-4px;left:0;right:0;height:3px;background:var(--brand);border-radius:2px;}
+        .tab:hover{color:var(--brand);}
+        .tab-content{display:none;animation:fadeIn .3s ease;}
+        .tab-content.active{display:block;}
+        @keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+        /* Messages */
+        .msg{padding:12px 16px;border-radius:12px;margin-bottom:16px;font-size:.9rem;font-weight:500;display:none;}
+        .msg.show{display:block;}
+        .msg-success{background:#dcfce7;color:#166534;border:1px solid #bbf7d0;}
+        .msg-error{background:#fee2e2;color:#991b1b;border:1px solid #fecaca;}
+        .msg-info{background:#dbeafe;color:#1e40af;border:1px solid #bfdbfe;}
+
+        /* Dashboard stats */
+        .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:24px;}
+        .stat-card{background:linear-gradient(135deg,var(--brand-dark),var(--brand));color:white;padding:24px;border-radius:16px;text-align:center;}
+        .stat-card h3{font-size:2rem;font-weight:900;}
+        .stat-card p{font-size:.9rem;opacity:.85;margin-top:4px;}
+        .stat-card.stars{background:linear-gradient(135deg,#f59e0b,#d97706);}
+        .stat-card.referrals{background:linear-gradient(135deg,#10b981,#059669);}
+
+        /* Preview iframe */
+        .preview-frame{width:100%;height:560px;border:1px solid var(--border);border-radius:16px;background:white;}
+
+        /* Social inputs */
+        .social-input{position:relative;}
+        .social-input i{position:absolute;left:14px;top:14px;color:var(--text2);font-size:1rem;}
+        .social-input input{padding-left:40px;}
+
+        /* Referral card */
+        .referral-card{background:linear-gradient(135deg,#fef3c7,#fde68a);padding:24px;border-radius:16px;text-align:center;margin-bottom:20px;}
+        .referral-card h3{font-size:1.2rem;font-weight:700;color:#92400e;margin-bottom:8px;}
+        .referral-code{display:inline-block;background:white;padding:12px 28px;border-radius:12px;font-family:monospace;font-size:1.3rem;font-weight:700;color:var(--text);letter-spacing:1px;border:2px dashed #f59e0b;margin:8px 0;}
+        .stars-info{background:#fffbeb;padding:16px;border-radius:12px;border:1px solid #fde68a;margin-top:16px;}
+        .stars-info h4{color:#92400e;margin-bottom:6px;}
+        .stars-info ul{list-style:none;padding:0;font-size:.9rem;color:#78350f;}
+        .stars-info li{padding:4px 0;display:flex;align-items:center;gap:8px;}
+
+        /* Activation */
+        .price-tag{font-size:2.5rem;font-weight:900;color:var(--brand);text-align:center;margin:16px 0;}
+        .price-tag span{font-size:1rem;font-weight:400;color:var(--text2);}
+        .plan-card{background:var(--card);padding:28px;border-radius:20px;border:2px solid var(--border);text-align:center;margin-bottom:16px;transition:all .2s;}
+        .plan-card:hover{border-color:var(--brand-light);transform:translateY(-2px);}
+        .plan-card.featured{border-color:var(--brand-light);background:linear-gradient(135deg,#eff6ff,#ffffff);}
+
+        /* Edit form sections */
+        .form-section{margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--border);}
+        .form-section:last-child{border-bottom:none;padding-bottom:0;}
+        .form-section h3{font-size:1.1rem;font-weight:700;margin-bottom:14px;color:var(--brand-dark);display:flex;align-items:center;gap:8px;}
+
+        /* Recovery */
+        .recovery-q{background:#f1f5f9;padding:16px;border-radius:12px;margin-bottom:12px;}
+        .recovery-q p{font-weight:600;margin-bottom:8px;}
+
+        /* Watermark */
+        .watermark{text-align:center;padding:20px;color:#94a3b8;font-size:.85rem;}
+        .watermark a{color:var(--brand);text-decoration:none;font-weight:600;}
+
+        /* Hidden */
+        .hidden{display:none !important;}
+
+        /* Mobile */
+        @media(max-width:640px){
+            .container{padding:16px;}
+            .card{padding:24px;}
+            h1{font-size:1.5rem;}
+            .preview-frame{height:450px;}
+            .tab-bar{gap:4px;}
+            .tab{padding:8px 12px;font-size:.85rem;}
+        }
+    </style>
 </head>
 <body>
+<div id="app">
 
-<!-- LOGIN -->
-<div id="loginScreen" class="screen active">
-<div class="auth-wrap">
-<div class="auth-logo">MyShop</div>
-<div class="auth-card">
-<div class="auth-title">Welcome</div>
-<div class="auth-sub">Sign in to manage your shop</div>
-<div class="msg" id="loginMsg"></div>
-<div class="form-group"><label>Email</label><input type="email" id="loginEmail" placeholder="your@email.com"/></div>
-<div class="form-group"><label>Password</label><input type="password" id="loginPass" placeholder="Password"/></div>
-<button class="btn btn-primary" onclick="doLogin()">Sign In</button>
-<div class="loader" id="loginLoader">Signing in...</div>
-<div class="auth-switch">No shop? <a onclick="showScreen('registerScreen')">Create one →</a></div>
-<div class="auth-switch" style="margin-top:8px">Forgot password? <a onclick="showScreen('recoveryScreen')">Recover</a></div>
-</div>
-</div>
-</div>
+    <!-- LOGIN -->
+    <div id="login-screen" class="card card-narrow">
+        <div style="text-align:center;margin-bottom:20px;">
+            <img src="/icon.svg" alt="MyShop" style="width:56px;height:56px;margin-bottom:12px;">
+            <h1>Welcome Back</h1>
+            <p class="sub">Sign in to manage your business hub</p>
+        </div>
+        <div id="login-msg" class="msg"></div>
+        <label>Email</label>
+        <input type="email" id="login-email" placeholder="you@example.com">
+        <label>Password</label>
+        <input type="password" id="login-password" placeholder="••••••••">
+        <button class="btn" onclick="login()" id="login-btn"><i class="fa-solid fa-arrow-right"></i> Sign In</button>
+        <p style="text-align:center;margin-top:16px;font-size:.9rem;color:var(--text2);">
+            <a href="#" onclick="showRegister()" style="color:var(--brand);text-decoration:none;font-weight:600;">Create a shop</a> · 
+            <a href="#" onclick="showRecovery()" style="color:var(--text2);text-decoration:none;">Forgot password?</a>
+        </p>
+    </div>
 
-<!-- REGISTER (multi-step) -->
-<div id="registerScreen" class="screen">
-<div class="auth-wrap">
-<div class="auth-logo">MyShop</div>
-<div class="auth-card">
-<div class="step-dots"><div class="dot active" id="d0"></div><div class="dot" id="d1"></div><div class="dot" id="d2"></div><div class="dot" id="d3"></div></div>
-<div class="msg" id="regMsg"></div>
+    <!-- RECOVERY -->
+    <div id="recovery-screen" class="card card-narrow hidden">
+        <div style="text-align:center;margin-bottom:20px;">
+            <h1>Recover Account</h1>
+            <p class="sub">Answer your security question to reset your password</p>
+        </div>
+        <div id="recovery-msg" class="msg"></div>
+        <div id="recovery-step1">
+            <label>Email</label>
+            <input type="email" id="rec-email" placeholder="you@example.com">
+            <button class="btn" onclick="fetchSecurityQuestions()"><i class="fa-solid fa-magnifying-glass"></i> Find My Account</button>
+        </div>
+        <div id="recovery-step2" class="hidden">
+            <div id="rec-questions"></div>
+            <label>New Password</label>
+            <input type="password" id="rec-new-password" placeholder="Min 6 characters">
+            <div class="btn-group">
+                <button class="btn btn-outline" onclick="showLogin()">Back</button>
+                <button class="btn" onclick="resetPassword()"><i class="fa-solid fa-rotate"></i> Reset Password</button>
+            </div>
+        </div>
+        <p style="text-align:center;margin-top:16px;">
+            <a href="#" onclick="showLogin()" style="color:var(--brand);text-decoration:none;font-weight:600;">Back to Sign In</a>
+        </p>
+    </div>
 
-<div id="regStep0">
-<div class="step-title">Your Business</div>
-<div class="step-sub">Tell us about your business</div>
-<div class="form-group"><label>Business Name</label><input type="text" id="bizName" placeholder="Business name"/></div>
-<div class="form-group"><label>Description</label><textarea id="bizDesc" placeholder="What you do..."></textarea></div>
-<div class="form-group"><label>Location</label><input type="text" id="bizLocation" placeholder="City, Country"/></div>
-<div class="form-group"><label>Phone</label><input type="tel" id="bizPhone" placeholder="+234..."/></div>
-<div class="form-group"><label>Where are you?</label><select id="bizCountry"><option value="NG">🇳🇬 Nigeria (₦1,500/month)</option><option value="INTL">🌍 International ($5/month)</option></select></div>
-<button class="btn btn-primary" onclick="regNext(0)">Continue →</button>
-</div>
+    <!-- REGISTER -->
+    <div id="register-screen" class="card card-narrow hidden">
+        <div style="text-align:center;margin-bottom:20px;">
+            <h1>Create Your Hub</h1>
+            <p class="sub">Step <span id="step-num">1</span> of 4</p>
+        </div>
+        <div class="step-header">
+            <div class="step-dot active" id="dot1">1</div>
+            <div class="step-line" id="line1"></div>
+            <div class="step-dot" id="dot2">2</div>
+            <div class="step-line" id="line2"></div>
+            <div class="step-dot" id="dot3">3</div>
+            <div class="step-line" id="line3"></div>
+            <div class="step-dot" id="dot4">4</div>
+        </div>
+        <div id="reg-msg" class="msg"></div>
 
-<div id="regStep1" style="display:none">
-<div class="step-title">Brand & Socials</div>
-<div class="step-sub">Make it yours</div>
-<div class="form-group"><label>Logo</label><div class="upload-area" id="logoUploadArea"><input type="file" id="logoFile" accept="image/*" onchange="uploadLogo()"/><strong>Upload Logo</strong><p>PNG, JPG · Max 5MB</p><img id="logoPreview" class="logo-preview" alt="Logo"/></div><div class="loader" id="logoLoader">Uploading...</div></div>
-<div class="form-group"><label>Primary Color</label><div class="color-row"><input type="color" id="c1" value="#2563eb" oninput="document.getElementById('c1hex').value=this.value"/><input type="text" id="c1hex" class="color-hex" value="#2563eb" oninput="document.getElementById('c1').value=this.value"/></div></div>
-<div class="form-group"><label>Secondary Color</label><div class="color-row"><input type="color" id="c2" value="#ffffff" oninput="document.getElementById('c2hex').value=this.value"/><input type="text" id="c2hex" class="color-hex" value="#ffffff" oninput="document.getElementById('c2').value=this.value"/></div></div>
-<div class="form-row"><div class="form-group"><label>Facebook</label><input type="url" id="socialFB" placeholder="URL"/></div><div class="form-group"><label>Instagram</label><input type="url" id="socialIG" placeholder="URL"/></div></div>
-<div class="form-row"><div class="form-group"><label>WhatsApp</label><input type="url" id="socialWA" placeholder="URL"/></div><div class="form-group"><label>TikTok</label><input type="url" id="socialTK" placeholder="URL"/></div></div>
-<div class="form-group"><label>Catalog URL</label><input type="url" id="catalogUrl" placeholder="Selar or WhatsApp catalog"/></div>
-<button class="btn btn-primary" onclick="regNext(1)">Continue →</button>
-<button class="btn btn-ghost" onclick="regBack(1)">← Back</button>
-</div>
+        <!-- Step 1: Business Info -->
+        <div id="step1">
+            <div class="form-section">
+                <h3><i class="fa-solid fa-briefcase"></i> Business Info</h3>
+                <label>Email *</label>
+                <input type="email" id="reg-email" placeholder="you@example.com">
+                <div class="input-group">
+                    <div>
+                        <label>Business Name *</label>
+                        <input type="text" id="reg-name" placeholder="My Store">
+                    </div>
+                    <div>
+                        <label>Tagline</label>
+                        <input type="text" id="reg-tagline" placeholder="What makes you special?">
+                    </div>
+                </div>
+                <label>Description</label>
+                <textarea id="reg-desc" rows="3" placeholder="Tell customers what you offer..."></textarea>
+            </div>
+            <div class="form-section">
+                <h3><i class="fa-solid fa-location-dot"></i> Contact Details</h3>
+                <div class="input-group">
+                    <div>
+                        <label>Phone *</label>
+                        <input type="tel" id="reg-phone" placeholder="+2348000000000">
+                    </div>
+                    <div>
+                        <label>Location</label>
+                        <input type="text" id="reg-location" placeholder="City, Country">
+                    </div>
+                </div>
+                <label>Country *</label>
+                <select id="reg-country">
+                    <option value="NG">Nigeria 🇳🇬</option>
+                    <option value="INTL">International 🌍</option>
+                </select>
+            </div>
+            <button class="btn" onclick="nextStep(2)">Continue <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
 
-<div id="regStep2" style="display:none">
-<div class="step-title">Your Account</div>
-<div class="step-sub">Set up login</div>
-<div class="form-group"><label>Email</label><input type="email" id="regEmail" placeholder="you@email.com"/></div>
-<div class="form-group"><label>Password</label><input type="password" id="regPass" placeholder="Strong password"/></div>
-<div class="form-group"><label>Referral Code (optional)</label><input type="text" id="regRef" placeholder="e.g. REF-XXXX"/></div>
-<button class="btn btn-primary" onclick="regNext(2)">Continue →</button>
-<button class="btn btn-ghost" onclick="regBack(2)">← Back</button>
-</div>
+        <!-- Step 2: Branding & Socials -->
+        <div id="step2" class="hidden">
+            <div class="form-section">
+                <h3><i class="fa-solid fa-image"></i> Logo</h3>
+                <input type="file" id="logo-file" accept="image/*" onchange="uploadLogo()">
+                <div id="logo-preview-container" style="text-align:center;display:none;margin-bottom:14px;">
+                    <img id="logo-preview-img" style="width:100px;height:100px;border-radius:20px;object-fit:cover;border:2px solid var(--border);" src="" alt="Logo Preview">
+                    <p id="logo-status" style="font-size:.85rem;color:var(--success);margin-top:6px;"></p>
+                </div>
+                <input type="hidden" id="reg-logo-url" value="">
+            </div>
+            <div class="form-section">
+                <h3><i class="fa-solid fa-store"></i> Catalog</h3>
+                <label>Catalog URL (Selar, Shopify, etc.)</label>
+                <input type="url" id="reg-catalog" placeholder="https://selar.co/...">
+            </div>
+            <div class="form-section">
+                <h3><i class="fa-solid fa-share-nodes"></i> Social Media</h3>
+                <div class="social-input">
+                    <i class="fa-brands fa-facebook-f"></i>
+                    <input type="url" id="reg-fb" placeholder="facebook.com/yourpage">
+                </div>
+                <div class="social-input">
+                    <i class="fa-brands fa-instagram"></i>
+                    <input type="url" id="reg-ig" placeholder="instagram.com/yourhandle">
+                </div>
+                <div class="social-input">
+                    <i class="fa-brands fa-tiktok"></i>
+                    <input type="url" id="reg-tt" placeholder="tiktok.com/@yourhandle">
+                </div>
+                <div class="social-input">
+                    <i class="fa-brands fa-x-twitter"></i>
+                    <input type="url" id="reg-tw" placeholder="x.com/yourhandle">
+                </div>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-outline" onclick="prevStep(1)"><i class="fa-solid fa-arrow-left"></i> Back</button>
+                <button class="btn" onclick="nextStep(3)">Continue <i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+        </div>
 
-<div id="regStep3" style="display:none">
-<div class="step-title">Security</div>
-<div class="step-sub">3 questions to recover your account</div>
-<div id="sqFields"></div>
-<button class="btn btn-primary" onclick="submitRegister()">Create Shop</button>
-<div class="loader" id="regLoader">Creating...</div>
-<button class="btn btn-ghost" onclick="regBack(3)">← Back</button>
-</div>
+        <!-- Step 3: Security -->
+        <div id="step3" class="hidden">
+            <div class="form-section">
+                <h3><i class="fa-solid fa-lock"></i> Create Password</h3>
+                <label>Password *</label>
+                <input type="password" id="reg-password" placeholder="Min 6 characters">
+            </div>
+            <div class="form-section">
+                <h3><i class="fa-solid fa-gift"></i> Referral (Optional)</h3>
+                <label>Who referred you?</label>
+                <input type="text" id="reg-ref" placeholder="REF-XXXX or friend's code">
+                <p style="font-size:.85rem;color:var(--text2);margin-top:-8px;">If someone shared MyShop with you, enter their code. They'll earn Stars!</p>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-outline" onclick="prevStep(2)"><i class="fa-solid fa-arrow-left"></i> Back</button>
+                <button class="btn" onclick="nextStep(4)">Continue <i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+        </div>
 
-<div class="auth-switch">Have a shop? <a onclick="showScreen('loginScreen')">Sign in →</a></div>
-</div>
-</div>
-</div>
+        <!-- Step 4: Security Questions -->
+        <div id="step4" class="hidden">
+            <div class="form-section">
+                <h3><i class="fa-solid fa-shield-halved"></i> Security Questions</h3>
+                <p class="sub">These help you recover your account if you forget your password.</p>
+                <label>Question 1 *</label>
+                <input type="text" id="sec-q1" placeholder="e.g. What city were you born in?">
+                <input type="text" id="sec-a1" placeholder="Your answer">
+                <label>Question 2 *</label>
+                <input type="text" id="sec-q2" placeholder="e.g. What is your mother's maiden name?">
+                <input type="text" id="sec-a2" placeholder="Your answer">
+                <label>Question 3 *</label>
+                <input type="text" id="sec-q3" placeholder="e.g. What was your first pet's name?">
+                <input type="text" id="sec-a3" placeholder="Your answer">
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-outline" onclick="prevStep(3)"><i class="fa-solid fa-arrow-left"></i> Back</button>
+                <button class="btn btn-success" onclick="register()"><i class="fa-solid fa-check"></i> Create My Shop</button>
+            </div>
+        </div>
+    </div>
 
-<!-- RECOVERY -->
-<div id="recoveryScreen" class="screen">
-<div class="auth-wrap">
-<div class="auth-logo">MyShop</div>
-<div class="auth-card">
-<div class="auth-title">Recover Account</div>
-<div class="auth-sub">Answer your security question</div>
-<div class="msg" id="recMsg"></div>
-<div id="recStep1">
-<div class="form-group"><label>Email</label><input type="email" id="recEmail" placeholder="your@email.com"/></div>
-<button class="btn btn-primary" onclick="loadSecurityQ()">Find Account</button>
-</div>
-<div id="recStep2" style="display:none">
-<div class="form-group"><label id="recQLabel">Question</label><input type="text" id="recAnswer" placeholder="Answer"/></div>
-<div class="form-group"><label>New Password</label><input type="password" id="recNewPass" placeholder="New password"/></div>
-<button class="btn btn-primary" onclick="doReset()">Reset</button>
-</div>
-<div class="auth-switch"><a onclick="showScreen('loginScreen')">← Back</a></div>
-</div>
-</div>
-</div>
+    <!-- DASHBOARD -->
+    <div id="dashboard" class="hidden">
+        <div class="container">
+            <div class="card" style="padding:20px 24px;margin-bottom:16px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+                    <div style="display:flex;align-items:center;gap:12px;">
+                        <img src="/icon.svg" alt="" style="width:36px;height:36px;">
+                        <div>
+                            <h2 style="margin:0;font-size:1.2rem;" id="dash-title">Your Shop</h2>
+                            <p style="margin:0;font-size:.85rem;color:var(--text2);" id="dash-url"></p>
+                        </div>
+                    </div>
+                    <button class="btn btn-outline btn-sm" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Sign Out</button>
+                </div>
+            </div>
 
-<!-- DASHBOARD -->
-<div id="dashScreen" class="screen">
-<div class="dash-nav">
-<div class="dash-logo">MyShop</div>
-<div class="dash-user">
-<span id="dashEmail"></span>
-<button class="logout-btn" onclick="logout()">Sign out</button>
-</div>
-</div>
-<div class="dash-body">
-<div class="status-box">
-<div>
-<div style="font-size:.8rem;color:var(--muted);margin-bottom:4px">Your Shop</div>
-<a class="shop-url" id="shopLink" target="_blank"></a>
-</div>
-<span class="badge" id="statusBadge">pending</span>
-</div>
+            <div class="tab-bar" id="tab-bar">
+                <div class="tab active" onclick="switchTab('overview',this)">Overview</div>
+                <div class="tab" onclick="switchTab('preview',this)">Preview</div>
+                <div class="tab" onclick="switchTab('edit',this)">Edit</div>
+                <div class="tab" onclick="switchTab('activate',this)">Activate</div>
+                <div class="tab" onclick="switchTab('referrals',this)">Referrals</div>
+                <div class="tab" onclick="switchTab('stars',this)">⭐ Stars</div>
+            </div>
 
-<div class="tabs">
-<div class="tab active" onclick="switchTab('overview')">Overview</div>
-<div class="tab" onclick="switchTab('preview')">Preview</div>
-<div class="tab" onclick="switchTab('edit')">Edit</div>
-<div class="tab" onclick="switchTab('activate')">Activate</div>
-<div class="tab" onclick="switchTab('referrals')">Referrals</div>
-</div>
-
-<div class="panel active" id="tab-overview">
-<div class="stats">
-<div class="stat"><div class="stat-val" id="visits">0</div><div class="stat-lbl">Visits</div></div>
-<div class="stat"><div class="stat-val" id="status">—</div><div class="stat-lbl">Status</div></div>
-<div class="stat"><div class="stat-val" id="expires">—</div><div class="stat-lbl">Expires</div></div>
-</div>
-<div id="overviewActivate"></div>
-</div>
-
-<div class="panel" id="tab-preview">
-<div class="preview-frame">
-<div class="preview-header"><div class="preview-dot" style="background:#ff5f57"></div><div class="preview-dot" style="background:#ffbd2e"></div><div class="preview-dot" style="background:#28c840"></div><div style="font-size:.75rem;color:var(--muted)">myshop.afric.site/shop</div></div>
-<div class="preview-body" id="preview">Loading...</div>
-</div>
-<a id="openPreview" href="#" target="_blank" class="btn btn-primary">Open Full Preview</a>
-</div>
-
-<div class="panel" id="tab-edit">
-<div class="msg" id="editMsg"></div>
-<div class="form-group"><label>Tagline</label><input type="text" id="editTagline" placeholder="Short tagline"/></div>
-<div class="form-group"><label>Description</label><textarea id="editDesc"></textarea></div>
-<div class="form-group"><label>Phone</label><input type="tel" id="editPhone"/></div>
-<div class="form-group"><label>Location</label><input type="text" id="editLocation"/></div>
-<div class="form-group"><label>Logo URL</label><input type="url" id="editLogo" placeholder="https://i.ibb.co/..."/></div>
-<div class="form-row"><div class="form-group"><label>Facebook</label><input type="url" id="editFB"/></div><div class="form-group"><label>Instagram</label><input type="url" id="editIG"/></div></div>
-<div class="form-row"><div class="form-group"><label>WhatsApp</label><input type="url" id="editWA"/></div><div class="form-group"><label>TikTok</label><input type="url" id="editTK"/></div></div>
-<div class="form-group"><label>Catalog</label><input type="url" id="editCatalog"/></div>
-<div class="form-row"><div class="form-group"><label>Primary Color</label><div class="color-row"><input type="color" id="editC1" oninput="document.getElementById('editC1hex').value=this.value"/><input type="text" id="editC1hex" class="color-hex" oninput="document.getElementById('editC1').value=this.value"/></div></div><div class="form-group"><label>Secondary</label><div class="color-row"><input type="color" id="editC2" oninput="document.getElementById('editC2hex').value=this.value"/><input type="text" id="editC2hex" class="color-hex" oninput="document.getElementById('editC2').value=this.value"/></div></div></div>
-<div class="form-group"><label>Password</label><input type="password" id="editPass" placeholder="Confirm password"/></div>
-<button class="btn btn-primary" onclick="saveEdit()">Save</button>
-<div class="loader" id="editLoader">Saving...</div>
-</div>
-
-<div class="panel" id="tab-activate">
-<div class="activate-box">
-<h3>Activate Your Shop</h3>
-<p>Make your shop public and start getting customers</p>
-<div id="activateContent"></div>
-</div>
-<div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:20px">
-<p style="color:var(--muted);font-size:.9rem;margin-bottom:16px">After paying on Selar, enter your email to activate.</p>
-<div class="form-group"><label>Email</label><input type="email" id="activateEmail" placeholder="Your email"/></div>
-<div class="form-group"><label>Subscription</label><select id="activateType"><option value="manual">Manual (pay monthly)</option><option value="auto">Automatic (recurring)</option></select></div>
-<button class="btn btn-primary" onclick="doActivate()">Activate</button>
-<div class="loader" id="activateLoader">Activating...</div>
-<div class="msg" id="activateMsg"></div>
-</div>
-</div>
-
-<div class="panel" id="tab-referrals">
-<div class="ref-code-box">
-<div>
-<div style="font-size:.75rem;color:var(--muted);margin-bottom:4px">YOUR CODE</div>
-<div class="ref-code" id="refCode">—</div>
-</div>
-<button class="copy-btn" onclick="copyRef()">Copy</button>
-</div>
-<div class="ref-stats">
-<div class="ref-stat"><div class="val" id="refTotal">0</div><div class="lbl">Referred</div></div>
-<div class="ref-stat"><div class="val" id="refActive">0</div><div class="lbl">Active</div></div>
-<div class="ref-stat"><div class="val" id="refEarn">₦0</div><div class="lbl">This Month</div></div>
-</div>
-</div>
-</div>
-
-<div class="powered">MyShop · <a href="https://emltechstudio.site" style="color:#999;text-decoration:none">EML Tech Studio</a></div>
-</div>
+            <div id="tab-content"></div>
+        </div>
+        <div class="watermark">Powered by <a href="/" target="_blank">MyShop</a> — EML Tech Studio</div>
+    </div>
 </div>
 
 <script>
-const API='https://emltechstudio-myshop-api.hf.space';
-const SQ=['What was the name of your first pet?','What city were you born in?','What is your mother\'s maiden name?','What was your primary school?','What was your childhood nickname?'];
-let session=JSON.parse(localStorage.getItem('myshop_session')||'null');
-let logoUrl='';
-let recQIdx=0;
+const API = 'https://emltechstudio-myshop-api.hf.space';
+let session = JSON.parse(localStorage.getItem('myshop_session') || 'null');
+let currentStep = 1;
+let uploadedLogoUrl = '';
+let shopData = null;
+let recoveryQuestions = [];
 
-function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active')}
-function showMsg(id,text,type='error'){const el=document.getElementById(id);el.textContent=text;el.className=`msg ${type}`;el.style.display='block';setTimeout(()=>el.style.display='none',5000)}
-function setLoader(id,show){document.getElementById(id).classList.toggle('active',show)}
+// Screen management
+function hideAll(){
+    document.getElementById('login-screen').classList.add('hidden');
+    document.getElementById('register-screen').classList.add('hidden');
+    document.getElementById('recovery-screen').classList.add('hidden');
+    document.getElementById('dashboard').classList.add('hidden');
+}
+function showLogin(){ hideAll(); document.getElementById('login-screen').classList.remove('hidden'); }
+function showRegister(){ hideAll(); document.getElementById('register-screen').classList.remove('hidden'); currentStep=1; updateSteps(); }
+function showRecovery(){ hideAll(); document.getElementById('recovery-screen').classList.remove('hidden'); document.getElementById('recovery-step1').classList.remove('hidden'); document.getElementById('recovery-step2').classList.add('hidden'); }
+function showDashboard(){ hideAll(); document.getElementById('dashboard').classList.remove('hidden'); loadOverview(); }
 
-async function doLogin(){
-  const email=document.getElementById('loginEmail').value.trim();const pass=document.getElementById('loginPass').value;
-  if(!email||!pass)return showMsg('loginMsg','Fill in all fields.');
-  setLoader('loginLoader',true);
-  try{
-    const r=await fetch(`${API}/auth/login`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password:pass})});
-    const d=await r.json();
-    if(!r.ok)throw new Error(d.detail);
-    session={...d,password:pass};localStorage.setItem('myshop_session',JSON.stringify(session));
-    loadDashboard();
-  }catch(e){showMsg('loginMsg',e.message)}
-  finally{setLoader('loginLoader',false)}
+if(session) showDashboard(); else showLogin();
+
+function updateSteps(){
+    for(let i=1;i<=4;i++){
+        document.getElementById('step'+i).classList.toggle('hidden', i!==currentStep);
+        document.getElementById('dot'+i).classList.toggle('active', i<=currentStep);
+        if(i<4) document.getElementById('line'+i).classList.toggle('active', i<currentStep);
+    }
+    document.getElementById('step-num').textContent = currentStep;
+}
+window.nextStep = function(n){ currentStep=n; updateSteps(); };
+window.prevStep = function(n){ currentStep=n; updateSteps(); };
+
+function showMsg(id, text, type='error'){
+    const el = document.getElementById(id);
+    el.textContent = text;
+    el.className = 'msg msg-'+type+' show';
+    setTimeout(()=>el.classList.remove('show'), 6000);
 }
 
-function regNext(step){
-  const v=[()=>document.getElementById('bizName').value&&document.getElementById('bizDesc').value&&document.getElementById('bizLocation').value&&document.getElementById('bizPhone').value,()=>true,()=>document.getElementById('regEmail').value.includes('@')&&document.getElementById('regPass').value.length>=6];
-  if(!v[step]())return showMsg('regMsg','Please fill in all required fields.');
-  document.getElementById(`regStep${step}`).style.display='none';document.getElementById(`regStep${step+1}`).style.display='block';
-  document.getElementById(`d${step}`).classList.remove('active');document.getElementById(`d${step+1}`).classList.add('active');
-  if(step===2)initSQ();
-}
-
-function regBack(step){document.getElementById(`regStep${step}`).style.display='none';document.getElementById(`regStep${step-1}`).style.display='block';document.getElementById(`d${step}`).classList.remove('active');document.getElementById(`d${step-1}`).classList.add('active')}
-
-function initSQ(){const c=document.getElementById('sqFields');c.innerHTML='';for(let i=0;i<3;i++)c.innerHTML+=`<div class="form-group"><label>Q${i+1}</label><select id="sq_q${i}">${SQ.map(q=>`<option>${q}</option>`).join('')}</select><input type="text" id="sq_a${i}" placeholder="Answer"/></div>`}
-
+// Logo upload
 async function uploadLogo(){
-  const f=document.getElementById('logoFile').files[0];if(!f)return;
-  setLoader('logoLoader',true);
-  try{
-    const fd=new FormData();fd.append('file',f);fd.append('email',document.getElementById('regEmail').value||'temp@test.com');
-    const r=await fetch(`${API}/shop/upload`,{method:'POST',headers:{'X-Anthropic-API-Key':''},body:fd});
-    const d=await r.json();if(!d.success)throw new Error('Upload failed');
-    logoUrl=d.url;document.getElementById('logoPreview').src=logoUrl;document.getElementById('logoPreview').style.display='block';
-  }catch(e){showMsg('regMsg','Logo upload failed. Try again.')}
-  finally{setLoader('logoLoader',false)}
+    const fileInput = document.getElementById('logo-file');
+    const file = fileInput.files[0];
+    if(!file) return;
+    const email = document.getElementById('reg-email').value.trim();
+    if(!email){ showMsg('reg-msg','Please enter your email first (Step 1)','error'); fileInput.value=''; return; }
+    const formData = new FormData();
+    formData.append('file', file);
+    try{
+        const res = await fetch(`${API}/shop/upload`, {method:'POST', headers:{'email':email}, body:formData});
+        if(!res.ok) throw new Error('Upload failed');
+        const data = await res.json();
+        uploadedLogoUrl = data.url;
+        document.getElementById('reg-logo-url').value = data.url;
+        document.getElementById('logo-preview-container').style.display = 'block';
+        document.getElementById('logo-preview-img').src = data.url;
+        document.getElementById('logo-status').textContent = '✓ Logo uploaded';
+    }catch(e){ showMsg('reg-msg','Logo upload error: '+e.message,'error'); fileInput.value=''; }
 }
 
-async function submitRegister(){
-  const sqs=[];for(let i=0;i<3;i++){const a=document.getElementById(`sq_a${i}`).value.trim();if(!a)return showMsg('regMsg','Answer all questions.');sqs.push({question:document.getElementById(`sq_q${i}`).value,answer:a})}
-  setLoader('regLoader',true);
-  try{
-    const body={email:document.getElementById('regEmail').value.trim(),password:document.getElementById('regPass').value,security_questions:sqs,business_name:document.getElementById('bizName').value.trim(),description:document.getElementById('bizDesc').value.trim(),logo_url:logoUrl,phone:document.getElementById('bizPhone').value.trim(),location:document.getElementById('bizLocation').value.trim(),country:document.getElementById('bizCountry').value,facebook:document.getElementById('socialFB').value.trim(),instagram:document.getElementById('socialIG').value.trim(),whatsapp:document.getElementById('socialWA').value.trim(),tiktok:document.getElementById('socialTK').value.trim(),catalog_url:document.getElementById('catalogUrl').value.trim(),brand_primary:document.getElementById('c1').value,brand_secondary:document.getElementById('c2').value,referred_by:document.getElementById('regRef').value.trim()};
-    const r=await fetch(`${API}/auth/register`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
-    const d=await r.json();if(!r.ok)throw new Error(d.detail);
-    session={email:body.email,password:body.password,slug:d.slug,status:'pending',referral_code:d.referral_code,visit_count:0};
-    localStorage.setItem('myshop_session',JSON.stringify(session));loadDashboard();
-  }catch(e){showMsg('regMsg',e.message)}
-  finally{setLoader('regLoader',false)}
+// Auth
+async function login(){
+    const email = document.getElementById('login-email').value.trim();
+    const password = document.getElementById('login-password').value;
+    const btn = document.getElementById('login-btn');
+    btn.disabled = true;
+    try{
+        const res = await fetch(`${API}/auth/login`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password})});
+        if(!res.ok) throw new Error('Invalid email or password');
+        const data = await res.json();
+        session = data;
+        localStorage.setItem('myshop_session', JSON.stringify(session));
+        showDashboard();
+    }catch(e){ showMsg('login-msg', e.message, 'error'); }
+    finally{ btn.disabled = false; }
 }
 
-async function loadSecurityQ(){
-  const email=document.getElementById('recEmail').value.trim();if(!email)return showMsg('recMsg','Enter your email.');
-  try{
-    const r=await fetch(`${API}/auth/security-questions?email=${encodeURIComponent(email)}`);
-    const d=await r.json();if(!r.ok)throw new Error(d.detail);
-    recQIdx=0;document.getElementById('recQLabel').textContent=d.questions[0];
-    document.getElementById('recStep1').style.display='none';document.getElementById('recStep2').style.display='block';
-  }catch(e){showMsg('recMsg',e.message)}
+async function register(){
+    const email = document.getElementById('reg-email').value.trim();
+    const name = document.getElementById('reg-name').value.trim();
+    const password = document.getElementById('reg-password').value;
+    const phone = document.getElementById('reg-phone').value.trim();
+    const location = document.getElementById('reg-location').value.trim();
+    const country = document.getElementById('reg-country').value;
+    const desc = document.getElementById('reg-desc').value.trim();
+    const tagline = document.getElementById('reg-tagline').value.trim();
+    const catalog = document.getElementById('reg-catalog').value.trim();
+    const ref = document.getElementById('reg-ref').value.trim();
+    const secQs = [
+        {question:document.getElementById('sec-q1').value.trim(),answer:document.getElementById('sec-a1').value.trim()},
+        {question:document.getElementById('sec-q2').value.trim(),answer:document.getElementById('sec-a2').value.trim()},
+        {question:document.getElementById('sec-q3').value.trim(),answer:document.getElementById('sec-a3').value.trim()}
+    ];
+    if(!email||!name||!password||!phone||!secQs[0].question||!secQs[0].answer){ showMsg('reg-msg','Please fill all required fields','error'); return; }
+    const body = {
+        email, password, business_name:name, description:desc, tagline, phone, location, country,
+        logo_url: uploadedLogoUrl || '', catalog_url: catalog, referred_by: ref,
+        security_questions: secQs,
+        facebook: document.getElementById('reg-fb').value.trim(),
+        instagram: document.getElementById('reg-ig').value.trim(),
+        tiktok: document.getElementById('reg-tt').value.trim(),
+        twitter: document.getElementById('reg-tw').value.trim(),
+        brand_primary: '#1e40af', brand_secondary: '#ffffff'
+    };
+    try{
+        const res = await fetch(`${API}/auth/register`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+        const data = await res.json();
+        if(!res.ok) throw new Error(data.detail || 'Registration failed');
+        showMsg('reg-msg','✓ Shop created! Redirecting to sign in...','success');
+        setTimeout(()=>showLogin(),2000);
+    }catch(e){ showMsg('reg-msg', e.message, 'error'); }
 }
 
-async function doReset(){
-  try{
-    const r=await fetch(`${API}/auth/reset-password`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:document.getElementById('recEmail').value.trim(),new_password:document.getElementById('recNewPass').value,question_index:recQIdx,answer:document.getElementById('recAnswer').value.trim()})});
-    const d=await r.json();if(!r.ok)throw new Error(d.detail);
-    showMsg('recMsg','Password reset!','success');setTimeout(()=>showScreen('loginScreen'),2000);
-  }catch(e){showMsg('recMsg',e.message)}
+function logout(){ localStorage.removeItem('myshop_session'); session=null; shopData=null; showLogin(); }
+
+// Recovery
+async function fetchSecurityQuestions(){
+    const email = document.getElementById('rec-email').value.trim();
+    if(!email){ showMsg('recovery-msg','Enter your email','error'); return; }
+    try{
+        const res = await fetch(`${API}/auth/security-questions?email=${encodeURIComponent(email)}`);
+        if(!res.ok) throw new Error('Account not found');
+        const data = await res.json();
+        recoveryQuestions = data.questions || [];
+        let html = '';
+        recoveryQuestions.forEach((q,i)=>{
+            html += `<div class="recovery-q"><p>Q${i+1}: ${q.question}</p><input type="text" id="rec-ans-${i}" placeholder="Your answer"></div>`;
+        });
+        document.getElementById('rec-questions').innerHTML = html;
+        document.getElementById('recovery-step1').classList.add('hidden');
+        document.getElementById('recovery-step2').classList.remove('hidden');
+    }catch(e){ showMsg('recovery-msg', e.message, 'error'); }
 }
 
-async function loadDashboard(){
-  showScreen('dashScreen');document.getElementById('dashEmail').textContent=session.email;
-  const link=`https://myshop.afric.site/${session.slug}`;
-  document.getElementById('shopLink').textContent=link;document.getElementById('shopLink').href=link;
-  document.getElementById('openPreview').href=link;document.getElementById('activateEmail').value=session.email;
-  document.getElementById('refCode').textContent=session.referral_code||'—';
-  document.getElementById('visits').textContent=session.visit_count||0;
-  updateBadge(session.status);buildActivate();loadPreview();
+async function resetPassword(){
+    const email = document.getElementById('rec-email').value.trim();
+    const newPassword = document.getElementById('rec-new-password').value;
+    if(!newPassword || newPassword.length<6){ showMsg('recovery-msg','Password must be at least 6 characters','error'); return; }
+    // Try each question until one works
+    for(let i=0;i<recoveryQuestions.length;i++){
+        const answer = document.getElementById(`rec-ans-${i}`).value.trim();
+        if(!answer) continue;
+        try{
+            const verifyRes = await fetch(`${API}/auth/verify-security-answer`,{
+                method:'POST', headers:{'Content-Type':'application/json'},
+                body:JSON.stringify({email, question_index:i, answer})
+            });
+            if(!verifyRes.ok) continue;
+            const resetRes = await fetch(`${API}/auth/reset-password`,{
+                method:'POST', headers:{'Content-Type':'application/json'},
+                body:JSON.stringify({email, new_password:newPassword, question_index:i, answer})
+            });
+            if(!resetRes.ok) throw new Error('Reset failed');
+            showMsg('recovery-msg','✓ Password reset! Sign in with your new password.','success');
+            setTimeout(()=>showLogin(),2000);
+            return;
+        }catch(e){}
+    }
+    showMsg('recovery-msg','Security answer incorrect. Please try again.','error');
 }
 
-function updateBadge(status){const b=document.getElementById('statusBadge');b.textContent=status;b.className=`badge ${status}`}
+// Dashboard Tabs
+async function switchTab(tab, el){
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    if(el) el.classList.add('active');
+    const content = document.getElementById('tab-content');
+    content.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text2);"><div class="spinner" style="margin:0 auto 16px;"></div>Loading...</div>';
+    if(tab==='overview') await loadOverview();
+    else if(tab==='preview') await loadPreview();
+    else if(tab==='edit') await loadEdit();
+    else if(tab==='activate') await loadActivate();
+    else if(tab==='referrals') await loadReferrals();
+    else if(tab==='stars') await loadStars();
+}
 
-function buildActivate(){
-  const country=session.country||'NG';const price=country==='NG'?'₦1,500/month':'$5/month';
-  const el=document.getElementById('activateContent');
-  if(session.status==='active'){el.innerHTML='<p style="color:#047857;font-weight:600">✓ Your shop is live!</p>'}
-  else{el.innerHTML=`<p style="color:var(--muted);font-size:.85rem;margin-bottom:12px">Price: <strong>${price}</strong></p><div class="activate-btns"><a href="https://selar.co/SELAR_NG_MANUAL" target="_blank" class="act-btn primary">Pay Monthly</a><a href="https://selar.co/SELAR_AUTO" target="_blank" class="act-btn secondary">Auto Sub</a></div>`}
+async function fetchShop(){
+    if(!session) return {};
+    const res = await fetch(`${API}/shop/preview/${session.slug}?email=${encodeURIComponent(session.email)}`);
+    shopData = await res.json();
+    return shopData;
+}
+
+async function loadOverview(){
+    const shop = await fetchShop();
+    const json = shop.shop_json || shop;
+    const isActive = shop.status === 'active';
+    const statusColor = isActive ? 'var(--success)' : 'var(--warning)';
+    const statusIcon = isActive ? 'fa-circle-check' : 'fa-clock';
+    document.getElementById('dash-title').textContent = json.business_name || 'Your Shop';
+    document.getElementById('dash-url').innerHTML = `<a href="/${shop.slug}" target="_blank" style="color:var(--brand);text-decoration:none;">myshop.afric.site/${shop.slug}</a>`;
+
+    document.getElementById('tab-content').innerHTML = `
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3><i class="fa-solid ${statusIcon}"></i></h3>
+                <p style="text-transform:capitalize;font-weight:700;">${shop.status || 'Pending'}</p>
+                <p style="font-size:.8rem;">Shop Status</p>
+            </div>
+            <div class="stat-card">
+                <h3>${shop.visit_count || 0}</h3>
+                <p>Total Visits</p>
+            </div>
+            <div class="stat-card referrals">
+                <h3><i class="fa-solid fa-users"></i></h3>
+                <p>Referral Program</p>
+                <p style="font-size:.8rem;">Invite & Earn Stars</p>
+            </div>
+            <div class="stat-card stars">
+                <h3>⭐</h3>
+                <p>Stars Balance</p>
+                <p style="font-size:.8rem;">Earn more by referring</p>
+            </div>
+        </div>
+        <div class="card">
+            <h3><i class="fa-solid fa-link"></i> Your Hub Link</h3>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;">
+                <input type="text" value="https://myshop.afric.site/${shop.slug}" readonly style="flex:1;margin-bottom:0;background:#f1f5f9;" id="hub-link">
+                <button class="btn btn-sm" onclick="copyLink()" style="width:auto;"><i class="fa-regular fa-copy"></i> Copy</button>
+                <a href="/${shop.slug}" target="_blank" class="btn btn-outline btn-sm" style="width:auto;text-decoration:none;"><i class="fa-solid fa-arrow-up-right-from-square"></i> Open</a>
+            </div>
+            ${!isActive ? `<div class="msg msg-info show" style="margin-top:16px;"><i class="fa-solid fa-triangle-exclamation"></i> Your shop is <strong>pending</strong>. Go to the <strong>Activate</strong> tab to make it live.</div>` : ''}
+        </div>
+        <div class="card">
+            <h3><i class="fa-solid fa-bolt"></i> Quick Actions</h3>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;">
+                <button class="btn btn-sm" onclick="switchTab('edit', document.querySelectorAll('.tab')[2])" style="width:auto;"><i class="fa-solid fa-pen"></i> Edit Shop</button>
+                <button class="btn btn-outline btn-sm" onclick="switchTab('preview', document.querySelectorAll('.tab')[1])" style="width:auto;"><i class="fa-solid fa-eye"></i> Preview</button>
+                <button class="btn btn-success btn-sm" onclick="switchTab('referrals', document.querySelectorAll('.tab')[4])" style="width:auto;"><i class="fa-solid fa-gift"></i> Refer & Earn</button>
+            </div>
+        </div>`;
+}
+
+function copyLink(){
+    const el = document.getElementById('hub-link');
+    el.select(); el.setSelectionRange(0,99999);
+    navigator.clipboard.writeText(el.value);
+    const btn = el.nextElementSibling;
+    const old = btn.innerHTML;
+    btn.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
+    setTimeout(()=>btn.innerHTML=old, 2000);
 }
 
 async function loadPreview(){
-  try{
-    const r=await fetch(`${API}/shop/preview/${session.slug}?email=${encodeURIComponent(session.email)}`);
-    const d=await r.json();if(!r.ok)return;
-    const sj=d.shop_json||{};const p=sj.brand_colors?.primary||'#2563eb';
-    document.getElementById('preview').innerHTML=`<div style="background:${sj.brand_colors?.secondary||'#fff'};padding:32px;text-align:center">${sj.logo_url?`<img src="${sj.logo_url}" style="width:72px;height:72px;border-radius:8px;object-fit:cover;margin-bottom:12px;"/>`:''}<div style="font-weight:700;font-size:1.3rem;color:${p}">${sj.business_name||'Business'}</div><div style="color:#999;font-size:.85rem;margin-top:6px">${sj.tagline||''}</div></div><div style="padding:20px;text-align:left"><p style="color:#666;font-size:.85rem;line-height:1.6">${sj.description||''}</p></div>`;
-    document.getElementById('editTagline').value=sj.tagline||'';document.getElementById('editDesc').value=sj.description||'';document.getElementById('editPhone').value=sj.phone||'';document.getElementById('editLocation').value=sj.location||'';document.getElementById('editLogo').value=sj.logo_url||'';document.getElementById('editCatalog').value=sj.catalog_url||'';document.getElementById('editFB').value=sj.socials?.facebook||'';document.getElementById('editIG').value=sj.socials?.instagram||'';document.getElementById('editWA').value=sj.socials?.whatsapp||'';document.getElementById('editTK').value=sj.socials?.tiktok||'';const pc=sj.brand_colors?.primary||'#2563eb';const sc=sj.brand_colors?.secondary||'#fff';document.getElementById('editC1').value=pc;document.getElementById('editC1hex').value=pc;document.getElementById('editC2').value=sc;document.getElementById('editC2hex').value=sc;
-  }catch(e){}
+    if(!session) return;
+    document.getElementById('tab-content').innerHTML = `<iframe src="/${session.slug}" class="preview-frame" title="Preview"></iframe>`;
+}
+
+async function loadEdit(){
+    const shop = await fetchShop();
+    const json = shop.shop_json || shop;
+    const socials = json.socials || {};
+    document.getElementById('tab-content').innerHTML = `
+        <div class="card">
+            <div id="edit-msg" class="msg"></div>
+            <div class="form-section">
+                <h3><i class="fa-solid fa-briefcase"></i> Business Info</h3>
+                <label>Business Name</label>
+                <input type="text" id="edit-name" value="${esc(json.business_name || '')}">
+                <label>Tagline</label>
+                <input type="text" id="edit-tagline" value="${esc(json.tagline || '')}">
+                <label>Description</label>
+                <textarea id="edit-desc" rows="3">${esc(json.description || '')}</textarea>
+            </div>
+            <div class="form-section">
+                <h3><i class="fa-solid fa-location-dot"></i> Contact</h3>
+                <div class="input-group">
+                    <div><label>Phone</label><input type="tel" id="edit-phone" value="${esc(json.phone || '')}"></div>
+                    <div><label>Email</label><input type="email" id="edit-email" value="${esc(json.email || shop.email || '')}"></div>
+                </div>
+                <label>Location</label>
+                <input type="text" id="edit-location" value="${esc(json.location || '')}">
+            </div>
+            <div class="form-section">
+                <h3><i class="fa-solid fa-store"></i> Catalog</h3>
+                <label>Catalog URL (Selar, Shopify)</label>
+                <input type="url" id="edit-catalog" value="${esc(json.catalog_url || '')}">
+                <label>Logo URL</label>
+                <input type="url" id="edit-logo" value="${esc(json.logo_url || '')}">
+            </div>
+            <div class="form-section">
+                <h3><i class="fa-solid fa-share-nodes"></i> Social Media</h3>
+                <div class="social-input"><i class="fa-brands fa-facebook-f"></i><input type="url" id="edit-fb" value="${esc(socials.facebook || '')}" placeholder="facebook.com/..."></div>
+                <div class="social-input"><i class="fa-brands fa-instagram"></i><input type="url" id="edit-ig" value="${esc(socials.instagram || '')}" placeholder="instagram.com/..."></div>
+                <div class="social-input"><i class="fa-brands fa-tiktok"></i><input type="url" id="edit-tt" value="${esc(socials.tiktok || '')}" placeholder="tiktok.com/..."></div>
+                <div class="social-input"><i class="fa-brands fa-x-twitter"></i><input type="url" id="edit-tw" value="${esc(socials.twitter || '')}" placeholder="x.com/..."></div>
+            </div>
+            <div class="form-section">
+                <h3><i class="fa-solid fa-palette"></i> Brand Color</h3>
+                <label>Primary Color</label>
+                <input type="color" id="edit-color" value="${json.brand_colors?.primary || '#1e40af'}" style="height:48px;padding:4px;">
+            </div>
+            <button class="btn" onclick="saveEdit()"><i class="fa-solid fa-floppy-disk"></i> Save Changes</button>
+        </div>`;
 }
 
 async function saveEdit(){
-  const pass=document.getElementById('editPass').value;if(!pass)return showMsg('editMsg','Enter password');
-  setLoader('editLoader',true);
-  try{
-    const b={email:session.email,password:pass,tagline:document.getElementById('editTagline').value,description:document.getElementById('editDesc').value,phone:document.getElementById('editPhone').value,location:document.getElementById('editLocation').value,logo_url:document.getElementById('editLogo').value,catalog_url:document.getElementById('editCatalog').value,facebook:document.getElementById('editFB').value,instagram:document.getElementById('editIG').value,whatsapp:document.getElementById('editWA').value,tiktok:document.getElementById('editTK').value,brand_primary:document.getElementById('editC1').value,brand_secondary:document.getElementById('editC2').value};
-    const r=await fetch(`${API}/shop/edit/${session.slug}`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});
-    const d=await r.json();if(!r.ok)throw new Error(d.detail);
-    showMsg('editMsg','Saved!','success');loadPreview();
-  }catch(e){showMsg('editMsg',e.message)}
-  finally{setLoader('editLoader',false)}
+    if(!session) return;
+    const body = {
+        email: session.email,
+        password: session.password,
+        business_name: document.getElementById('edit-name').value.trim(),
+        tagline: document.getElementById('edit-tagline').value.trim(),
+        description: document.getElementById('edit-desc').value.trim(),
+        phone: document.getElementById('edit-phone').value.trim(),
+        location: document.getElementById('edit-location').value.trim(),
+        catalog_url: document.getElementById('edit-catalog').value.trim(),
+        logo_url: document.getElementById('edit-logo').value.trim(),
+        facebook: document.getElementById('edit-fb').value.trim(),
+        instagram: document.getElementById('edit-ig').value.trim(),
+        tiktok: document.getElementById('edit-tt').value.trim(),
+        twitter: document.getElementById('edit-tw').value.trim(),
+        brand_primary: document.getElementById('edit-color').value
+    };
+    try{
+        const res = await fetch(`${API}/shop/edit/${session.slug}`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+        const data = await res.json();
+        if(!res.ok) throw new Error(data.detail || 'Update failed');
+        showMsg('edit-msg','✓ Changes saved successfully!','success');
+        shopData = null;
+    }catch(e){ showMsg('edit-msg', e.message, 'error'); }
 }
 
-async function doActivate(){
-  const email=document.getElementById('activateEmail').value.trim();const sub=document.getElementById('activateType').value;if(!email)return showMsg('activateMsg','Enter email');
-  setLoader('activateLoader',true);
-  try{
-    const r=await fetch(`${API}/payment/activate`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,sub_type:sub})});
-    const d=await r.json();if(!r.ok)throw new Error(d.detail);
-    session.status='active';session.sub_type=sub;localStorage.setItem('myshop_session',JSON.stringify(session));
-    updateBadge('active');buildActivate();showMsg('activateMsg','✓ Shop is live!','success');
-  }catch(e){showMsg('activateMsg',e.message)}
-  finally{setLoader('activateLoader',false)}
+async function loadActivate(){
+    try{
+        const res = await fetch(`${API}/payment/selar-urls`);
+        const urls = await res.json();
+        const shop = await fetchShop();
+        const isActive = shop.status === 'active';
+        document.getElementById('tab-content').innerHTML = `
+            <div class="card" style="text-align:center;">
+                <h2><i class="fa-solid fa-rocket"></i> Activate Your Shop</h2>
+                ${isActive ? '<div class="msg msg-success show"><i class="fa-solid fa-circle-check"></i> Your shop is already <strong>active</strong>!</div>' : ''}
+                <p style="color:var(--text2);margin:16px 0;">Choose your plan and pay securely via Selar. Your hub goes live instantly.</p>
+            </div>
+            <div class="plan-card">
+                <div style="font-size:2rem;margin-bottom:4px;">🇳🇬</div>
+                <h3>Nigeria — Monthly</h3>
+                <div class="price-tag">₦1,500<span>/mo</span></div>
+                <p style="color:var(--text2);font-size:.9rem;margin-bottom:16px;">One-time payment. Expires after 31 days.</p>
+                <a href="${urls.manual || '#' }" target="_blank" class="btn" style="display:block;text-decoration:none;"><i class="fa-solid fa-credit-card"></i> Pay ₦1,500 on Selar</a>
+            </div>
+            <div class="plan-card featured">
+                <div style="font-size:2rem;margin-bottom:4px;">🌍</div>
+                <h3>International — Monthly</h3>
+                <div class="price-tag">$5<span>/mo</span></div>
+                <p style="color:var(--text2);font-size:.9rem;margin-bottom:16px;">Auto-renews every month. Cancel anytime.</p>
+                <a href="${urls.auto || '#' }" target="_blank" class="btn" style="display:block;text-decoration:none;"><i class="fa-solid fa-credit-card"></i> Pay $5 on Selar</a>
+            </div>
+            <div class="card" style="text-align:center;">
+                <h3><i class="fa-solid fa-check-double"></i> Already Paid?</h3>
+                <p style="color:var(--text2);margin-bottom:16px;">If you've completed payment on Selar, click below to activate your shop.</p>
+                <button class="btn btn-success" onclick="confirmActivation()"><i class="fa-solid fa-bolt"></i> Activate Now</button>
+            </div>`;
+    }catch(e){
+        document.getElementById('tab-content').innerHTML = `<div class="card"><p style="color:var(--danger);">Error loading payment options. Please refresh.</p></div>`;
+    }
 }
 
-function switchTab(name){document.querySelectorAll('.tab').forEach((t,i)=>{const names=['overview','preview','edit','activate','referrals'];t.classList.toggle('active',names[i]===name)});document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.getElementById(`tab-${name}`).classList.add('active')}
+async function confirmActivation(){
+    if(!session) return;
+    try{
+        const res = await fetch(`${API}/payment/activate/confirm`,{
+            method:'POST', headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({email:session.email, sub_type:'manual'})
+        });
+        const data = await res.json();
+        if(!res.ok) throw new Error(data.detail || 'Activation failed');
+        showMsg('tab-content-msg','✓ Shop activated!','success');
+        loadOverview();
+    }catch(e){ alert('Activation error: ' + e.message); }
+}
 
-function copyRef(){navigator.clipboard.writeText(session.referral_code||'');event.target.textContent='Copied!';setTimeout(()=>event.target.textContent='Copy',2000)}
-function logout(){localStorage.removeItem('myshop_session');session=null;showScreen('loginScreen')}
+async function loadReferrals(){
+    if(!session) return;
+    try{
+        const res = await fetch(`${API}/shop/referrals?email=${encodeURIComponent(session.email)}&password=${encodeURIComponent(session.password)}`);
+        const ref = await res.json();
+        document.getElementById('tab-content').innerHTML = `
+            <div class="referral-card">
+                <h3><i class="fa-solid fa-gift"></i> Your Referral Code</h3>
+                <div class="referral-code">${ref.referral_code || 'N/A'}</div>
+                <p style="color:#78350f;font-size:.9rem;">Share this code with friends. When they activate their shop, you earn <strong>⭐ Stars</strong>!</p>
+                <button class="btn btn-sm" style="width:auto;margin-top:10px;" onclick="copyRef('${ref.referral_code || ''}')"><i class="fa-regular fa-copy"></i> Copy Code</button>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card referrals">
+                    <h3>${ref.total_referred || 0}</h3>
+                    <p>People Referred</p>
+                </div>
+                <div class="stat-card stars">
+                    <h3>${(ref.total_referred || 0) * 10}</h3>
+                    <p>Stars Earned</p>
+                </div>
+            </div>
+            <div class="card">
+                <h3><i class="fa-solid fa-share-nodes"></i> Share Your Link</h3>
+                <p style="color:var(--text2);margin:10px 0;font-size:.9rem;">Share your shop link anywhere. Anyone who signs up through your page counts toward your referrals.</p>
+                <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                    <input type="text" value="https://myshop.afric.site/?ref=${ref.referral_code || ''}" readonly style="flex:1;margin-bottom:0;background:#f1f5f9;">
+                    <button class="btn btn-sm" onclick="navigator.clipboard.writeText(this.previousElementSibling.value);this.innerHTML='<i class=\'fa-solid fa-check\'></i> Copied!';setTimeout(()=>this.innerHTML='<i class=\'fa-regular fa-copy\'></i> Copy',2000)" style="width:auto;">Copy</button>
+                </div>
+            </div>`;
+    }catch(e){
+        document.getElementById('tab-content').innerHTML = `<div class="card"><p style="color:var(--danger);">Error loading referrals. ${e.message}</p></div>`;
+    }
+}
 
-if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');
-if(session?.email)loadDashboard();
+function copyRef(code){
+    navigator.clipboard.writeText(code);
+    event.target.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
+    setTimeout(()=>event.target.innerHTML = '<i class="fa-regular fa-copy"></i> Copy Code', 2000);
+}
+
+async function loadStars(){
+    if(!session) return;
+    try{
+        const res = await fetch(`${API}/shop/referrals?email=${encodeURIComponent(session.email)}&password=${encodeURIComponent(session.password)}`);
+        const ref = await res.json();
+        const stars = (ref.total_referred || 0) * 10;
+        document.getElementById('tab-content').innerHTML = `
+            <div class="stats-grid">
+                <div class="stat-card stars">
+                    <h3 style="font-size:3rem;">⭐ ${stars}</h3>
+                    <p>Your Stars Balance</p>
+                </div>
+            </div>
+            <div class="card">
+                <h3><i class="fa-solid fa-star"></i> What Are Stars?</h3>
+                <p style="color:var(--text2);margin:10px 0;line-height:1.7;">Stars are MyShop's reward currency. You earn them by referring other sellers to the platform. They can't be bought — only earned.</p>
+            </div>
+            <div class="card">
+                <h3><i class="fa-solid fa-wand-magic-sparkles"></i> What You Can Do With Stars</h3>
+                <ul style="list-style:none;padding:0;margin-top:12px;">
+                    <li style="padding:10px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;">
+                        <span style="background:#fef3c7;color:#92400e;padding:4px 12px;border-radius:8px;font-weight:700;font-size:.85rem;">⭐ 50</span>
+                        <span><strong>Featured Badge</strong> — Get a "Featured" badge on your hub</span>
+                    </li>
+                    <li style="padding:10px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;">
+                        <span style="background:#fef3c7;color:#92400e;padding:4px 12px;border-radius:8px;font-weight:700;font-size:.85rem;">⭐ 100</span>
+                        <span><strong>Priority Support</strong> — Jump to the front of the support queue</span>
+                    </li>
+                    <li style="padding:10px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;">
+                        <span style="background:#fef3c7;color:#92400e;padding:4px 12px;border-radius:8px;font-weight:700;font-size:.85rem;">⭐ 150</span>
+                        <span><strong>Hub Boost</strong> — Your shop appears in "Featured Shops" on our homepage for 14 days</span>
+                    </li>
+                    <li style="padding:10px 0;display:flex;align-items:center;gap:12px;">
+                        <span style="background:#fef3c7;color:#92400e;padding:4px 12px;border-radius:8px;font-weight:700;font-size:.85rem;">⭐ 300</span>
+                        <span><strong>Annual Pass</strong> — 3 free months of MyShop subscription</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3><i class="fa-solid fa-chart-line"></i> How to Earn More</h3>
+                <div style="display:flex;gap:12px;align-items:center;margin-top:12px;padding:16px;background:#f0fdf4;border-radius:12px;border:1px solid #bbf7d0;">
+                    <div style="font-size:2rem;">🎁</div>
+                    <div>
+                        <p style="font-weight:700;color:#166534;">Refer a seller, earn 10 Stars</p>
+                        <p style="color:#15803d;font-size:.9rem;">Share your referral code. When they activate their shop, you both win.</p>
+                    </div>
+                </div>
+            </div>`;
+    }catch(e){
+        document.getElementById('tab-content').innerHTML = `<div class="card"><p style="color:var(--danger);">Error loading stars. ${e.message}</p></div>`;
+    }
+}
+
+function esc(str){ return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+if('serviceWorker'in navigator){navigator.serviceWorker.register('/sw.js');}
 </script>
 </body>
 </html>

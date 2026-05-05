@@ -1,3 +1,6 @@
-/app        /app.html     200
-/install    /install.html 200
-/*          /shop.html    200
+# Netlify redirects for SPA
+/shop/*    /shop.html    200
+/app/*     /app.html     200
+/referral/* /referral.html 200
+/install   /install.html 200
+/*         /index.html   200

@@ -1,106 +1,276 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>MyShop — Business Website Builder</title>
-<meta name="description" content="Professional business website in minutes. Simple, affordable, powerful."/>
-<link rel="manifest" href="/manifest.json"/><link rel="icon" href="/icon.svg"/>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}:root{--primary:#2563eb;--light:#f0f4f8;--text:#1f2937;--muted:#6b7280;--border:#e5e7eb}
-body{background:#fff;color:var(--text);font-family:Outfit,sans-serif;line-height:1.6}
-nav{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid var(--border);padding:16px 24px;display:flex;justify-content:space-between;align-items:center}
-.logo{font-weight:700;color:var(--primary);font-size:1.1rem;text-decoration:none}
-.nav-cta{padding:10px 20px;background:var(--primary);color:#fff;border-radius:8px;font-weight:600;text-decoration:none;font-size:.85rem}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#1e40af">
+    <title>MyShop — Your Business Hub. One Link. Every Platform.</title>
+    <meta name="description" content="Connect your Selar, Shopify, WhatsApp, social media and more into one professional page. Sell everywhere from one link.">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" type="image/svg+xml" href="/icon.svg">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;}
+        :root{
+            --brand:#1e40af;--brand-light:#3b82f6;--brand-dark:#1e3a8a;
+            --bg:#f8fafc;--card:#ffffff;--text:#0f172a;--text2:#475569;--border:#e2e8f0;
+            --radius:20px;--shadow:0 4px 24px rgba(0,0,0,.06);
+        }
+        html{scroll-behavior:smooth;}
+        body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased;}
+        .container{max-width:1100px;margin:0 auto;padding:0 24px;}
 
-.hero{min-height:85vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:80px 24px;background:linear-gradient(135deg,#f0f4f8 0%,#fff 100%)}
-h1{font-size:clamp(2rem,6vw,4rem);font-weight:700;line-height:1.1;margin-bottom:20px}
-.highlight{color:var(--primary)}
-.hero p{font-size:1rem;color:var(--muted);max-width:500px;margin:0 auto 40px;line-height:1.7}
-.buttons{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-.btn{padding:12px 28px;border-radius:8px;font-weight:600;text-decoration:none;transition:all .2s;border:none;cursor:pointer;font-size:.95rem}
-.btn-primary{background:var(--primary);color:#fff;box-shadow:0 2px 8px rgba(37,99,235,.2)}
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(37,99,235,.3)}
-.btn-ghost{background:#fff;color:var(--primary);border:1.5px solid var(--primary)}
-.btn-ghost:hover{background:var(--light)}
-.note{margin-top:24px;font-size:.85rem;color:var(--muted)}
+        /* Navbar */
+        .nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,255,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
+        .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;max-width:1100px;margin:0 auto;}
+        .nav-logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.2rem;color:var(--brand);text-decoration:none;}
+        .nav-logo img{width:32px;height:32px;}
+        .nav-links{display:flex;gap:28px;align-items:center;}
+        .nav-links a{color:var(--text2);text-decoration:none;font-weight:500;font-size:.95rem;transition:color .2s;}
+        .nav-links a:hover{color:var(--brand);}
+        .nav-cta{background:var(--brand);color:white;padding:10px 22px;border-radius:50px;font-weight:600;text-decoration:none;font-size:.9rem;transition:all .2s;}
+        .nav-cta:hover{background:var(--brand-dark);transform:translateY(-1px);}
+        .nav-toggle{display:none;background:none;border:none;font-size:1.4rem;color:var(--text);cursor:pointer;}
 
-.section{padding:80px 24px;max-width:900px;margin:0 auto}
-.section h2{font-size:clamp(1.6rem,4vw,2.6rem);font-weight:700;text-align:center;margin-bottom:48px;line-height:1.2}
-.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;margin-bottom:80px}
-.feature{padding:28px;border:1px solid var(--border);border-radius:12px;transition:all .3s;background:#fff}
-.feature:hover{border-color:var(--primary);box-shadow:0 4px 12px rgba(37,99,235,.1);transform:translateY(-4px)}
-.feature h3{font-weight:600;margin-bottom:8px;font-size:1rem}
-.feature p{color:var(--muted);font-size:.9rem}
+        /* Hero */
+        .hero{background:linear-gradient(135deg,#0f172a 0%,var(--brand-dark) 40%,var(--brand) 100%);color:white;padding:140px 24px 100px;text-align:center;position:relative;overflow:hidden;}
+        .hero::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.08) 0%,transparent 50%);pointer-events:none;}
+        .hero h1{font-size:3.2rem;font-weight:900;letter-spacing:-1.5px;line-height:1.1;margin-bottom:18px;position:relative;}
+        .hero p{font-size:1.2rem;opacity:.85;max-width:560px;margin:0 auto 32px;position:relative;}
+        .hero-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;position:relative;}
+        .btn-primary{background:white;color:var(--brand);padding:14px 32px;border-radius:50px;font-weight:700;text-decoration:none;font-size:1.05rem;transition:all .2s;display:inline-block;box-shadow:0 8px 24px rgba(0,0,0,.15);}
+        .btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(0,0,0,.2);}
+        .btn-ghost{background:rgba(255,255,255,.12);color:white;padding:14px 32px;border-radius:50px;font-weight:700;text-decoration:none;font-size:1.05rem;transition:all .2s;display:inline-block;border:1px solid rgba(255,255,255,.25);}
+        .btn-ghost:hover{background:rgba(255,255,255,.2);}
+        .hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:8px 18px;border-radius:50px;font-size:.85rem;margin-bottom:24px;backdrop-filter:blur(8px);}
 
-.steps{display:flex;flex-direction:column;gap:36px;margin-top:48px;max-width:700px;margin-left:auto;margin-right:auto}
-.step{display:flex;gap:24px;align-items:flex-start;text-align:left}
-.step-num{width:44px;height:44px;border-radius:50%;background:var(--primary);color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.step h3{font-weight:600;margin-bottom:4px}
-.step p{color:var(--muted);font-size:.9rem}
+        /* Demo */
+        .demo-section{padding:80px 24px;background:var(--bg);}
+        .demo-card{background:var(--card);border-radius:28px;padding:32px;box-shadow:var(--shadow);border:1px solid var(--border);max-width:900px;margin:0 auto;}
+        .demo-card h2{font-size:1.8rem;font-weight:800;margin-bottom:6px;color:var(--text);}
+        .demo-card > p{color:var(--text2);margin-bottom:20px;}
+        .demo-frame{width:100%;height:580px;border:1px solid var(--border);border-radius:16px;overflow:hidden;background:#f1f5f9;}
 
-.pricing{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:48px}
-.price-card{padding:32px;border:1px solid var(--border);border-radius:12px;background:#fff;position:relative}
-.price-card.featured{border:2px solid var(--primary);background:var(--light)}
-.price-card.featured::before{content:'Popular';position:absolute;top:12px;right:12px;background:var(--primary);color:#fff;font-size:.7rem;font-weight:700;padding:4px 12px;border-radius:4px}
-.price-flag{font-size:1.3rem;margin-bottom:8px}
-.price-label{font-weight:600;margin-bottom:2px}
-.price-region{color:var(--muted);font-size:.8rem;margin-bottom:16px}
-.price-amount{font-weight:700;font-size:2rem;color:var(--primary);margin-bottom:24px}
-.price-amount span{font-size:.9rem;color:var(--muted);font-weight:400}
-.perks{list-style:none;margin-bottom:24px}
-.perks li{padding:6px 0;border-bottom:1px solid var(--border);color:#555;font-size:.9rem}
-.perks li::before{content:'✓ ';color:var(--primary);font-weight:700}
+        /* Features */
+        .features-section{padding:80px 24px;}
+        .section-header{text-align:center;margin-bottom:48px;}
+        .section-header h2{font-size:2.2rem;font-weight:800;color:var(--text);margin-bottom:10px;}
+        .section-header p{color:var(--text2);max-width:500px;margin:0 auto;}
+        .features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;}
+        .feature-card{background:var(--card);padding:32px;border-radius:20px;box-shadow:var(--shadow);border:1px solid var(--border);transition:all .25s;}
+        .feature-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,.08);}
+        .feature-icon{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,var(--brand-light),var(--brand));display:flex;align-items:center;justify-content:center;color:white;font-size:1.4rem;margin-bottom:16px;}
+        .feature-card h3{font-weight:700;margin-bottom:6px;font-size:1.1rem;}
+        .feature-card p{color:var(--text2);font-size:.95rem;line-height:1.6;}
 
-footer{padding:40px 24px;text-align:center;color:var(--muted);border-top:1px solid var(--border);background:#f9fafb)}
-footer a{color:var(--primary);text-decoration:none}
+        /* How it works */
+        .how-section{padding:80px 24px;background:var(--card);}
+        .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:32px;margin-top:40px;}
+        .step{text-align:center;position:relative;}
+        .step-num{width:56px;height:56px;border-radius:50%;background:var(--brand);color:white;font-size:1.4rem;font-weight:800;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;}
+        .step h3{font-weight:700;margin-bottom:6px;}
+        .step p{color:var(--text2);font-size:.95rem;}
 
-@media(max-width:600px){.pricing{grid-template-columns:1fr}.price-card.featured::before{display:none}.buttons{flex-direction:column}.btn{width:100%;text-align:center}.step{gap:16px}.step-num{width:40px;height:40px;font-size:.9rem}}
-</style></head><body>
+        /* Pricing */
+        .pricing-section{padding:80px 24px;}
+        .pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;max-width:700px;margin:0 auto;}
+        .pricing-card{background:var(--card);padding:40px 32px;border-radius:24px;box-shadow:var(--shadow);border:2px solid var(--border);text-align:center;transition:all .25s;}
+        .pricing-card:hover{transform:translateY(-4px);}
+        .pricing-card.featured{border-color:var(--brand-light);transform:scale(1.03);}
+        .pricing-card.featured:hover{transform:scale(1.03) translateY(-4px);}
+        .pricing-card h3{font-size:1.3rem;font-weight:700;margin-bottom:4px;}
+        .pricing-card .flag{font-size:1.6rem;}
+        .price{font-size:2.8rem;font-weight:900;color:var(--brand);margin:16px 0;}
+        .price span{font-size:1rem;font-weight:400;color:var(--text2);}
+        .pricing-card ul{list-style:none;text-align:left;margin:20px 0;color:var(--text2);font-size:.95rem;}
+        .pricing-card ul li{padding:6px 0;display:flex;gap:8px;}
+        .pricing-card ul li i{color:var(--brand);margin-top:3px;}
 
-<nav><a href="/" class="logo">MyShop</a><a href="/app" class="nav-cta">Get Started</a></nav>
+        /* CTA */
+        .cta-section{text-align:center;padding:100px 24px;background:linear-gradient(135deg,var(--brand-dark),var(--brand));color:white;position:relative;overflow:hidden;}
+        .cta-section::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");opacity:.5;}
+        .cta-section h2{font-size:2.4rem;font-weight:900;margin-bottom:12px;position:relative;}
+        .cta-section p{opacity:.9;margin-bottom:28px;max-width:500px;margin-left:auto;margin-right:auto;position:relative;}
 
-<section class="hero">
-<h1>Build your <span class="highlight">business website</span> in minutes</h1>
-<p>No code. No designer needed. Professional, fast, and made for Africa and beyond.</p>
-<div class="buttons"><a href="/app" class="btn btn-primary">Create Your Shop Free</a><a href="#how" class="btn btn-ghost">How It Works</a></div>
-<p class="note">₦1,500/month Nigeria · $5/month International</p>
-</section>
+        /* Footer */
+        .footer{text-align:center;padding:40px 24px;color:#94a3b8;font-size:.9rem;}
+        .footer a{color:var(--brand);text-decoration:none;font-weight:600;}
+        .footer strong{color:var(--text);}
 
-<section class="section">
-<h2>Everything your business needs</h2>
-<div class="features">
-<div class="feature"><h3>Your Own Link</h3><p>Get myshop.afric.site/your-business. Easy to share on WhatsApp, Instagram, everywhere.</p></div>
-<div class="feature"><h3>AI-Powered Copy</h3><p>Tell us about your business. AI writes professional descriptions and taglines automatically.</p></div>
-<div class="feature"><h3>Your Brand Colors</h3><p>Choose your colors and upload your logo. Your page looks like your brand, not a template.</p></div>
-<div class="feature"><h3>Connect Your Catalog</h3><p>Link your WhatsApp catalog or Selar store. Customers buy directly from your page.</p></div>
-<div class="feature"><h3>Mobile First</h3><p>Built for African networks and devices. Fast, simple, works everywhere.</p></div>
-<div class="feature"><h3>See Your Visitors</h3><p>Track how many people visited your shop each month. Simple analytics, no confusion.</p></div>
-</div>
-</section>
+        /* Mobile */
+        @media(max-width:768px){
+            .hero h1{font-size:2.2rem;}
+            .hero{padding:120px 20px 80px;}
+            .nav-links{display:none;}
+            .nav-toggle{display:block;}
+            .demo-frame{height:480px;}
+            .pricing-card.featured{transform:scale(1);}
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="/" class="nav-logo">
+                <img src="/icon.svg" alt="MyShop">
+                MyShop
+            </a>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#pricing">Pricing</a>
+                <a href="/referral.html">Refer & Earn</a>
+                <a href="/app.html" class="nav-cta">Create Your Hub</a>
+            </div>
+            <button class="nav-toggle" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i></button>
+        </div>
+    </nav>
 
-<section class="section" id="how">
-<h2>How It Works</h2>
-<div class="steps">
-<div class="step"><div class="step-num">1</div><div><h3>Tell Us About Your Business</h3><p>Fill in your name, description, logo, social links. Our AI improves your copy automatically.</p></div></div>
-<div class="step"><div class="step-num">2</div><div><h3>Preview Your Shop</h3><p>See exactly how your page looks. Edit anything you want before going live.</p></div></div>
-<div class="step"><div class="step-num">3</div><div><h3>Activate & Share</h3><p>Pay monthly subscription. Your link goes live instantly. Start getting customers.</p></div></div>
-</div>
-</section>
+    <section class="hero">
+        <div class="hero-badge">✨ Trusted by sellers across Africa</div>
+        <h1>Your Business Hub.<br>One Link. Every Platform.</h1>
+        <p>Connect your Selar store, Shopify, WhatsApp catalog, Facebook, Instagram, TikTok, phone and email — all in one professional page.</p>
+        <div class="hero-btns">
+            <a href="/app.html" class="btn-primary">Create Your Hub — Free Preview</a>
+            <a href="#demo" class="btn-ghost">See How It Works</a>
+        </div>
+    </section>
 
-<section class="section">
-<h2>Simple Monthly Pricing</h2>
-<div class="pricing">
-<div class="price-card"><div class="price-flag">🇳🇬</div><div class="price-label">Nigerian Businesses</div><div class="price-region">Billed in Naira</div><div class="price-amount">₦1,500 <span>/ month</span></div><ul class="perks"><li>Your business link</li><li>AI copywriting</li><li>Logo & brand colors</li><li>Catalog integration</li><li>Visitor analytics</li><li>Free preview</li></ul><a href="/app" class="btn btn-primary" style="width:100%">Start Now</a></div>
-<div class="price-card featured"><div class="price-flag">🌍</div><div class="price-label">International Businesses</div><div class="price-region">Billed in USD</div><div class="price-amount">$5 <span>/ month</span></div><ul class="perks"><li>Your business link</li><li>AI copywriting</li><li>Logo & brand colors</li><li>Catalog integration</li><li>Visitor analytics</li><li>Free preview</li></ul><a href="/app" class="btn btn-primary" style="width:100%">Start Now</a></div>
-</div>
-</section>
+    <section class="demo-section" id="demo">
+        <div class="demo-card">
+            <h2>See it in action</h2>
+            <p>This is how your hub will look. Your catalog embedded, contact buttons ready, social links connected.</p>
+            <iframe src="/shop.html?slug=demo" class="demo-frame" title="Demo Hub" loading="lazy"></iframe>
+        </div>
+    </section>
 
-<footer>
-<p style="margin-bottom:12px;font-weight:500">MyShop by <a href="https://emltechstudio.site" target="_blank">EML Tech Studio</a></p>
-<p style="font-size:.85rem"><a href="https://myshop.afric.site">Dashboard</a> · <a href="/install">Install App</a> · <a href="https://emltechstudio.site">About</a></p>
-<p style="margin-top:12px;color:#999;font-size:.8rem">© 2026 EML Tech Studio</p>
-</footer>
+    <section class="features-section" id="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>Everything, connected</h2>
+                <p>No more sharing multiple links. Your hub brings together your entire online presence.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fa-solid fa-store"></i></div>
+                    <h3>Catalog Embed</h3>
+                    <p>Embed your Selar or Shopify store directly inside your hub. Your WhatsApp catalog gets its own prominent button.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fa-solid fa-phone"></i></div>
+                    <h3>One-Tap Contact</h3>
+                    <p>Visitors tap to call, WhatsApp with a pre-filled message, or email you directly. Zero friction.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fa-solid fa-globe"></i></div>
+                    <h3>Social Hub</h3>
+                    <p>Facebook, Instagram, TikTok, Twitter — all linked with one tap. Your followers find you everywhere.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fa-solid fa-palette"></i></div>
+                    <h3>Your Brand</h3>
+                    <p>Your logo, your colors, your voice. The hub looks like you — not a generic template.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fa-solid fa-chart-line"></i></div>
+                    <h3>Visitor Analytics</h3>
+                    <p>Track how many people visit your hub. Know what's working and grow smarter.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fa-solid fa-bolt"></i></div>
+                    <h3>Instant Setup</h3>
+                    <p>Get your hub in minutes. No coding, no waiting. Preview free, then activate when you're ready.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<script>if('serviceWorker'in navigator)navigator.serviceWorker.register('/sw.js');</script>
-</body></html>
+    <section class="how-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>How it works</h2>
+                <p>Three simple steps to your professional business hub.</p>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-num">1</div>
+                    <h3>Create Your Account</h3>
+                    <p>Sign up in seconds. Add your business name, logo, description, and contact details.</p>
+                </div>
+                <div class="step">
+                    <div class="step-num">2</div>
+                    <h3>Connect Everything</h3>
+                    <p>Link your Selar store, WhatsApp catalog, social media accounts, and contact channels.</p>
+                </div>
+                <div class="step">
+                    <div class="step-num">3</div>
+                    <h3>Share Your Link</h3>
+                    <p>Get your unique link (myshop.afric.site/yourname) and share it everywhere. Done.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="pricing-section" id="pricing">
+        <div class="container">
+            <div class="section-header">
+                <h2>Simple pricing</h2>
+                <p>One plan. No hidden fees. Cancel anytime.</p>
+            </div>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="flag">🇳🇬</div>
+                    <h3>Nigeria</h3>
+                    <div class="price">₦1,500<span>/mo</span></div>
+                    <ul>
+                        <li><i class="fa-solid fa-check"></i> Everything in your hub</li>
+                        <li><i class="fa-solid fa-check"></i> Unlimited visitors</li>
+                        <li><i class="fa-solid fa-check"></i> Visitor analytics</li>
+                        <li><i class="fa-solid fa-check"></i> WhatsApp & call integration</li>
+                        <li><i class="fa-solid fa-check"></i> Social media links</li>
+                    </ul>
+                    <a href="/app.html" class="btn-primary" style="display:block;text-align:center;">Start Free Preview</a>
+                </div>
+                <div class="pricing-card featured">
+                    <div class="flag">🌍</div>
+                    <h3>International</h3>
+                    <div class="price">$5<span>/mo</span></div>
+                    <ul>
+                        <li><i class="fa-solid fa-check"></i> Everything in your hub</li>
+                        <li><i class="fa-solid fa-check"></i> Unlimited visitors</li>
+                        <li><i class="fa-solid fa-check"></i> Visitor analytics</li>
+                        <li><i class="fa-solid fa-check"></i> WhatsApp & call integration</li>
+                        <li><i class="fa-solid fa-check"></i> Social media links</li>
+                    </ul>
+                    <a href="/app.html" class="btn-primary" style="display:block;text-align:center;background:var(--brand);color:white;">Start Free Preview</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section style="padding:80px 24px;background:linear-gradient(135deg,#fffbeb,#fef3c7);text-align:center;">
+        <div class="container">
+            <div style="font-size:3rem;margin-bottom:16px;">⭐</div>
+            <h2 style="font-size:2rem;font-weight:800;color:#78350f;margin-bottom:10px;">Refer Sellers, Earn Stars</h2>
+            <p style="color:#92400e;max-width:500px;margin:0 auto 24px;">Invite other business owners to MyShop. When they activate, you earn Stars — redeemable for free months, featured badges, and more.</p>
+            <a href="/referral.html" class="btn-primary" style="background:#f59e0b;color:white;">Learn About Referrals</a>
+        </div>
+    </section>
+<section class="cta-section">
+        <h2>Ready to bring your business together?</h2>
+        <p>Create your hub, preview it free, and activate when you're happy. Your customers are already looking for you.</p>
+        <a href="/app.html" class="btn-primary">Get Started Now — It's Free</a>
+    </section>
+
+    <div class="footer">
+        <p>Powered by <strong>MyShop</strong> — <a href="https://emltechstudio.com" target="_blank">EML Tech Studio</a></p>
+        <p style="margin-top:8px;font-size:.8rem;"><a href="/install.html">Install as App</a> · <a href="/app.html">Dashboard</a></p>
+    </div>
+
+    <script>
+        if('serviceWorker'in navigator){navigator.serviceWorker.register('/sw.js');}
+        function toggleMenu(){const links=document.querySelector('.nav-links');links.style.display=links.style.display==='flex'?'none':'flex';links.style.position='absolute';links.style.top='60px';links.style.left='0';links.style.right='0';links.style.flexDirection='column';links.style.background='white';links.style.padding='20px';links.style.boxShadow='0 8px 24px rgba(0,0,0,.1)';}
+    </script>
+</body>
+</html>
