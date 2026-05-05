@@ -268,7 +268,7 @@
                     <div id="logo-upload-content">
                         <i class="fa-solid fa-cloud-arrow-up"></i>
                         <div class="logo-upload-text">Click to upload your logo</div>
-                        <div style="font-size:.8rem;color:var(--text3);margin-top:4px;">JPG, PNG, SVG — max 2MB</div>
+                        <div style="font-size:.8rem;color:var(--text2);margin-top:4px;">JPG, PNG, SVG — max 2MB</div>
                     </div>
                     <img id="logo-preview-img" class="logo-preview-img hidden" src="" alt="Logo preview">
                     <div id="logo-status" style="font-size:.85rem;color:var(--success);margin-top:8px;display:none;"></div>
@@ -427,7 +427,7 @@ function showMsg(id, text, type='error'){
     setTimeout(()=>el.classList.remove('show'), 6000);
 }
 
-// Logo upload
+// Logo upload (registration)
 async function uploadLogo(){
     const fileInput = document.getElementById('logo-file-input');
     const file = fileInput.files[0];
@@ -468,6 +468,54 @@ async function uploadLogo(){
         statusEl.style.color = 'var(--success)';
     }catch(e){ 
         showMsg('reg-msg','Logo upload error: ' + e.message,'error'); 
+        statusEl.textContent = '✗ Upload failed';
+        statusEl.style.color = 'var(--danger)';
+    }
+}
+
+// Logo upload (edit tab)
+async function uploadEditLogo(){
+    const fileInput = document.getElementById('edit-logo-file-input');
+    const file = fileInput.files[0];
+    if(!file) return;
+
+    // Preview immediately
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const img = document.getElementById('edit-logo-preview-img');
+        img.src = e.target.result;
+        img.style.display = 'block';
+        document.getElementById('edit-logo-upload-content').style.display = 'none';
+        document.getElementById('edit-logo-upload-area').classList.add('has-image');
+    };
+    reader.readAsDataURL(file);
+
+    if(!session || !session.email) {
+        showMsg('edit-msg','Session expired. Please sign in again.','error');
+        fileInput.value = '';
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const statusEl = document.getElementById('edit-logo-status');
+    statusEl.textContent = 'Uploading...';
+    statusEl.style.display = 'block';
+
+    try{
+        const res = await fetch(API + '/shop/upload', {
+            method: 'POST',
+            headers: {'email': session.email},
+            body: formData
+        });
+        if(!res.ok) throw new Error('Upload failed');
+        const data = await res.json();
+        document.getElementById('edit-logo-url-hidden').value = data.url;
+        statusEl.textContent = '✓ Logo updated';
+        statusEl.style.color = 'var(--success)';
+    } catch(e) {
+        showMsg('edit-msg', 'Logo upload error: ' + e.message, 'error');
         statusEl.textContent = '✗ Upload failed';
         statusEl.style.color = 'var(--danger)';
     }
@@ -584,7 +632,7 @@ async function switchTab(tab, el){
     document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
     if(el) el.classList.add('active');
     const content = document.getElementById('tab-content');
-    content.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text2);"><div class="spinner" style="margin:0 auto 16px;width:32px;height:32px;"></div>Loading...</div>';
+    content.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text2);"><i class="fa-solid fa-spinner fa-spin" style="font-size:2rem;margin-bottom:16px;display:block;"></i>Loading...</div>';
     if(tab==='overview') await loadOverview();
     else if(tab==='preview') await loadPreview();
     else if(tab==='edit') await loadEdit();
@@ -657,6 +705,7 @@ async function loadEdit(){
     const shop = await fetchShop();
     const json = shop.shop_json || shop;
     const socials = json.socials || {};
+    const hasLogo = json.logo_url ? true : false;
     document.getElementById('tab-content').innerHTML = 
         '<div class="card">' +
             '<div id="edit-msg" class="msg"></div>' +
@@ -682,8 +731,20 @@ async function loadEdit(){
                 '<h3><i class="fa-solid fa-store"></i> Catalog</h3>' +
                 '<label>Catalog URL (Selar, Shopify)</label>' +
                 '<input type="url" id="edit-catalog" value="' + esc(json.catalog_url || '') + '">' +
-                '<label>Logo URL</label>' +
-                '<input type="url" id="edit-logo" value="' + esc(json.logo_url || '') + '">' +
+            '</div>' +
+            '<div class="form-section">' +
+                '<h3><i class="fa-solid fa-image"></i> Logo</h3>' +
+                '<div class="logo-upload-area" id="edit-logo-upload-area" onclick="document.getElementById(\'edit-logo-file-input\').click()">' +
+                    '<img id="edit-logo-preview-img" class="logo-preview-img" src="' + esc(json.logo_url || '') + '" alt="Logo preview" style="display:' + (hasLogo ? 'inline-block' : 'none') + ';">' +
+                    '<div id="edit-logo-upload-content" style="' + (hasLogo ? 'display:none;' : '') + '">' +
+                        '<i class="fa-solid fa-cloud-arrow-up" style="font-size:1.5rem;color:var(--brand);margin-bottom:8px;display:block;"></i>' +
+                        '<div class="logo-upload-text">Click to ' + (hasLogo ? 'change' : 'upload') + ' logo</div>' +
+                        '<div style="font-size:.8rem;color:var(--text2);margin-top:4px;">JPG, PNG, SVG — max 2MB</div>' +
+                    '</div>' +
+                    '<div id="edit-logo-status" style="font-size:.85rem;color:var(--success);margin-top:8px;display:none;"></div>' +
+                '</div>' +
+                '<input type="file" id="edit-logo-file-input" accept="image/*" onchange="uploadEditLogo()" style="display:none;">' +
+                '<input type="hidden" id="edit-logo-url-hidden" value="' + esc(json.logo_url || '') + '">' +
             '</div>' +
             '<div class="form-section">' +
                 '<h3><i class="fa-solid fa-share-nodes"></i> Social Media</h3>' +
@@ -712,7 +773,7 @@ async function saveEdit(){
         phone: document.getElementById('edit-phone').value.trim(),
         location: document.getElementById('edit-location').value.trim(),
         catalog_url: document.getElementById('edit-catalog').value.trim(),
-        logo_url: document.getElementById('edit-logo').value.trim(),
+        logo_url: document.getElementById('edit-logo-url-hidden').value.trim(),
         facebook: document.getElementById('edit-fb').value.trim(),
         instagram: document.getElementById('edit-ig').value.trim(),
         tiktok: document.getElementById('edit-tt').value.trim(),
@@ -728,7 +789,7 @@ async function saveEdit(){
     }catch(e){ showMsg('edit-msg', e.message, 'error'); }
 }
 
-// ACTIVATION - Clean, no backdoor button, just payment links
+// ACTIVATION - Payment mode (Manual / Auto-Renewal), not country
 async function loadActivate(){
     try{
         const res = await fetch(API + '/payment/selar-urls');
@@ -740,28 +801,26 @@ async function loadActivate(){
             '<div class="card" style="text-align:center;">' +
                 '<h2><i class="fa-solid fa-rocket"></i> Activate Your Shop</h2>' +
                 (isActive ? '<div class="msg msg-success show"><i class="fa-solid fa-circle-check"></i> Your shop is already <strong>active</strong>!</div>' : '') +
-                '<p style="color:var(--text2);margin:16px 0;">Choose your plan and pay securely via Selar. Your hub goes live instantly after payment.</p>' +
+                '<p style="color:var(--text2);margin:16px 0;">Choose your subscription type and pay securely via Selar. Your hub goes live instantly. Selar accepts multiple currencies.</p>' +
             '</div>' +
             '<div class="plan-card">' +
-                '<div class="plan-flag">🇳🇬</div>' +
-                '<div class="plan-name">Nigeria — One-Time</div>' +
-                '<div class="plan-price">₦1,500<span>/mo</span></div>' +
-                '<p class="plan-desc">Pay once. Active for 31 days. Renew manually.</p>' +
-                '<a href="' + (urls.manual || '#') + '" target="_blank" rel="noopener noreferrer" class="btn" style="display:block;text-decoration:none;"><i class="fa-solid fa-credit-card"></i> Pay ₦1,500 on Selar</a>' +
-                '<div class="plan-note"><i class="fa-solid fa-circle-info"></i> You will be redirected to Selar to complete payment.</div>' +
+                '<div class="plan-name"><i class="fa-solid fa-credit-card"></i> Manual Subscription</div>' +
+                '<div class="plan-price">One-Time<span style="font-size:1rem;font-weight:400;color:var(--text2);"> payment</span></div>' +
+                '<p class="plan-desc">Pay once. Active for 31 days. Renew manually when you want.</p>' +
+                '<a href="' + (urls.manual || '#') + '" target="_blank" rel="noopener noreferrer" class="btn" style="display:block;text-decoration:none;"><i class="fa-solid fa-credit-card"></i> Pay on Selar</a>' +
+                '<div class="plan-note"><i class="fa-solid fa-circle-info"></i> You will be redirected to Selar to complete payment. Cards, bank transfers, and more accepted.</div>' +
             '</div>' +
             '<div class="plan-card featured">' +
-                '<div class="plan-flag">🌍</div>' +
-                '<div class="plan-name">International — Auto-Renewal</div>' +
-                '<div class="plan-price">$5<span>/mo</span></div>' +
-                '<p class="plan-desc">Auto-renews every month. Cancel anytime on Selar.</p>' +
-                '<a href="' + (urls.auto || '#') + '" target="_blank" rel="noopener noreferrer" class="btn" style="display:block;text-decoration:none;"><i class="fa-solid fa-credit-card"></i> Pay $5 on Selar</a>' +
-                '<div class="plan-note"><i class="fa-solid fa-rotate"></i> Subscription renews automatically. Manage on Selar.</div>' +
+                '<div class="plan-name"><i class="fa-solid fa-rotate"></i> Auto-Renewal Subscription</div>' +
+                '<div class="plan-price">Recurring<span style="font-size:1rem;font-weight:400;color:var(--text2);"> monthly</span></div>' +
+                '<p class="plan-desc">Auto-renews every month. Cancel anytime on Selar. Hassle-free.</p>' +
+                '<a href="' + (urls.auto || '#') + '" target="_blank" rel="noopener noreferrer" class="btn" style="display:block;text-decoration:none;"><i class="fa-solid fa-credit-card"></i> Pay on Selar</a>' +
+                '<div class="plan-note"><i class="fa-solid fa-rotate"></i> Subscription renews automatically. Manage or cancel on Selar anytime.</div>' +
             '</div>' +
             '<div class="card" style="text-align:center;">' +
                 '<h3><i class="fa-solid fa-circle-question"></i> Already Paid?</h3>' +
-                '<p style="color:var(--text2);margin-bottom:16px;">If you completed payment on Selar, your shop will activate automatically within 2 minutes. Refresh this page to check.</p>' +
-                '<button class="btn btn-outline" onclick="loadActivate()"><i class="fa-solid fa-rotate"></i> Check Status</button>' +
+                '<p style="color:var(--text2);margin-bottom:16px;">If you completed payment on Selar, your shop will activate automatically. Refresh this page to check.</p>' +
+                '<button class="btn btn-outline" onclick="switchTab(\'activate\', document.querySelectorAll(\'.tab\')[3])"><i class="fa-solid fa-rotate"></i> Check Status</button>' +
             '</div>';
     }catch(e){
         document.getElementById('tab-content').innerHTML = '<div class="card"><p style="color:var(--danger);">Error loading payment options. Please refresh.</p></div>';
