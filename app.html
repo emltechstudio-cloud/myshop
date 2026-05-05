@@ -155,7 +155,7 @@
         </p>
     </div>
 
-    <!-- RECOVERY -->
+    <!-- RECOVERY (unchanged) -->
     <div id="recovery-screen" class="card card-narrow hidden">
         <div style="text-align:center;margin-bottom:20px;">
             <h1>Recover Account</h1>
@@ -201,7 +201,7 @@
         </div>
         <div id="reg-msg" class="msg"></div>
 
-        <!-- Step 1 -->
+        <!-- Step 1: Business Info + Contact (with WhatsApp number) -->
         <div id="step1">
             <div class="form-section">
                 <h3><i class="fa-solid fa-briefcase"></i> Business Info</h3>
@@ -228,20 +228,28 @@
                         <input type="tel" id="reg-phone" placeholder="+2348000000000">
                     </div>
                     <div>
+                        <label>WhatsApp Number</label>
+                        <input type="tel" id="reg-wa-number" placeholder="If different from phone">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <div>
                         <label>Location</label>
                         <input type="text" id="reg-location" placeholder="City, Country">
                     </div>
+                    <div>
+                        <label>Country *</label>
+                        <select id="reg-country">
+                            <option value="NG">Nigeria 🇳🇬</option>
+                            <option value="INTL">International 🌍</option>
+                        </select>
+                    </div>
                 </div>
-                <label>Country *</label>
-                <select id="reg-country">
-                    <option value="NG">Nigeria 🇳🇬</option>
-                    <option value="INTL">International 🌍</option>
-                </select>
             </div>
             <button class="btn" onclick="nextStep(2)">Continue <i class="fa-solid fa-arrow-right"></i></button>
         </div>
 
-        <!-- Step 2 -->
+        <!-- Step 2: Logo, Catalog, WhatsApp Catalog, Socials -->
         <div id="step2" class="hidden">
             <div class="form-section">
                 <h3><i class="fa-solid fa-image"></i> Your Logo</h3>
@@ -278,7 +286,7 @@
             </div>
         </div>
 
-        <!-- Step 3 -->
+        <!-- Step 3: Password -->
         <div id="step3" class="hidden">
             <div class="form-section">
                 <h3><i class="fa-solid fa-lock"></i> Create Password</h3>
@@ -305,7 +313,7 @@
             </div>
         </div>
 
-        <!-- Step 4 -->
+        <!-- Step 4: Security Questions -->
         <div id="step4" class="hidden">
             <div class="form-section">
                 <h3><i class="fa-solid fa-shield-halved"></i> Security Questions</h3>
@@ -408,6 +416,7 @@ function showMsg(id, text, type='error'){
     setTimeout(()=>el.classList.remove('show'), 6000);
 }
 
+// Registration logo upload
 async function uploadRegLogo(){
     const fileInput = document.getElementById('logo-file-input');
     const file = fileInput.files[0];
@@ -447,6 +456,7 @@ async function uploadRegLogo(){
     }
 }
 
+// Edit logo upload
 async function uploadEditLogo(){
     const fileInput = document.getElementById('edit-logo-file-input');
     const file = fileInput.files[0];
@@ -501,7 +511,7 @@ async function login(){
         });
         if(!res.ok) throw new Error('Invalid email or password');
         const data = await res.json();
-        data.password = password;
+        data.password = password;  // store password for edit/referrals
         session = data;
         localStorage.setItem('myshop_session', JSON.stringify(session));
         showDashboard();
@@ -515,6 +525,7 @@ async function register(){
     const password = document.getElementById('reg-password').value;
     const passwordConfirm = document.getElementById('reg-password-confirm').value;
     const phone = document.getElementById('reg-phone').value.trim();
+    const waNumber = document.getElementById('reg-wa-number').value.trim();
     const location = document.getElementById('reg-location').value.trim();
     const country = document.getElementById('reg-country').value;
     const desc = document.getElementById('reg-desc').value.trim();
@@ -535,6 +546,7 @@ async function register(){
 
     const body = {
         email, password, business_name:name, description:desc, tagline, phone, location, country,
+        whatsapp: waNumber,   // will be stored in socials if backend accepts, else ignored
         logo_url: uploadedLogoUrl || '', catalog_url: catalog, whatsapp_catalog_url: waCatalog, referred_by: ref,
         security_questions: secQs,
         facebook: document.getElementById('reg-fb').value.trim(),
@@ -553,6 +565,7 @@ async function register(){
 
 function logout(){ localStorage.removeItem('myshop_session'); session=null; shopData=null; showLogin(); }
 
+// Recovery (unchanged)
 async function fetchSecurityQuestions(){
     const email = document.getElementById('rec-email').value.trim();
     if(!email){ showMsg('recovery-msg','Enter your email','error'); return; }
@@ -597,6 +610,7 @@ async function resetPassword(){
     showMsg('recovery-msg','Security answer incorrect. Please try again.','error');
 }
 
+// Dashboard Tabs
 async function switchTab(tab, el){
     document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
     if(el) el.classList.add('active');
@@ -688,10 +702,12 @@ async function loadEdit(){
                 '<h3><i class="fa-solid fa-location-dot"></i> Contact</h3>' +
                 '<div class="input-group">' +
                     '<div><label>Phone</label><input type="tel" id="edit-phone" value="' + esc(json.phone || '') + '"></div>' +
-                    '<div><label>Email</label><input type="email" id="edit-email" value="' + esc(json.email || shop.email || '') + '"></div>' +
+                    '<div><label>WhatsApp Number</label><input type="tel" id="edit-wa-number" value="' + esc(socials.whatsapp || '') + '" placeholder="Your WhatsApp number"></div>' +
                 '</div>' +
-                '<label>Location</label>' +
-                '<input type="text" id="edit-location" value="' + esc(json.location || '') + '">' +
+                '<div class="input-group">' +
+                    '<div><label>Email</label><input type="email" id="edit-email" value="' + esc(json.email || shop.email || '') + '"></div>' +
+                    '<div><label>Location</label><input type="text" id="edit-location" value="' + esc(json.location || '') + '"></div>' +
+                '</div>' +
             '</div>' +
             '<div class="form-section">' +
                 '<h3><i class="fa-solid fa-store"></i> Catalogs</h3>' +
@@ -734,6 +750,7 @@ async function saveEdit(){
         tagline: document.getElementById('edit-tagline').value.trim(),
         description: document.getElementById('edit-desc').value.trim(),
         phone: document.getElementById('edit-phone').value.trim(),
+        whatsapp: document.getElementById('edit-wa-number').value.trim(),  // stored in socials.whatsapp
         location: document.getElementById('edit-location').value.trim(),
         catalog_url: document.getElementById('edit-catalog').value.trim(),
         whatsapp_catalog_url: document.getElementById('edit-wa-catalog').value.trim(),
@@ -760,6 +777,7 @@ async function saveEdit(){
     }catch(e){ showMsg('edit-msg', e.message, 'error'); }
 }
 
+// Activation & Referrals unchanged (same as before)
 async function loadActivate(){
     try{
         const res = await fetch(API + '/payment/selar-urls');
@@ -838,7 +856,7 @@ async function loadReferrals(){
         document.getElementById('tab-content').innerHTML = '<div class="card"><p style="color:var(--danger);">Error loading referrals. ' + e.message + '</p></div>';
     }
 }
-
+2 5
 function copyRef(code){
     navigator.clipboard.writeText(code);
     event.target.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
@@ -850,4 +868,4 @@ function esc(str){ return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace
 if('serviceWorker'in navigator){navigator.serviceWorker.register('/sw.js');}
 </script>
 </body>
-            </html>
+</html>
