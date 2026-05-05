@@ -669,7 +669,7 @@
                 document.documentElement.style.setProperty('--brand-dark', primary);
                 document.querySelector('meta[name="theme-color"]').setAttribute('content', primary);
 
-                const waNum = (json.phone || '').replace(/\D/g, '');
+                const waNum = (json.socials?.whatsapp || json.phone || '').replace(/\D/g, '');
                 const waMsg = encodeURIComponent('Hi ' + (json.business_name || 'there') + ', I found your shop on MyShop and I\'m interested in your products.');
                 const waLink = waNum ? 'https://wa.me/' + waNum + '?text=' + waMsg : '#';
 
