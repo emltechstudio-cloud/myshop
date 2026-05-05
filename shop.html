@@ -582,6 +582,14 @@
         (async function() {
             const API = 'https://emltechstudio-myshop-api.hf.space';
 
+            // ---- helper to add https:// if missing ----
+            function fixUrl(url) {
+                if (!url) return '#';
+                url = url.trim();
+                if (url.startsWith('http://') || url.startsWith('https://')) return url;
+                return 'https://' + url;
+            }
+
             // ===== SLUG DETECTION =====
             let slug = '';
             const fullPath = window.location.pathname;
@@ -665,7 +673,6 @@
                 const waMsg = encodeURIComponent('Hi ' + (json.business_name || 'there') + ', I found your shop on MyShop and I\'m interested in your products.');
                 const waLink = waNum ? 'https://wa.me/' + waNum + '?text=' + waMsg : '#';
 
-                // Check if catalog is WhatsApp (cannot iframe)
                 const hasCatalog = !!json.catalog_url;
                 const isWACatalog = isWhatsAppUrl(json.catalog_url);
                 const hasRealCatalog = hasCatalog && !isWACatalog;
@@ -677,7 +684,6 @@
                 if (json.socials && Object.keys(json.socials).length > 0) navLinks += '<a href="#socials">Socials</a>';
                 navLinks += '<a href="#contact">Contact</a>';
 
-                // Build sections
                 let sections = '';
 
                 // ABOUT
@@ -693,7 +699,6 @@
                 sections += '<section class="section" id="catalog"><div class="section-title fade-in"><i class="fa-solid fa-bag-shopping"></i> Catalog <div class="line"></div></div>';
 
                 if (slug === 'demo') {
-                    // Demo: show fake products
                     sections += '<div class="products-grid">';
                     const demoProducts = [
                         { name: "Silk Evening Dress", price: "₦45,000", emoji: "👗", badge: "Best Seller" },
@@ -711,16 +716,13 @@
                         sections += '<div style="text-align:center;margin-top:32px;"><a href="' + waLink + '" target="_blank" rel="noopener noreferrer" class="action-btn whatsapp" style="display:inline-flex;"><i class="fa-brands fa-whatsapp"></i> Order on WhatsApp</a></div>';
                     }
                 } else if (hasRealCatalog) {
-                    // Real embeddable catalog (Selar, Shopify)
-                    sections += '<iframe src="' + json.catalog_url + '" class="catalog-frame fade-in" title="Catalog"></iframe>';
+                    sections += '<iframe src="' + fixUrl(json.catalog_url) + '" class="catalog-frame fade-in" title="Catalog" sandbox="allow-scripts allow-same-origin allow-forms allow-top-navigation"></iframe>';
                     if (waNum) {
                         sections += '<div style="text-align:center;margin-top:24px;"><a href="' + waLink + '" target="_blank" rel="noopener noreferrer" class="action-btn whatsapp" style="display:inline-flex;"><i class="fa-brands fa-whatsapp"></i> Also Available on WhatsApp</a></div>';
                     }
                 } else if (isWACatalog) {
-                    // WhatsApp catalog - cannot iframe, show CTA
-                    sections += '<div class="catalog-fallback fade-in"><h3><i class="fa-brands fa-whatsapp"></i> WhatsApp Catalog</h3><p>This seller\'s catalog is on WhatsApp. Tap below to browse and order directly.</p><a href="' + json.catalog_url + '" target="_blank" rel="noopener noreferrer" class="wa-btn"><i class="fa-brands fa-whatsapp"></i> View Catalog on WhatsApp</a></div>';
+                    sections += '<div class="catalog-fallback fade-in"><h3><i class="fa-brands fa-whatsapp"></i> WhatsApp Catalog</h3><p>This seller\'s catalog is on WhatsApp. Tap below to browse and order directly.</p><a href="' + fixUrl(json.catalog_url) + '" target="_blank" rel="noopener noreferrer" class="wa-btn"><i class="fa-brands fa-whatsapp"></i> View Catalog on WhatsApp</a></div>';
                 } else {
-                    // No catalog at all
                     sections += '<div class="catalog-fallback fade-in"><h3><i class="fa-solid fa-store"></i> Catalog Coming Soon</h3><p>This seller is setting up their catalog. Reach out directly to place an order.</p>';
                     if (waNum) {
                         sections += '<a href="' + waLink + '" target="_blank" rel="noopener noreferrer" class="wa-btn"><i class="fa-brands fa-whatsapp"></i> Order via WhatsApp</a>';
@@ -743,7 +745,8 @@
                 for (let [key, cfg] of Object.entries(platforms)) {
                     if (socials[key]) {
                         hasSocials = true;
-                        socialHtml += '<a href="' + socials[key] + '" target="_blank" rel="noopener noreferrer" class="social-card fade-in"><div class="social-icon-box ' + cfg.cls + '"><i class="' + cfg.icon + '"></i></div><div class="social-info"><h4>' + cfg.name + '</h4><p>' + socials[key].replace(/^https?:\/\//, '') + '</p></div><i class="fa-solid fa-arrow-right social-arrow"></i></a>';
+                        const safeUrl = fixUrl(socials[key]);
+                        socialHtml += '<a href="' + safeUrl + '" target="_blank" rel="noopener noreferrer" class="social-card fade-in"><div class="social-icon-box ' + cfg.cls + '"><i class="' + cfg.icon + '"></i></div><div class="social-info"><h4>' + cfg.name + '</h4><p>' + safeUrl.replace(/^https?:\/\//, '') + '</p></div><i class="fa-solid fa-arrow-right social-arrow"></i></a>';
                     }
                 }
                 if (hasSocials) {
