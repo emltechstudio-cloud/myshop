@@ -683,7 +683,7 @@ async function loadPreview(){
             '<button class="btn btn-outline btn-sm" onclick="window.open(\'/' + session.slug + '?preview=true\', \'_blank\')"><i class="fa-solid fa-up-right-from-square"></i> Open in New Tab</button>' +
         '</div>' +
         '<iframe src="/' + session.slug + '?preview=true" class="preview-frame" title="Preview"></iframe>';
-}
+    }
 
 async function loadEdit(){
     const shop = await fetchShop();
