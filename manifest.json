@@ -2,7 +2,7 @@
   "name": "MyShop — Your Business Hub",
   "short_name": "MyShop",
   "description": "One link for your business. Catalog, contact, socials — all connected. By EML Tech Studio.",
-  "start_url": "./",
+  "start_url": "./app.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait-primary",
