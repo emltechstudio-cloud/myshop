@@ -3,7 +3,7 @@
   "short_name": "MyShop",
   "description": "One link for your business. Catalog, contact, socials — all connected. By EML Tech Studio.",
   "start_url": "./app.html",
-  "scope": "./",
+  "scope": "./app.html",
   "display": "standalone",
   "orientation": "portrait-primary",
   "background_color": "#f8fafc",
