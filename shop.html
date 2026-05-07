@@ -345,6 +345,10 @@
              })
              .then(shop => {
              document.body.classList.add('loaded');
+             if (!shop.shop_json) {
+             appEl.innerHTML = '<div class="error-state">Preview data is incomplete.</div>';
+             return;
+             }
              renderShop(shop);
              initBackToTop();
              })
