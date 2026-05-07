@@ -519,10 +519,96 @@ async function login(){
     finally{ btn.disabled = false; }
 }
 
-// Register, recovery, etc. unchanged...
-// ... (keeping their existing implementations from your original file)
+async function register(){
+    const email = document.getElementById('reg-email').value.trim();
+    const name = document.getElementById('reg-name').value.trim();
+    const password = document.getElementById('reg-password').value;
+    const passwordConfirm = document.getElementById('reg-password-confirm').value;
+    const phone = document.getElementById('reg-phone').value.trim();
+    const waNumber = document.getElementById('reg-wa-number').value.trim();
+    const location = document.getElementById('reg-location').value.trim();
+    const country = document.getElementById('reg-country').value;
+    const desc = document.getElementById('reg-desc').value.trim();
+    const tagline = document.getElementById('reg-tagline').value.trim();
+    const catalog = document.getElementById('reg-catalog').value.trim();
+    const waCatalog = document.getElementById('reg-wa-catalog').value.trim();
+    const ref = document.getElementById('reg-ref').value.trim();
+
+    if(password !== passwordConfirm){ showMsg('reg-msg','Passwords do not match','error'); return; }
+    if(password.length < 6){ showMsg('reg-msg','Password must be at least 6 characters','error'); return; }
+
+    const secQs = [
+        {question:document.getElementById('sec-q1').value.trim(),answer:document.getElementById('sec-a1').value.trim()},
+        {question:document.getElementById('sec-q2').value.trim(),answer:document.getElementById('sec-a2').value.trim()},
+        {question:document.getElementById('sec-q3').value.trim(),answer:document.getElementById('sec-a3').value.trim()}
+    ];
+    if(!email||!name||!password||!phone||!secQs[0].question||!secQs[0].answer){ showMsg('reg-msg','Please fill all required fields','error'); return; }
+
+    const body = {
+        email, password, business_name:name, description:desc, tagline, phone, location, country,
+        whatsapp: waNumber,
+        logo_url: uploadedLogoUrl || '', catalog_url: catalog, whatsapp_catalog_url: waCatalog, referred_by: ref,
+        security_questions: secQs,
+        facebook: document.getElementById('reg-fb').value.trim(),
+        instagram: document.getElementById('reg-ig').value.trim(),
+        tiktok: document.getElementById('reg-tt').value.trim(),
+        twitter: document.getElementById('reg-tw').value.trim()
+    };
+    try{
+        const res = await fetch(API + '/auth/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+        const data = await res.json();
+        if(!res.ok) throw new Error(data.detail || 'Registration failed');
+        showMsg('reg-msg','✓ Shop created! Redirecting to sign in...','success');
+        setTimeout(()=>showLogin(),2000);
+    }catch(e){ showMsg('reg-msg', e.message, 'error'); }
+}
 
 function logout(){ localStorage.removeItem('myshop_session'); session=null; shopData=null; showLogin(); }
+
+// Recovery
+async function fetchSecurityQuestions(){
+    const email = document.getElementById('rec-email').value.trim();
+    if(!email){ showMsg('recovery-msg','Enter your email','error'); return; }
+    try{
+        const res = await fetch(API + '/auth/security-questions?email=' + encodeURIComponent(email));
+        if(!res.ok) throw new Error('Account not found');
+        const data = await res.json();
+        recoveryQuestions = data.questions || [];
+        let html = '';
+        recoveryQuestions.forEach((q,i)=>{
+            html += '<div class="recovery-q"><p>Q' + (i+1) + ': ' + q.question + '</p><input type="text" id="rec-ans-' + i + '" placeholder="Your answer"></div>';
+        });
+        document.getElementById('rec-questions').innerHTML = html;
+        document.getElementById('recovery-step1').classList.add('hidden');
+        document.getElementById('recovery-step2').classList.remove('hidden');
+    }catch(e){ showMsg('recovery-msg', e.message, 'error'); }
+}
+
+async function resetPassword(){
+    const email = document.getElementById('rec-email').value.trim();
+    const newPassword = document.getElementById('rec-new-password').value;
+    if(!newPassword || newPassword.length<6){ showMsg('recovery-msg','Password must be at least 6 characters','error'); return; }
+    for(let i=0;i<recoveryQuestions.length;i++){
+        const answer = document.getElementById('rec-ans-'+i).value.trim();
+        if(!answer) continue;
+        try{
+            const verifyRes = await fetch(API + '/auth/verify-security-answer',{
+                method:'POST', headers:{'Content-Type':'application/json'},
+                body:JSON.stringify({email, question_index:i, answer})
+            });
+            if(!verifyRes.ok) continue;
+            const resetRes = await fetch(API + '/auth/reset-password',{
+                method:'POST', headers:{'Content-Type':'application/json'},
+                body:JSON.stringify({email, new_password:newPassword, question_index:i, answer})
+            });
+            if(!resetRes.ok) throw new Error('Reset failed');
+            showMsg('recovery-msg','✓ Password reset! Sign in with your new password.','success');
+            setTimeout(()=>showLogin(),2000);
+            return;
+        }catch(e){}
+    }
+    showMsg('recovery-msg','Security answer incorrect. Please try again.','error');
+}
 
 // Dashboard Tabs
 async function switchTab(tab, el){
@@ -592,7 +678,6 @@ function copyLink(){
 
 async function loadPreview(){
     if(!session) return;
-    // Use query string slug because GitHub Pages may not route folders correctly
     const previewUrl = '/shop.html?slug=' + session.slug + '&preview=1&email=' + encodeURIComponent(session.email);
     document.getElementById('tab-content').innerHTML = '<iframe src="' + previewUrl + '" style="width:100%;height:500px;border:1px solid #e2e8f0;border-radius:12px;"></iframe>';
 }
@@ -602,7 +687,6 @@ async function loadEdit(){
     const json = shop.shop_json || shop;
     const socials = json.socials || {};
     const hasLogo = json.logo_url ? true : false;
-    // Use session.email because preview endpoint doesn't return email
     document.getElementById('tab-content').innerHTML = 
         '<div class="card">' +
             '<div id="edit-msg" class="msg"></div>' +
@@ -662,7 +746,7 @@ async function saveEdit(){
     if(!session) return;
     const newEmail = document.getElementById('edit-email').value.trim();
     const body = {
-        email: session.email,              // for authentication
+        email: session.email,
         password: session.password,
         business_name: document.getElementById('edit-name').value.trim(),
         tagline: document.getElementById('edit-tagline').value.trim(),
@@ -677,7 +761,7 @@ async function saveEdit(){
         instagram: document.getElementById('edit-ig').value.trim(),
         tiktok: document.getElementById('edit-tt').value.trim(),
         twitter: document.getElementById('edit-tw').value.trim(),
-        new_email: newEmail                // <-- this is the new email
+        new_email: newEmail
     };
 
     try{
@@ -689,22 +773,111 @@ async function saveEdit(){
         const data = await res.json();
         if(!res.ok) throw new Error(data.detail || 'Update failed');
 
-        // Update session email if it was changed
         if (newEmail && newEmail !== session.email) {
             session.email = newEmail;
             localStorage.setItem('myshop_session', JSON.stringify(session));
         }
         showMsg('edit-msg','✓ Changes saved successfully!','success');
-        shopData = null; // force refresh on next load
+        shopData = null;
     }catch(e){ showMsg('edit-msg', e.message, 'error'); }
 }
 
-// Activation & Referrals unchanged...
-// ... (keep your existing loadActivate, loadReferrals, etc.)
+// Activation & Referrals
+async function loadActivate(){
+    try{
+        const res = await fetch(API + '/payment/selar-urls');
+        const urls = await res.json();
+        const shop = await fetchShop();
+        const isActive = shop.status === 'active';
+
+        document.getElementById('tab-content').innerHTML = 
+            '<div class="card" style="text-align:center;">' +
+                '<h2><i class="fa-solid fa-rocket"></i> Activate Your Shop</h2>' +
+                (isActive ? '<div class="msg msg-success show"><i class="fa-solid fa-circle-check"></i> Your shop is already <strong>active</strong>!</div>' : '') +
+                '<p style="color:var(--text2);margin:16px 0;">Choose your subscription type and pay securely via Selar. Your hub goes live instantly.</p>' +
+            '</div>' +
+            '<div class="plan-card">' +
+                '<div class="plan-name"><i class="fa-solid fa-credit-card"></i> Manual Subscription</div>' +
+                '<div class="plan-price">One-Time<span style="font-size:1rem;font-weight:400;color:var(--text2);"> payment</span></div>' +
+                '<p class="plan-desc">Pay once. Active for 31 days. Renew manually when you want.</p>' +
+                '<a href="' + (urls.manual || '#') + '" target="_blank" rel="noopener noreferrer" class="btn" style="display:block;text-decoration:none;"><i class="fa-solid fa-credit-card"></i> Pay on Selar</a>' +
+                '<div class="plan-note"><i class="fa-solid fa-circle-info"></i> You will be redirected to Selar to complete payment.</div>' +
+            '</div>' +
+            '<div class="plan-card featured">' +
+                '<div class="plan-name"><i class="fa-solid fa-rotate"></i> Auto-Renewal Subscription</div>' +
+                '<div class="plan-price">Recurring<span style="font-size:1rem;font-weight:400;color:var(--text2);"> monthly</span></div>' +
+                '<p class="plan-desc">Auto-renews every month. Cancel anytime on Selar.</p>' +
+                '<a href="' + (urls.auto || '#') + '" target="_blank" rel="noopener noreferrer" class="btn" style="display:block;text-decoration:none;"><i class="fa-solid fa-credit-card"></i> Pay on Selar</a>' +
+                '<div class="plan-note"><i class="fa-solid fa-rotate"></i> Subscription renews automatically. Manage or cancel on Selar anytime.</div>' +
+            '</div>' +
+            '<div class="card" style="text-align:center;">' +
+                '<h3><i class="fa-solid fa-circle-question"></i> Already Paid?</h3>' +
+                '<p style="color:var(--text2);margin-bottom:16px;">If you completed payment on Selar, your shop will activate automatically. Refresh this page to check.</p>' +
+                '<button class="btn btn-outline" onclick="switchTab(\'activate\', document.querySelectorAll(\'.tab\')[3])"><i class="fa-solid fa-rotate"></i> Check Status</button>' +
+            '</div>';
+    }catch(e){
+        document.getElementById('tab-content').innerHTML = '<div class="card"><p style="color:var(--danger);">Error loading payment options. Please refresh.</p></div>';
+    }
+}
+
+async function loadReferrals(){
+    if(!session) return;
+    try{
+        const res = await fetch(API + '/shop/referrals?email=' + encodeURIComponent(session.email) + '&password=' + encodeURIComponent(session.password));
+        const ref = await res.json();
+        document.getElementById('tab-content').innerHTML = 
+            '<div class="card" style="background:linear-gradient(135deg,#fef3c7,#fde68a);text-align:center;">' +
+                '<h3 style="color:#92400e;margin-bottom:8px;"><i class="fa-solid fa-gift"></i> Your Referral Code</h3>' +
+                '<div style="display:inline-block;background:white;padding:12px 28px;border-radius:12px;font-family:monospace;font-size:1.3rem;font-weight:700;color:var(--text);letter-spacing:1px;border:2px dashed #f59e0b;margin:8px 0;">' + (ref.referral_code || 'N/A') + '</div>' +
+                '<p style="color:#78350f;font-size:.9rem;">Share this code with friends. When they activate their shop, you earn Stars!</p>' +
+                '<button class="btn btn-sm" style="width:auto;margin-top:10px;background:#92400e;" onclick="copyRef(\'' + (ref.referral_code || '') + '\')\"><i class="fa-regular fa-copy"></i> Copy Code</button>' +
+            '</div>' +
+            '<div class="stats-grid">' +
+                '<div class="stat-card" style="background:linear-gradient(135deg,#10b981,#059669);">' +
+                    '<h3>' + (ref.total_referred || 0) + '</h3>' +
+                    '<p>People Referred</p>' +
+                '</div>' +
+                '<div class="stat-card" style="background:linear-gradient(135deg,#f59e0b,#d97706);">' +
+                    '<h3>Coming Soon</h3>' +
+                    '<p>Stars Earned</p>' +
+                '</div>' +
+            '</div>' +
+            '<div class="card">' +
+                '<h3><i class="fa-solid fa-share-nodes"></i> Share Your Link</h3>' +
+                '<p style="color:var(--text2);margin:10px 0;font-size:.9rem;">Share your shop link anywhere. Anyone who signs up through your page counts toward your referrals.</p>' +
+                '<div style="display:flex;gap:10px;flex-wrap:wrap;">' +
+                    '<input type="text" value="https://myshop.afric.site/?ref=' + (ref.referral_code || '') + '" readonly style="flex:1;margin-bottom:0;background:#f1f5f9;">' +
+                    '<button class="btn btn-sm" onclick="copyShareLink(this)" style="width:auto;">Copy</button>' +
+                '</div>' +
+            '</div>' +
+            '<div class="card">' +
+                '<h3><i class="fa-solid fa-star"></i> Stars Program</h3>' +
+                '<p style="color:var(--text2);margin:10px 0;">Stars are coming soon! You\'re already earning them — they\'ll be redeemable for free months, featured badges, and more.</p>' +
+                '<div style="background:#f0fdf4;padding:16px;border-radius:12px;border:1px solid #bbf7d0;">' +
+                    '<p style="color:#166534;font-size:.9rem;"><i class="fa-solid fa-clock"></i> <strong>Coming soon:</strong> Redeem Stars for free subscriptions, priority support, and homepage features.</p>' +
+                '</div>' +
+            '</div>';
+    }catch(e){
+        document.getElementById('tab-content').innerHTML = '<div class="card"><p style="color:var(--danger);">Error loading referrals. ' + e.message + '</p></div>';
+    }
+}
+
+function copyShareLink(btn) {
+    const input = btn.previousElementSibling;
+    navigator.clipboard.writeText(input.value);
+    btn.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
+    setTimeout(() => btn.innerHTML = '<i class="fa-regular fa-copy"></i> Copy', 2000);
+}
+
+function copyRef(code){
+    navigator.clipboard.writeText(code);
+    event.target.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
+    setTimeout(()=>event.target.innerHTML = '<i class="fa-regular fa-copy"></i> Copy Code', 2000);
+}
 
 function esc(str){ return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
 if('serviceWorker'in navigator){navigator.serviceWorker.register('/sw.js');}
 </script>
 </body>
-    </html>
+                                                  </html>
