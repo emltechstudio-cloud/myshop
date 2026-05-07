@@ -332,27 +332,26 @@
             }
 
             let fetchUrl;
-            let fetchUrl;
-if (isPreview && previewEmail) {
-    fetchUrl = `${API}/shop/preview/${slug}?email=${encodeURIComponent(previewEmail)}`;
-} else {
-    fetchUrl = `${API}/shop/live/${slug}`;
-}
+             if (isPreview && previewEmail) {
+             fetchUrl = `${API}/shop/preview/${slug}?email=${encodeURIComponent(previewEmail)}`;
+             } else {
+             fetchUrl = `${API}/shop/live/${slug}`;
+             }
 
-fetch(fetchUrl)
-.then(res => {
-    if (!res.ok) throw new Error('Status ' + res.status);
-    return res.json();
-})
-.then(shop => {
-    document.body.classList.add('loaded');
-    renderShop(shop);
-    initBackToTop();
-})
-.catch(err => {
-    document.body.classList.add('loaded');
-    appEl.innerHTML = '<div class="error-state"><div class="error-card"><div class="icon">⚠️</div><h2>Debug Info</h2><p>Error: <strong>' + err.message + '</strong></p><p style="font-size:0.8rem;">URL tried: <code>' + fetchUrl + '</code></p><a href="/">Go Home</a></div></div>';
-});
+             fetch(fetchUrl)
+             .then(res => {
+             if (!res.ok) throw new Error('Status ' + res.status);
+             return res.json();
+             })
+             .then(shop => {
+             document.body.classList.add('loaded');
+             renderShop(shop);
+             initBackToTop();
+             })
+             .catch(err => {
+             document.body.classList.add('loaded');
+             appEl.innerHTML = '<div class="error-state"><div class="error-card"><div class="icon">⚠️</div><h2>Debug Info</h2><p>Error: <strong>' + err.message + '</strong></p><p style="font-size:0.8rem;">URL tried: <code>' + fetchUrl + '</code></p><a href="/">Go Home</a></div></div>';
+             });
 
             function getDemoData() {
                 return {
