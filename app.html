@@ -678,8 +678,8 @@ function copyLink(){
 
 async function loadPreview(){
     if(!session) return;
-    const previewUrl = '/' + session.slug + '?preview=1&email=' + encodeURIComponent(session.email);
-    document.getElementById('tab-content').innerHTML = '<iframe src="' + previewUrl + '" class="preview-frame" title="Preview"></iframe>';
+    const previewUrl = `/${session.slug}?preview=1&email=${encodeURIComponent(session.email)}`;
+    document.getElementById('tab-content').innerHTML = `<iframe src="${previewUrl}" style="width:100%;height:500px;border:1px solid #e2e8f0;border-radius:12px;"></iframe>`;
 }
 async function loadEdit(){
     const shop = await fetchShop();
