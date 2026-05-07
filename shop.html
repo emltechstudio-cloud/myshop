@@ -345,8 +345,8 @@
              })
              .then(shop => {
              document.body.classList.add('loaded');
-             if (!shop.shop_json) {
-             appEl.innerHTML = '<div class="error-state">Preview data is incomplete.</div>';
+             if (!shop || !shop.shop_json) {
+             appEl.innerHTML = '<div class="error-state"><div class="error-card"><div class="icon">⚠️</div><h2>Shop data missing</h2><p>The shop could not be loaded. Please try again later.</p><a href="/">Go Home</a></div></div>';
              return;
              }
              renderShop(shop);
