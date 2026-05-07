@@ -842,7 +842,7 @@ async function loadReferrals(){
                 '<p style="color:var(--text2);margin:10px 0;font-size:.9rem;">Share your shop link anywhere. Anyone who signs up through your page counts toward your referrals.</p>' +
                 '<div style="display:flex;gap:10px;flex-wrap:wrap;">' +
                     '<input type="text" value="https://myshop.afric.site/?ref=' + (ref.referral_code || '') + '" readonly style="flex:1;margin-bottom:0;background:#f1f5f9;">' +
-                    '<button class="btn btn-sm" onclick="copyShareLink(this)" style="width:auto;">Copy</button>'
+                    '<button class="btn btn-sm" onclick="copyShareLink(this)" style="width:auto;">Copy</button>' +  // ← FIX HERE: added +
             '</div>' +
             '<div class="card">' +
                 '<h3><i class="fa-solid fa-star"></i> Stars Program</h3>' +
@@ -868,7 +868,6 @@ function copyRef(code){
 }
 
 function esc(str){ return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-
 if('serviceWorker'in navigator){navigator.serviceWorker.register('/sw.js');}
 </script>
 </body>
