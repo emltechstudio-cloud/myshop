@@ -678,13 +678,9 @@ function copyLink(){
 
 async function loadPreview(){
     if(!session) return;
-    document.getElementById('tab-content').innerHTML = 
-        '<div style="margin-bottom:12px;display:flex;gap:10px;flex-wrap:wrap;">' +
-            '<button class="btn btn-outline btn-sm" onclick="window.open(\'/' + session.slug + '?preview=true\', \'_blank\')"><i class="fa-solid fa-up-right-from-square"></i> Open in New Tab</button>' +
-        '</div>' +
-        '<iframe src="/' + session.slug + '?preview=true" class="preview-frame" title="Preview"></iframe>';
-    }
-
+    const previewUrl = '/' + session.slug + '?preview=1&email=' + encodeURIComponent(session.email);
+    document.getElementById('tab-content').innerHTML = '<iframe src="' + previewUrl + '" class="preview-frame" title="Preview"></iframe>';
+}
 async function loadEdit(){
     const shop = await fetchShop();
     const json = shop.shop_json || shop;
