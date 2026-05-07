@@ -155,7 +155,7 @@
         </p>
     </div>
 
-    <!-- RECOVERY (unchanged) -->
+    <!-- RECOVERY -->
     <div id="recovery-screen" class="card card-narrow hidden">
         <div style="text-align:center;margin-bottom:20px;">
             <h1>Recover Account</h1>
@@ -201,7 +201,7 @@
         </div>
         <div id="reg-msg" class="msg"></div>
 
-        <!-- Step 1: Business Info + Contact (with WhatsApp number) -->
+        <!-- Step 1: Business Info + Contact -->
         <div id="step1">
             <div class="form-section">
                 <h3><i class="fa-solid fa-briefcase"></i> Business Info</h3>
@@ -680,7 +680,8 @@ async function loadPreview(){
     if(!session) return;
     const previewUrl = '/' + session.slug + '?preview=1&email=' + encodeURIComponent(session.email);
     document.getElementById('tab-content').innerHTML = '<iframe src="' + previewUrl + '" style="width:100%;height:500px;border:1px solid #e2e8f0;border-radius:12px;"></iframe>';
-    }
+}
+
 async function loadEdit(){
     const shop = await fetchShop();
     const json = shop.shop_json || shop;
@@ -777,7 +778,7 @@ async function saveEdit(){
     }catch(e){ showMsg('edit-msg', e.message, 'error'); }
 }
 
-// Activation & Referrals unchanged (same as before)
+// Activation & Referrals
 async function loadActivate(){
     try{
         const res = await fetch(API + '/payment/selar-urls');
@@ -842,7 +843,8 @@ async function loadReferrals(){
                 '<p style="color:var(--text2);margin:10px 0;font-size:.9rem;">Share your shop link anywhere. Anyone who signs up through your page counts toward your referrals.</p>' +
                 '<div style="display:flex;gap:10px;flex-wrap:wrap;">' +
                     '<input type="text" value="https://myshop.afric.site/?ref=' + (ref.referral_code || '') + '" readonly style="flex:1;margin-bottom:0;background:#f1f5f9;">' +
-                    '<button class="btn btn-sm" onclick="copyShareLink(this)" style="width:auto;">Copy</button>' +  // ← FIX HERE: added +
+                    '<button class="btn btn-sm" onclick="copyShareLink(this)" style="width:auto;">Copy</button>' +
+                '</div>' +
             '</div>' +
             '<div class="card">' +
                 '<h3><i class="fa-solid fa-star"></i> Stars Program</h3>' +
@@ -855,12 +857,14 @@ async function loadReferrals(){
         document.getElementById('tab-content').innerHTML = '<div class="card"><p style="color:var(--danger);">Error loading referrals. ' + e.message + '</p></div>';
     }
 }
+
 function copyShareLink(btn) {
     const input = btn.previousElementSibling;
     navigator.clipboard.writeText(input.value);
     btn.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
     setTimeout(() => btn.innerHTML = '<i class="fa-regular fa-copy"></i> Copy', 2000);
 }
+
 function copyRef(code){
     navigator.clipboard.writeText(code);
     event.target.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
@@ -868,6 +872,7 @@ function copyRef(code){
 }
 
 function esc(str){ return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
 if('serviceWorker'in navigator){navigator.serviceWorker.register('/sw.js');}
 </script>
 </body>
