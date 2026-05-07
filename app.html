@@ -511,7 +511,7 @@ async function login(){
         });
         if(!res.ok) throw new Error('Invalid email or password');
         const data = await res.json();
-        data.password = password;
+        data.password = password;  // store password for edit/referrals
         session = data;
         localStorage.setItem('myshop_session', JSON.stringify(session));
         showDashboard();
@@ -546,7 +546,7 @@ async function register(){
 
     const body = {
         email, password, business_name:name, description:desc, tagline, phone, location, country,
-        whatsapp: waNumber,
+        whatsapp: waNumber,   // will be stored in socials if backend accepts, else ignored
         logo_url: uploadedLogoUrl || '', catalog_url: catalog, whatsapp_catalog_url: waCatalog, referred_by: ref,
         security_questions: secQs,
         facebook: document.getElementById('reg-fb').value.trim(),
@@ -565,7 +565,7 @@ async function register(){
 
 function logout(){ localStorage.removeItem('myshop_session'); session=null; shopData=null; showLogin(); }
 
-// Recovery
+// Recovery (unchanged)
 async function fetchSecurityQuestions(){
     const email = document.getElementById('rec-email').value.trim();
     if(!email){ showMsg('recovery-msg','Enter your email','error'); return; }
@@ -706,7 +706,7 @@ async function loadEdit(){
                     '<div><label>WhatsApp Number</label><input type="tel" id="edit-wa-number" value="' + esc(socials.whatsapp || '') + '" placeholder="Your WhatsApp number"></div>' +
                 '</div>' +
                 '<div class="input-group">' +
-                    '<div><label>Email (login)</label><input type="email" id="edit-email" value="' + esc(session.email || '') + '"></div>' +
+                    '<div><label>Email</label><input type="email" id="edit-email" value="' + esc(json.email || shop.email || '') + '"></div>' +
                     '<div><label>Location</label><input type="text" id="edit-location" value="' + esc(json.location || '') + '"></div>' +
                 '</div>' +
             '</div>' +
@@ -744,7 +744,6 @@ async function loadEdit(){
 
 async function saveEdit(){
     if(!session) return;
-    const newEmail = document.getElementById('edit-email').value.trim();
     const body = {
         email: session.email,
         password: session.password,
@@ -752,7 +751,7 @@ async function saveEdit(){
         tagline: document.getElementById('edit-tagline').value.trim(),
         description: document.getElementById('edit-desc').value.trim(),
         phone: document.getElementById('edit-phone').value.trim(),
-        whatsapp: document.getElementById('edit-wa-number').value.trim(),
+        whatsapp: document.getElementById('edit-wa-number').value.trim(),  // stored in socials.whatsapp
         location: document.getElementById('edit-location').value.trim(),
         catalog_url: document.getElementById('edit-catalog').value.trim(),
         whatsapp_catalog_url: document.getElementById('edit-wa-catalog').value.trim(),
@@ -760,25 +759,22 @@ async function saveEdit(){
         facebook: document.getElementById('edit-fb').value.trim(),
         instagram: document.getElementById('edit-ig').value.trim(),
         tiktok: document.getElementById('edit-tt').value.trim(),
-        twitter: document.getElementById('edit-tw').value.trim(),
-        new_email: newEmail
+        twitter: document.getElementById('edit-tw').value.trim()
     };
-
     try{
-        const res = await fetch(API + '/shop/edit/' + session.slug, {
-            method:'PUT',
-            headers:{'Content-Type':'application/json'},
-            body:JSON.stringify(body)
-        });
+        const res = await fetch(API + '/shop/edit/' + session.slug, {method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)});
         const data = await res.json();
         if(!res.ok) throw new Error(data.detail || 'Update failed');
-
-        if (newEmail && newEmail !== session.email) {
-            session.email = newEmail;
-            localStorage.setItem('myshop_session', JSON.stringify(session));
-        }
         showMsg('edit-msg','✓ Changes saved successfully!','success');
         shopData = null;
+        const editLogoPreview = document.getElementById('edit-logo-preview-img');
+        const editLogoHidden = document.getElementById('edit-logo-url-hidden');
+        if(editLogoPreview && editLogoHidden && editLogoHidden.value) {
+            editLogoPreview.src = editLogoHidden.value;
+            editLogoPreview.style.display = 'inline-block';
+            document.getElementById('edit-logo-upload-content').style.display = 'none';
+            document.getElementById('edit-logo-upload-area').classList.add('has-image');
+        }
     }catch(e){ showMsg('edit-msg', e.message, 'error'); }
 }
 
@@ -880,4 +876,4 @@ function esc(str){ return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace
 if('serviceWorker'in navigator){navigator.serviceWorker.register('/sw.js');}
 </script>
 </body>
-                                                  </html>
+</html>
