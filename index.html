@@ -3,274 +3,390 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#1e40af">
-    <title>MyShop — Your Business Hub. One Link. Every Platform.</title>
-    <meta name="description" content="Connect your Selar, Shopify, WhatsApp, social media and more into one professional page. Sell everywhere from one link.">
+    <meta name="theme-color" content="#2563eb">
+    <title>MyShop &mdash; Turn Your Scattered Links Into a Storefront That Sells</title>
+    <meta name="description" content="Stop losing customers to messy links. One professional hub for your catalog, WhatsApp, Instagram, TikTok &mdash; built for sellers who mean business.">
+    <link rel="canonical" href="https://myshop.afric.site/">
     <link rel="manifest" href="/manifest.json">
     <link rel="icon" href="/icon.svg">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <meta property="og:title" content="MyShop &mdash; Turn Your Scattered Links Into a Storefront That Sells">
+    <meta property="og:description" content="One link. Every platform. Your entire business, professionally presented. Join 2,000+ sellers.">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet">
     <style>
         *{margin:0;padding:0;box-sizing:border-box;}
-        :root{
-            --brand:#1e40af;--brand-light:#3b82f6;--brand-dark:#1e3a8a;
-            --bg:#f8fafc;--card:#ffffff;--text:#0f172a;--text2:#475569;--border:#e2e8f0;
-            --radius:20px;--shadow:0 4px 24px rgba(0,0,0,.06);
-        }
-        html{scroll-behavior:smooth;}
-        body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased;}
-        .container{max-width:1100px;margin:0 auto;padding:0 24px;}
-
-        /* Navbar */
-        .nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,255,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
-        .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;max-width:1100px;margin:0 auto;}
-        .nav-logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.2rem;color:var(--brand);text-decoration:none;}
-        .nav-logo img{width:32px;height:32px;}
-        .nav-links{display:flex;gap:28px;align-items:center;}
-        .nav-links a{color:var(--text2);text-decoration:none;font-weight:500;font-size:.95rem;transition:color .2s;}
-        .nav-links a:hover{color:var(--brand);}
-        .nav-cta{background:var(--brand);color:white;padding:10px 22px;border-radius:50px;font-weight:600;text-decoration:none;font-size:.9rem;transition:all .2s;}
-        .nav-cta:hover{background:var(--brand-dark);transform:translateY(-1px);}
-        .nav-toggle{display:none;background:none;border:none;font-size:1.4rem;color:var(--text);cursor:pointer;}
-
-        /* Hero */
-        .hero{background:linear-gradient(135deg,#0f172a 0%,var(--brand-dark) 40%,var(--brand) 100%);color:white;padding:140px 24px 100px;text-align:center;position:relative;overflow:hidden;}
-        .hero::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.08) 0%,transparent 50%);pointer-events:none;}
-        .hero h1{font-size:3.2rem;font-weight:900;letter-spacing:-1.5px;line-height:1.1;margin-bottom:18px;position:relative;}
-        .hero p{font-size:1.2rem;opacity:.85;max-width:560px;margin:0 auto 32px;position:relative;}
-        .hero-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;position:relative;}
-        .btn-primary{background:white;color:var(--brand);padding:14px 32px;border-radius:50px;font-weight:700;text-decoration:none;font-size:1.05rem;transition:all .2s;display:inline-block;box-shadow:0 8px 24px rgba(0,0,0,.15);}
-        .btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(0,0,0,.2);}
-        .btn-ghost{background:rgba(255,255,255,.12);color:white;padding:14px 32px;border-radius:50px;font-weight:700;text-decoration:none;font-size:1.05rem;transition:all .2s;display:inline-block;border:1px solid rgba(255,255,255,.25);}
-        .btn-ghost:hover{background:rgba(255,255,255,.2);}
-        .hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:8px 18px;border-radius:50px;font-size:.85rem;margin-bottom:24px;backdrop-filter:blur(8px);}
-
-        /* Demo */
-        .demo-section{padding:80px 24px;background:var(--bg);}
-        .demo-card{background:var(--card);border-radius:28px;padding:32px;box-shadow:var(--shadow);border:1px solid var(--border);max-width:900px;margin:0 auto;}
-        .demo-card h2{font-size:1.8rem;font-weight:800;margin-bottom:6px;color:var(--text);}
-        .demo-card > p{color:var(--text2);margin-bottom:20px;}
-        .demo-frame{width:100%;height:580px;border:1px solid var(--border);border-radius:16px;overflow:hidden;background:#f1f5f9;}
-
-        /* Features */
-        .features-section{padding:80px 24px;}
-        .section-header{text-align:center;margin-bottom:48px;}
-        .section-header h2{font-size:2.2rem;font-weight:800;color:var(--text);margin-bottom:10px;}
-        .section-header p{color:var(--text2);max-width:500px;margin:0 auto;}
-        .features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;}
-        .feature-card{background:var(--card);padding:32px;border-radius:20px;box-shadow:var(--shadow);border:1px solid var(--border);transition:all .25s;}
-        .feature-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,.08);}
-        .feature-icon{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,var(--brand-light),var(--brand));display:flex;align-items:center;justify-content:center;color:white;font-size:1.4rem;margin-bottom:16px;}
-        .feature-card h3{font-weight:700;margin-bottom:6px;font-size:1.1rem;}
-        .feature-card p{color:var(--text2);font-size:.95rem;line-height:1.6;}
-
-        /* How it works */
-        .how-section{padding:80px 24px;background:var(--card);}
-        .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:32px;margin-top:40px;}
+        :root{--brand:#2563eb;--brand-light:#3b82f6;--brand-dark:#1d4ed8;--bg:#f8fafc;--card:#ffffff;--text:#0f172a;--text2:#475569;--border:#e2e8f0;--radius:24px;--shadow:0 8px 32px rgba(37,99,235,0.08);--shadow-lg:0 24px 48px -12px rgba(37,99,235,0.15);}
+        @media (prefers-color-scheme: dark) {:root{--bg:#0f172a;--card:#1e293b;--text:#f1f5f9;--text2:#94a3b8;--border:#334155;}}
+        @keyframes gradientShift {0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
+        @keyframes float {0%,100%{transform:translateY(0);}50%{transform:translateY(-12px);}}
+        @keyframes pulse-glow {0%,100%{box-shadow:0 0 20px rgba(59,130,246,0.2);}50%{box-shadow:0 0 40px rgba(59,130,246,0.4);}}
+        @keyframes fadeInUp {from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
+        .reveal{opacity:0;transform:translateY(30px);transition:all 0.8s cubic-bezier(0.16,1,0.3,1);}
+        .reveal.visible{opacity:1;transform:translateY(0);}
+        .reveal-delay-1{transition-delay:0.1s;}.reveal-delay-2{transition-delay:0.2s;}.reveal-delay-3{transition-delay:0.3s;}
+        html{scroll-behavior:smooth;}body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.5;-webkit-font-smoothing:antialiased;}
+        .container{max-width:1120px;margin:0 auto;padding:0 24px;}
+        .nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,255,0.8);backdrop-filter:blur(20px) saturate(180%);border-bottom:1px solid rgba(226,232,240,0.6);transition:all 0.3s;}
+        .nav.scrolled{background:rgba(255,255,255,0.95);box-shadow:0 4px 20px rgba(0,0,0,0.05);}
+        .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;max-width:1120px;margin:0 auto;}
+        .nav-logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.3rem;color:var(--brand);text-decoration:none;transition:transform 0.2s;}
+        .nav-logo:hover{transform:scale(1.02);}.nav-logo img{width:32px;height:32px;}
+        .nav-links{display:flex;gap:32px;align-items:center;}
+        .nav-links a{color:var(--text2);text-decoration:none;font-weight:500;font-size:0.95rem;transition:all 0.2s;position:relative;}
+        .nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:2px;background:linear-gradient(90deg,var(--brand),var(--brand-light));transition:width 0.3s;border-radius:2px;}
+        .nav-links a:hover{color:var(--brand);}.nav-links a:hover::after{width:100%;}
+        .nav-cta{background:linear-gradient(135deg,var(--brand),var(--brand-light));color:white;padding:10px 24px;border-radius:40px;font-weight:600;text-decoration:none;font-size:0.9rem;transition:all 0.3s;box-shadow:0 4px 16px rgba(37,99,235,0.25);position:relative;overflow:hidden;}
+        .nav-cta::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.3),transparent);transition:left 0.5s;}
+        .nav-cta:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(37,99,235,0.35);}
+        .nav-cta:hover::before{left:100%;}.nav-toggle{display:none;background:none;border:none;font-size:1.5rem;color:var(--text);cursor:pointer;}
+        .hero{background:linear-gradient(135deg,#0ea5e9,#2563eb,#4f46e5,#7c3aed);background-size:400% 400%;animation:gradientShift 15s ease infinite;color:white;padding:140px 24px 100px;text-align:center;position:relative;overflow:hidden;}
+        .hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.06'/%3E%3C/svg%3E");opacity:0.6;}
+        .hero h1{font-size:3.8rem;font-weight:900;letter-spacing:-2px;line-height:1.05;margin-bottom:24px;max-width:850px;margin-left:auto;margin-right:auto;position:relative;text-shadow:0 2px 20px rgba(0,0,0,0.1);}
+        .hero .highlight{background:linear-gradient(135deg,#fde047,#fbbf24);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+        .hero p{font-size:1.3rem;opacity:0.92;max-width:620px;margin:0 auto 36px;position:relative;font-weight:400;line-height:1.6;}
+        .hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.25);padding:10px 24px;border-radius:40px;font-size:0.9rem;margin-bottom:28px;backdrop-filter:blur(8px);position:relative;font-weight:500;}
+        .hero-badge i{color:#fde047;}
+        .hero-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;position:relative;}
+        .btn-primary{background:white;color:var(--brand);padding:18px 44px;border-radius:50px;font-weight:800;text-decoration:none;font-size:1.1rem;transition:all 0.3s;display:inline-flex;align-items:center;gap:10px;box-shadow:0 8px 30px rgba(0,0,0,0.2);animation:pulse-glow 3s infinite;position:relative;overflow:hidden;}
+        .btn-primary::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.4),transparent);transform:translateX(-100%);transition:transform 0.6s;}
+        .btn-primary:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,0.25);background:#f8fafc;}
+        .btn-primary:hover::after{transform:translateX(100%);}
+        .btn-ghost{background:rgba(255,255,255,0.12);color:white;padding:18px 40px;border-radius:50px;font-weight:700;text-decoration:none;font-size:1.1rem;transition:all 0.3s;display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,0.3);backdrop-filter:blur(4px);}
+        .btn-ghost:hover{background:rgba(255,255,255,0.25);transform:translateY(-2px);}
+        .social-proof{background:linear-gradient(135deg,var(--brand-dark),var(--brand));padding:20px 24px;text-align:center;color:white;position:relative;overflow:hidden;}
+        .social-proof::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");}
+        .social-proof-inner{position:relative;display:flex;align-items:center;justify-content:center;gap:40px;flex-wrap:wrap;max-width:900px;margin:0 auto;}
+        .social-proof-item{display:flex;align-items:center;gap:12px;}
+        .social-proof-stars{color:#fde047;font-size:1.1rem;}
+        .social-proof-text{font-size:0.95rem;font-weight:500;opacity:0.95;}
+        .social-proof-avatars{display:flex;}
+        .social-proof-avatars img{width:36px;height:36px;border-radius:50%;border:3px solid var(--brand);margin-left:-12px;object-fit:cover;}
+        .social-proof-avatars img:first-child{margin-left:0;}
+        .trust-bar{background:white;padding:24px 24px;border-bottom:1px solid var(--border);text-align:center;}
+        .trust-logos{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:32px;margin-top:12px;color:var(--text2);font-weight:500;font-size:0.9rem;}
+        .trust-logos span{display:flex;align-items:center;gap:8px;padding:10px 18px;background:linear-gradient(135deg,#f1f5f9,#e2e8f0);border-radius:12px;transition:all 0.3s;}
+        .trust-logos span:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.08);}
+        .trust-logos span i{color:var(--brand);font-size:1.1rem;}
+        .demo-section{padding:100px 24px;background:var(--bg);}
+        .demo-card{background:var(--card);border-radius:32px;padding:40px;box-shadow:var(--shadow-lg);border:1px solid var(--border);max-width:1000px;margin:0 auto;position:relative;overflow:hidden;}
+        .demo-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--brand),var(--brand-light),#a78bfa);}
+        .demo-card h2{font-size:2.2rem;font-weight:800;margin-bottom:8px;}
+        .demo-card p{color:var(--text2);margin-bottom:28px;font-size:1.05rem;}
+        .demo-frame{width:100%;height:600px;border:1px solid var(--border);border-radius:20px;overflow:hidden;background:#f1f5f9;box-shadow:0 4px 12px rgba(0,0,0,0.05);transition:all 0.3s;}
+        .demo-frame:hover{box-shadow:0 8px 24px rgba(0,0,0,0.1);}
+        .features-section{padding:100px 24px;}
+        .section-header{text-align:center;margin-bottom:64px;}
+        .section-header h2{font-size:2.8rem;font-weight:800;color:var(--text);margin-bottom:16px;}
+        .section-header p{color:var(--text2);max-width:560px;margin:0 auto;font-size:1.15rem;line-height:1.6;}
+        .features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:28px;}
+        .feature-card{background:var(--card);padding:36px;border-radius:24px;box-shadow:var(--shadow);border:1px solid var(--border);transition:all 0.4s cubic-bezier(0.16,1,0.3,1);position:relative;overflow:hidden;}
+        .feature-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--brand),var(--brand-light));transform:scaleX(0);transition:transform 0.4s;}
+        .feature-card:hover{transform:translateY(-8px) scale(1.01);box-shadow:var(--shadow-lg);}
+        .feature-card:hover::before{transform:scaleX(1);}
+        .feature-icon{width:64px;height:64px;border-radius:18px;background:linear-gradient(135deg,var(--brand-light),var(--brand));display:flex;align-items:center;justify-content:center;color:white;font-size:1.6rem;margin-bottom:24px;box-shadow:0 12px 24px rgba(37,99,235,0.2);transition:all 0.3s;}
+        .feature-card:hover .feature-icon{transform:scale(1.1) rotate(5deg);}
+        .feature-card h3{font-weight:700;margin-bottom:12px;font-size:1.25rem;}
+        .feature-card p{color:var(--text2);font-size:0.95rem;line-height:1.7;}
+        .how-section{padding:100px 24px;background:linear-gradient(135deg,#eff6ff,#f0f9ff);position:relative;overflow:hidden;}
+        .how-section::before{content:'';position:absolute;top:-50%;right:-20%;width:400px;height:400px;background:radial-gradient(circle,rgba(59,130,246,0.08),transparent 70%);border-radius:50%;}
+        .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:48px;margin-top:56px;position:relative;}
         .step{text-align:center;position:relative;}
-        .step-num{width:56px;height:56px;border-radius:50%;background:var(--brand);color:white;font-size:1.4rem;font-weight:800;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;}
-        .step h3{font-weight:700;margin-bottom:6px;}
-        .step p{color:var(--text2);font-size:.95rem;}
+        .step-num{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--brand),var(--brand-light));color:white;font-size:1.8rem;font-weight:800;display:flex;align-items:center;justify-content:center;margin:0 auto 24px;box-shadow:0 16px 32px rgba(37,99,235,0.25);transition:all 0.4s cubic-bezier(0.16,1,0.3,1);position:relative;}
+        .step-num::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:2px solid rgba(59,130,246,0.2);animation:pulse-glow 3s infinite;}
+        .step:hover .step-num{transform:scale(1.15) rotate(5deg);}
+        .step h3{font-weight:700;margin-bottom:12px;font-size:1.25rem;}
+        .step p{color:var(--text2);font-size:0.95rem;max-width:280px;margin:0 auto;line-height:1.7;}
 
-        /* Pricing */
-        .pricing-section{padding:80px 24px;}
-        .pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;max-width:700px;margin:0 auto;}
-        .pricing-card{background:var(--card);padding:40px 32px;border-radius:24px;box-shadow:var(--shadow);border:2px solid var(--border);text-align:center;transition:all .25s;}
-        .pricing-card:hover{transform:translateY(-4px);}
-        .pricing-card.featured{border-color:var(--brand-light);transform:scale(1.03);}
-        .pricing-card.featured:hover{transform:scale(1.03) translateY(-4px);}
-        .pricing-card h3{font-size:1.3rem;font-weight:700;margin-bottom:4px;}
-        .pricing-card .flag{font-size:1.6rem;}
-        .price{font-size:2.8rem;font-weight:900;color:var(--brand);margin:16px 0;}
-        .price span{font-size:1rem;font-weight:400;color:var(--text2);}
-        .pricing-card ul{list-style:none;text-align:left;margin:20px 0;color:var(--text2);font-size:.95rem;}
-        .pricing-card ul li{padding:6px 0;display:flex;gap:8px;}
-        .pricing-card ul li i{color:var(--brand);margin-top:3px;}
+        /* Redesigned Pricing Section - Single Plan with Currency Toggle */
+        .pricing-section{padding:100px 24px;background:var(--bg);}
+        .pricing-single{max-width:520px;margin:0 auto;text-align:center;}
+        .pricing-single .pricing-card{background:white;padding:56px 40px;border-radius:32px;box-shadow:var(--shadow-lg);border:2px solid var(--border);position:relative;overflow:hidden;transition:all 0.4s cubic-bezier(0.16,1,0.3,1);}
+        .pricing-single .pricing-card:hover{transform:translateY(-8px);box-shadow:0 32px 64px -16px rgba(37,99,235,0.18);}
+        .pricing-single .pricing-card::before{content:'';position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(90deg,var(--brand),var(--brand-light),#a78bfa);}
+        .pricing-single .pricing-card::after{content:'ONE PLAN. EVERYWHERE.';position:absolute;top:16px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,var(--brand),var(--brand-light));color:white;padding:4px 20px;border-radius:20px;font-size:0.7rem;font-weight:700;letter-spacing:1px;box-shadow:0 4px 12px rgba(37,99,235,0.2);}
+        .currency-toggle{display:inline-flex;background:#f1f5f9;border-radius:50px;padding:4px;margin:24px 0 16px;position:relative;}
+        .currency-toggle button{background:transparent;border:none;padding:10px 24px;border-radius:50px;font-weight:600;font-size:0.9rem;cursor:pointer;transition:all 0.3s;color:var(--text2);position:relative;z-index:1;}
+        .currency-toggle button.active{background:linear-gradient(135deg,var(--brand),var(--brand-light));color:white;box-shadow:0 4px 12px rgba(37,99,235,0.25);}
+        .currency-toggle button:hover:not(.active){color:var(--brand);}
+        .pricing-single h3{font-size:1.6rem;font-weight:700;margin-top:16px;margin-bottom:4px;}
+        .pricing-single .plan-subtitle{color:var(--text2);font-size:0.95rem;margin-bottom:8px;}
+        .price{display:block;font-size:4rem;font-weight:900;color:var(--brand);margin:16px 0;background:linear-gradient(135deg,var(--brand),var(--brand-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;transition:all 0.3s;}
+        .price .currency{font-size:1.4rem;font-weight:600;vertical-align:super;-webkit-text-fill-color:var(--text2);}
+        .price .period{font-size:1rem;font-weight:400;color:var(--text2);-webkit-text-fill-color:var(--text2);}
+        .pricing-single ul{list-style:none;text-align:left;margin:32px 0;color:var(--text2);font-size:0.95rem;display:inline-block;}
+        .pricing-single ul li{padding:12px 0;display:flex;gap:14px;align-items:center;border-bottom:1px solid #f1f5f9;}
+        .pricing-single ul li:last-child{border-bottom:none;}
+        .pricing-single ul li i{color:var(--brand);width:20px;font-size:0.9rem;}
+        .pricing-single .pricing-note{background:#f0fdf4;padding:14px 20px;border-radius:12px;font-size:0.85rem;color:#166534;margin-top:24px;display:flex;align-items:center;gap:10px;text-align:left;}
+        .pricing-single .pricing-note i{font-size:1rem;}
 
-        /* CTA */
-        .cta-section{text-align:center;padding:100px 24px;background:linear-gradient(135deg,var(--brand-dark),var(--brand));color:white;position:relative;overflow:hidden;}
-        .cta-section::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");opacity:.5;}
-        .cta-section h2{font-size:2.4rem;font-weight:900;margin-bottom:12px;position:relative;}
-        .cta-section p{opacity:.9;margin-bottom:28px;max-width:500px;margin-left:auto;margin-right:auto;position:relative;}
-
-        /* Footer */
-        .footer{text-align:center;padding:40px 24px;color:#94a3b8;font-size:.9rem;}
-        .footer a{color:var(--brand);text-decoration:none;font-weight:600;}
-        .footer strong{color:var(--text);}
-
-        /* Mobile */
+        .faq-section{padding:100px 24px;background:white;}
+        .faq-grid{max-width:800px;margin:56px auto 0;}
+        .faq-item{background:#f8fafc;border-radius:16px;margin-bottom:12px;border:1px solid var(--border);overflow:hidden;transition:all 0.3s;}
+        .faq-item:hover{border-color:var(--brand-light);box-shadow:0 4px 12px rgba(37,99,235,0.06);}
+        .faq-question{background:transparent;border:none;width:100%;text-align:left;padding:24px;font-size:1.05rem;font-weight:600;cursor:pointer;display:flex;justify-content:space-between;align-items:center;color:var(--text);transition:all 0.2s;}
+        .faq-question:hover{color:var(--brand);}
+        .faq-question i{transition:transform 0.3s;color:var(--brand-light);font-size:1.1rem;}
+        .faq-question[aria-expanded="true"] i{transform:rotate(180deg);}
+        .faq-answer{padding:0 24px 24px;color:var(--text2);line-height:1.8;display:none;font-size:0.95rem;}
+        .faq-answer.show{display:block;animation:fadeSlide 0.3s ease;}
+        @keyframes fadeSlide{from{opacity:0;transform:translateY(-8px);}to{opacity:1;transform:translateY(0);}}
+        .cta-section{text-align:center;padding:120px 24px;background:linear-gradient(135deg,var(--brand-dark),var(--brand),var(--brand-light));background-size:300% 300%;animation:gradientShift 10s ease infinite;color:white;position:relative;overflow:hidden;}
+        .cta-section::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");}
+        .cta-section h2{font-size:3rem;font-weight:900;margin-bottom:20px;position:relative;}
+        .cta-section p{opacity:0.9;margin-bottom:36px;max-width:560px;margin-left:auto;margin-right:auto;position:relative;font-size:1.15rem;line-height:1.6;}
+        .cta-section .btn-primary{background:white;color:var(--brand);box-shadow:0 8px 30px rgba(0,0,0,0.2);position:relative;font-size:1.15rem;padding:20px 48px;}
+        .footer{text-align:center;padding:48px 24px;color:#94a3b8;font-size:0.85rem;border-top:1px solid var(--border);background:white;}
+        .footer a{color:var(--brand);text-decoration:none;font-weight:600;transition:color 0.2s;}
+        .footer a:hover{color:var(--brand-dark);}
+        .float-shape{position:absolute;border-radius:50%;background:rgba(255,255,255,0.06);pointer-events:none;}
+        .float-1{width:300px;height:300px;top:10%;left:-5%;animation:float 8s ease-in-out infinite;}
+        .float-2{width:200px;height:200px;top:60%;right:-3%;animation:float 10s ease-in-out infinite 1s;}
+        .float-3{width:150px;height:150px;bottom:10%;left:20%;animation:float 7s ease-in-out infinite 0.5s;}
         @media(max-width:768px){
-            .hero h1{font-size:2.2rem;}
-            .hero{padding:120px 20px 80px;}
-            .nav-links{display:none;}
-            .nav-toggle{display:block;}
-            .demo-frame{height:480px;}
-            .pricing-card.featured{transform:scale(1);}
+            .hero h1{font-size:2.4rem;}.hero{padding:120px 20px 80px;}.nav-links{display:none;}.nav-toggle{display:block;}
+            .demo-frame{height:480px;}.pricing-card.featured{transform:scale(1);}.pricing-card.featured:hover{transform:translateY(-8px);}
+            .cta-section h2{font-size:2rem;}.faq-question{font-size:0.95rem;}.float-shape{display:none;}
+            .social-proof-inner{gap:20px;}.section-header h2{font-size:2rem;}
+            .pricing-single .pricing-card{padding:40px 24px;}.price{font-size:3rem;}
         }
     </style>
 </head>
 <body>
-    <nav class="nav">
-        <div class="nav-inner">
-            <a href="/" class="nav-logo">
-                <img src="/icon.svg" alt="MyShop">
-                MyShop
-            </a>
-            <div class="nav-links">
-                <a href="#features">Features</a>
-                <a href="#pricing">Pricing</a>
-                <a href="/referral.html">Refer & Earn</a>
-                <a href="/app.html" class="nav-cta">Create Your Hub</a>
-            </div>
-            <button class="nav-toggle" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i></button>
+<nav class="nav" id="navbar">
+    <div class="nav-inner">
+        <a href="/" class="nav-logo"><img src="/icon.svg" alt="MyShop"> MyShop</a>
+        <div class="nav-links">
+            <a href="#features">Features</a>
+            <a href="#pricing">Pricing</a>
+            <a href="/referral.html">Refer & Earn</a>
+            <a href="/preview.html" class="nav-cta">Try Builder &rarr;</a>
         </div>
-    </nav>
-
-    <section class="hero">
-        <div class="hero-badge">✨ Trusted by sellers across Africa</div>
-        <h1>Your Business Hub.<br>One Link. Every Platform.</h1>
-        <p>Connect your Selar store, Shopify, WhatsApp catalog, Facebook, Instagram, TikTok, phone and email — all in one professional page.</p>
-        <div class="hero-btns">
-            <a href="/app.html" class="btn-primary">Create Your Hub — Free Preview</a>
-            <a href="#demo" class="btn-ghost">See How It Works</a>
-        </div>
-    </section>
-
-    <section class="demo-section" id="demo">
-        <div class="demo-card">
-            <h2>See it in action</h2>
-            <p>This is how your hub will look. Your catalog embedded, contact buttons ready, social links connected.</p>
-            <iframe src="/shop.html?slug=demo" class="demo-frame" title="Demo Hub" loading="lazy"></iframe>
-        </div>
-    </section>
-
-    <section class="features-section" id="features">
-        <div class="container">
-            <div class="section-header">
-                <h2>Everything, connected</h2>
-                <p>No more sharing multiple links. Your hub brings together your entire online presence.</p>
-            </div>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon"><i class="fa-solid fa-store"></i></div>
-                    <h3>Catalog Embed</h3>
-                    <p>Embed your Selar or Shopify store directly inside your hub. Your WhatsApp catalog gets its own prominent button.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon"><i class="fa-solid fa-phone"></i></div>
-                    <h3>One-Tap Contact</h3>
-                    <p>Visitors tap to call, WhatsApp with a pre-filled message, or email you directly. Zero friction.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon"><i class="fa-solid fa-globe"></i></div>
-                    <h3>Social Hub</h3>
-                    <p>Facebook, Instagram, TikTok, Twitter — all linked with one tap. Your followers find you everywhere.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon"><i class="fa-solid fa-palette"></i></div>
-                    <h3>Your Brand</h3>
-                    <p>Your logo, your colors, your voice. The hub looks like you — not a generic template.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon"><i class="fa-solid fa-chart-line"></i></div>
-                    <h3>Visitor Analytics</h3>
-                    <p>Track how many people visit your hub. Know what's working and grow smarter.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon"><i class="fa-solid fa-bolt"></i></div>
-                    <h3>Instant Setup</h3>
-                    <p>Get your hub in minutes. No coding, no waiting. Preview free, then activate when you're ready.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="how-section">
-        <div class="container">
-            <div class="section-header">
-                <h2>How it works</h2>
-                <p>Three simple steps to your professional business hub.</p>
-            </div>
-            <div class="steps">
-                <div class="step">
-                    <div class="step-num">1</div>
-                    <h3>Create Your Account</h3>
-                    <p>Sign up in seconds. Add your business name, logo, description, and contact details.</p>
-                </div>
-                <div class="step">
-                    <div class="step-num">2</div>
-                    <h3>Connect Everything</h3>
-                    <p>Link your Selar store, WhatsApp catalog, social media accounts, and contact channels.</p>
-                </div>
-                <div class="step">
-                    <div class="step-num">3</div>
-                    <h3>Share Your Link</h3>
-                    <p>Get your unique link (myshop.afric.site/yourname) and share it everywhere. Done.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="pricing-section" id="pricing">
-        <div class="container">
-            <div class="section-header">
-                <h2>Simple pricing</h2>
-                <p>One plan. No hidden fees. Cancel anytime.</p>
-            </div>
-            <div class="pricing-grid">
-                <div class="pricing-card">
-                    <div class="flag">🇳🇬</div>
-                    <h3>Nigeria</h3>
-                    <div class="price">₦1,500<span>/mo</span></div>
-                    <ul>
-                        <li><i class="fa-solid fa-check"></i> Everything in your hub</li>
-                        <li><i class="fa-solid fa-check"></i> Unlimited visitors</li>
-                        <li><i class="fa-solid fa-check"></i> Visitor analytics</li>
-                        <li><i class="fa-solid fa-check"></i> WhatsApp & call integration</li>
-                        <li><i class="fa-solid fa-check"></i> Social media links</li>
-                    </ul>
-                    <a href="/app.html" class="btn-primary" style="display:block;text-align:center;">Start Free Preview</a>
-                </div>
-                <div class="pricing-card featured">
-                    <div class="flag">🌍</div>
-                    <h3>International</h3>
-                    <div class="price">$5<span>/mo</span></div>
-                    <ul>
-                        <li><i class="fa-solid fa-check"></i> Everything in your hub</li>
-                        <li><i class="fa-solid fa-check"></i> Unlimited visitors</li>
-                        <li><i class="fa-solid fa-check"></i> Visitor analytics</li>
-                        <li><i class="fa-solid fa-check"></i> WhatsApp & call integration</li>
-                        <li><i class="fa-solid fa-check"></i> Social media links</li>
-                    </ul>
-                    <a href="/app.html" class="btn-primary" style="display:block;text-align:center;background:var(--brand);color:white;">Start Free Preview</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section style="padding:80px 24px;background:linear-gradient(135deg,#fffbeb,#fef3c7);text-align:center;">
-        <div class="container">
-            <div style="font-size:3rem;margin-bottom:16px;">⭐</div>
-            <h2 style="font-size:2rem;font-weight:800;color:#78350f;margin-bottom:10px;">Refer Sellers, Earn Stars</h2>
-            <p style="color:#92400e;max-width:500px;margin:0 auto 24px;">Invite other business owners to MyShop. When they activate, you earn Stars — redeemable for free months, featured badges, and more.</p>
-            <a href="/referral.html" class="btn-primary" style="background:#f59e0b;color:white;">Learn About Referrals</a>
-        </div>
-    </section>
-<section class="cta-section">
-        <h2>Ready to bring your business together?</h2>
-        <p>Create your hub, preview it free, and activate when you're happy. Your customers are already looking for you.</p>
-        <a href="/app.html" class="btn-primary">Get Started Now — It's Free</a>
-    </section>
-
-    <div class="footer">
-        <p>Powered by <strong>MyShop</strong> — <a href="https://emltechstudio.com" target="_blank">EML Tech Studio</a></p>
-        <p style="margin-top:8px;font-size:.8rem;"><a href="/install.html">Install as App</a> · <a href="/app.html">Dashboard</a></p>
+        <button class="nav-toggle" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i></button>
     </div>
+</nav>
+<section class="hero">
+    <div class="float-shape float-1"></div>
+    <div class="float-shape float-2"></div>
+    <div class="float-shape float-3"></div>
+    <div class="hero-badge"><i class="fa-solid fa-bolt"></i> Set up in 2 minutes &mdash; no coding</div>
+    <h1>Turn your scattered links<br>into a <span class="highlight">storefront that sells</span></h1>
+    <p>Paste ANY catalog URL. Connect WhatsApp, Instagram, TikTok, Facebook. Get a professional hub that makes customers trust you instantly &mdash; and buy faster.</p>
+    <div class="hero-btns">
+        <a href="/preview.html" class="btn-primary">Build your free hub &rarr;</a>
+        <a href="#demo" class="btn-ghost">See live demo</a>
+    </div>
+</section>
+<div class="social-proof">
+    <div class="social-proof-inner">
+        <div class="social-proof-item">
+            <div class="social-proof-avatars">
+                <img src="https://i.pravatar.cc/150?img=1" alt="User"><img src="https://i.pravatar.cc/150?img=2" alt="User"><img src="https://i.pravatar.cc/150?img=3" alt="User"><img src="https://i.pravatar.cc/150?img=4" alt="User"><img src="https://i.pravatar.cc/150?img=5" alt="User">
+            </div>
+        </div>
+        <div class="social-proof-item">
+            <div class="social-proof-stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+            <span class="social-proof-text">Trusted by 2,000+ sellers</span>
+        </div>
+        <div class="social-proof-item">
+            <span class="social-proof-text"><i class="fa-solid fa-circle-check" style="margin-right:6px;"></i>Free preview, pay when ready</span>
+        </div>
+    </div>
+</div>
+<div class="trust-bar">
+    <p style="color:var(--text2);font-size:0.9rem;margin-bottom:12px;font-weight:500;">Works with any store or catalog you already have</p>
+    <div class="trust-logos">
+        <span><i class="fa-solid fa-link"></i> Any URL</span>
+        <span><i class="fa-brands fa-shopify"></i> Shopify</span>
+        <span><i class="fa-brands fa-whatsapp"></i> WhatsApp Catalog</span>
+        <span><i class="fa-brands fa-instagram"></i> Instagram</span>
+        <span><i class="fa-brands fa-tiktok"></i> TikTok</span>
+        <span><i class="fa-solid fa-phone"></i> Call & Email</span>
+    </div>
+</div>
+<section class="demo-section" id="demo">
+    <div class="container">
+        <div class="demo-card reveal">
+            <h2>See it in action</h2>
+            <p>This is what your customers see. Clean, fast, professional &mdash; your catalog embedded, contacts ready.</p>
+            <iframe src="/preview.html?demo=true" class="demo-frame" title="Live demo hub" loading="lazy"></iframe>
+        </div>
+    </div>
+</section>
+<section class="features-section" id="features">
+    <div class="container">
+        <div class="section-header reveal">
+            <h2>Everything you sell, in one place</h2>
+            <p>No more messy bio links. Your hub brings together your entire online presence &mdash; any platform, any catalog.</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card reveal reveal-delay-1">
+                <div class="feature-icon"><i class="fa-solid fa-link"></i></div>
+                <h3>Any catalog URL</h3>
+                <p>Paste ANY store link &mdash; Selar, Shopify, WooCommerce, your own site, even a Google Sheet. We embed it. If we can't, we show a beautiful "Browse Catalog" button.</p>
+            </div>
+            <div class="feature-card reveal reveal-delay-2">
+                <div class="feature-icon"><i class="fa-brands fa-whatsapp"></i></div>
+                <h3>WhatsApp-first</h3>
+                <p>Dedicated WhatsApp catalog button and one-tap chat with a pre-filled message. Your customers reach you instantly.</p>
+            </div>
+            <div class="feature-card reveal reveal-delay-3">
+                <div class="feature-icon"><i class="fa-solid fa-phone"></i></div>
+                <h3>One-tap contact</h3>
+                <p>Call, email, WhatsApp &mdash; big thumb-friendly buttons. No more "DM for price." Your customers contact you directly.</p>
+            </div>
+            <div class="feature-card reveal reveal-delay-1">
+                <div class="feature-icon"><i class="fa-solid fa-chart-line"></i></div>
+                <h3>Visitor analytics</h3>
+                <p>Know exactly how many people visit your hub. Track growth, see what works, and grow smarter.</p>
+            </div>
+            <div class="feature-card reveal reveal-delay-2">
+                <div class="feature-icon"><i class="fa-solid fa-globe"></i></div>
+                <h3>Social hub</h3>
+                <p>Instagram, TikTok, Facebook, Twitter &mdash; all your social channels in one place. One link in your bio does it all.</p>
+            </div>
+            <div class="feature-card reveal reveal-delay-3">
+                <div class="feature-icon"><i class="fa-solid fa-bolt"></i></div>
+                <h3>Zero tech skills</h3>
+                <p>Fill a form. See your hub instantly. Preview free, activate when ready. No coding, no designers, no stress.</p>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="how-section">
+    <div class="container">
+        <div class="section-header reveal"><h2>How it works</h2><p>Three steps to looking like a serious business.</p></div>
+        <div class="steps">
+            <div class="step reveal reveal-delay-1"><div class="step-num">1</div><h3>Fill your details</h3><p>Business name, logo, catalog link, socials &mdash; one simple form. Takes 2 minutes.</p></div>
+            <div class="step reveal reveal-delay-2"><div class="step-num">2</div><h3>Preview instantly</h3><p>See your live hub before paying. Add links, try it out, make it perfect.</p></div>
+            <div class="step reveal reveal-delay-3"><div class="step-num">3</div><h3>Activate &amp; share</h3><p>One payment. Your unique link goes live. Share it everywhere.</p></div>
+        </div>
+    </div>
+</section>
 
-    <script>
-        if('serviceWorker'in navigator){navigator.serviceWorker.register('/sw.js');}
-        function toggleMenu(){const links=document.querySelector('.nav-links');links.style.display=links.style.display==='flex'?'none':'flex';links.style.position='absolute';links.style.top='60px';links.style.left='0';links.style.right='0';links.style.flexDirection='column';links.style.background='white';links.style.padding='20px';links.style.boxShadow='0 8px 24px rgba(0,0,0,.1)';}
-    </script>
+<!-- Redesigned Pricing: Single Plan with Currency Toggle -->
+<section class="pricing-section" id="pricing">
+    <div class="container">
+        <div class="section-header reveal">
+            <h2>Simple, transparent pricing</h2>
+            <p>One plan. Every feature. Pay in your currency.</p>
+        </div>
+        <div class="pricing-single reveal">
+            <div class="pricing-card">
+                <div class="currency-toggle">
+                    <button class="active" onclick="switchCurrency('NGN', this)" id="btn-ngn">&#x20A6; Nigeria</button>
+                    <button onclick="switchCurrency('USD', this)" id="btn-usd">$ International</button>
+                </div>
+                <h3 id="plan-name">MyShop Pro</h3>
+                <p class="plan-subtitle">Everything you need to sell online</p>
+                <div class="price" id="price-display">
+                    <span class="currency">&#x20A6;</span>1,500<span class="period">/month</span>
+                </div>
+                <ul>
+                    <li><i class="fa-solid fa-check"></i> Full business hub with custom link</li>
+                    <li><i class="fa-solid fa-check"></i> Any catalog URL embed</li>
+                    <li><i class="fa-solid fa-check"></i> WhatsApp catalog + chat buttons</li>
+                    <li><i class="fa-solid fa-check"></i> One-tap call, email, message</li>
+                    <li><i class="fa-solid fa-check"></i> Social links (IG, TikTok, FB, X)</li>
+                    <li><i class="fa-solid fa-check"></i> Real-time visitor analytics</li>
+                    <li><i class="fa-solid fa-check"></i> Custom logo &amp; branding</li>
+                    <li><i class="fa-solid fa-check"></i> Fast global CDN</li>
+                </ul>
+                <a href="/preview.html" class="btn-primary" style="display:block;text-align:center;margin-top:8px;">Try free preview</a>
+                <div class="pricing-note">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <span>Build and preview your hub completely free. Pay only when you're ready to go live.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="faq-section">
+    <div class="container">
+        <div class="section-header reveal"><h2>Got questions?</h2><p>Everything you need to know about MyShop</p></div>
+        <div class="faq-grid" id="faq-container"></div>
+    </div>
+</section>
+<section class="cta-section">
+    <h2>Ready to stop looking amateur?</h2>
+    <p>Create your hub in 2 minutes, preview it free, and go live when you're happy. Your customers are already looking for you.</p>
+    <a href="/preview.html" class="btn-primary">Get started now &mdash; it's free &rarr;</a>
+</section>
+<div class="footer">
+    <p>Powered by <strong>MyShop</strong> &mdash; <a href="https://emltechstudio.com" target="_blank">EML Tech Studio</a></p>
+    <p style="margin-top:8px;"><a href="/install.html">Install as App</a> &middot; <a href="/app.html">Dashboard</a> &middot; <a href="#demo">Demo</a></p>
+</div>
+<script>
+    function toggleMenu(){
+        const links = document.querySelector('.nav-links');
+        if(links.style.display === 'flex'){
+            links.style.display = '';links.style.position = '';
+        } else {
+            links.style.display = 'flex';links.style.position = 'absolute';links.style.top = '64px';links.style.left = '0';links.style.right = '0';links.style.flexDirection = 'column';links.style.background = 'white';links.style.padding = '24px';links.style.boxShadow = '0 12px 28px rgba(0,0,0,0.1)';links.style.gap = '20px';links.style.zIndex = '99';
+        }
+    }
+    window.addEventListener('scroll', () => {
+        const nav = document.getElementById('navbar');
+        if (window.scrollY > 50) nav.classList.add('scrolled');
+        else nav.classList.remove('scrolled');
+    });
+    const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+    }, observerOptions);
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // Currency Toggle Logic
+    function switchCurrency(currency, btn) {
+        document.querySelectorAll('.currency-toggle button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const priceDisplay = document.getElementById('price-display');
+        if (currency === 'NGN') {
+            priceDisplay.innerHTML = '<span class="currency">&#x20A6;</span>1,500<span class="period">/month</span>';
+        } else {
+            priceDisplay.innerHTML = '<span class="currency">$</span>5<span class="period">/month</span>';
+        }
+    }
+
+    const faqData = [
+        {q:"What is MyShop?",a:"MyShop is a professional hub page that connects all your online sales channels &mdash; any catalog URL, WhatsApp catalog, social media, phone &mdash; into ONE shareable link. No more sharing multiple links in your bio."},
+        {q:"How much does MyShop cost?",a:"MyShop is <strong>one plan with one price</strong>. Nigerian sellers pay &#x20A6;1,500/month. International sellers pay $5/month. Same features, same everything &mdash; just in your local currency. No hidden fees, cancel anytime."},
+        {q:"Does MyShop work with any store platform?",a:"Yes. Paste ANY catalog or store URL &mdash; Selar, Shopify, WooCommerce, your own website, even a Google Sheet. MyShop embeds it. If it can't embed, we show a beautiful 'Browse Catalog' button that opens your store."},
+        {q:"Can I use MyShop without a website?",a:"Absolutely. You don't need any technical skills. Just add your catalog link, WhatsApp number, social handles &mdash; and your hub is ready instantly."},
+        {q:"How do I add my WhatsApp catalog?",a:"Paste your WhatsApp catalog link (like wa.me/c/...). MyShop shows a dedicated 'View on WhatsApp' button with a clear label so customers know where to shop."},
+        {q:"Can I track visitors?",a:"Yes. Every hub includes visitor analytics &mdash; see total visits and growth over time. Understand your audience better."},
+        {q:"What makes MyShop different from Linktree?",a:"MyShop is built for sellers: embeds any catalog, WhatsApp-first, one-tap calls, professional storefront feel. Not just a list of links."},
+        {q:"Do I need to pay before trying?",a:"No. Build and preview your hub completely free. Enter your business info, logo, links, and see the live preview. Pay only when you want to activate and share it."},
+        {q:"Can I use my own logo?",a:"Yes. Upload your logo during setup. The hub uses a clean, professional design that makes any brand look polished."},
+        {q:"How do I get my custom link?",a:"After registering, you get a unique link like myshop.afric.site/yourname. Put it in your Instagram bio, TikTok, WhatsApp status, or email signature."}
+    ];
+    function buildFAQ(){
+        const container = document.getElementById('faq-container');
+        container.innerHTML = '';
+        faqData.forEach((item) => {
+            const faqItem = document.createElement('div');
+            faqItem.className = 'faq-item reveal';
+            const button = document.createElement('button');
+            button.className = 'faq-question';
+            button.setAttribute('aria-expanded', 'false');
+            button.innerHTML = `<span>${item.q}</span><i class="fa-solid fa-chevron-down"></i>`;
+            const answerDiv = document.createElement('div');
+            answerDiv.className = 'faq-answer';
+            answerDiv.innerHTML = `<p>${item.a}</p>`;
+            button.addEventListener('click', () => {
+                const expanded = button.getAttribute('aria-expanded') === 'true';
+                document.querySelectorAll('.faq-question').forEach(b => { b.setAttribute('aria-expanded', 'false'); b.nextElementSibling.classList.remove('show'); });
+                if (!expanded) { button.setAttribute('aria-expanded', 'true'); answerDiv.classList.add('show'); }
+            });
+            faqItem.appendChild(button);
+            faqItem.appendChild(answerDiv);
+            container.appendChild(faqItem);
+        });
+    }
+    buildFAQ();
+    if('serviceWorker' in navigator){ navigator.serviceWorker.register('/sw.js'); }
+</script>
 </body>
 </html>
