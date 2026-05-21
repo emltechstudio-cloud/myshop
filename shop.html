@@ -881,13 +881,6 @@
                     renderShop(updatedShop, currentIsPreview);
                 }
             });
-
-            // Initial load logic
-            if (!slug) {
-                appEl.innerHTML = '<div class="error-state"><div class="error-card"><div class="icon">🔍</div><h2>No shop specified</h2><p>Add a shop name to the URL like <code>myshop.afric.site/your-shop</code></p><a href="/">Go to MyShop</a></div></div>';
-                return;
-            }
-
             if (slug === 'demo') {
                 const demoData = getDemoData();
                 currentShopData = demoData;
@@ -896,6 +889,7 @@
                 return;
             }
 
+            // Try live endpoint first, then preview if owner
             try {
                 const endpoint = isPreview ? '/shop/preview/' + slug : '/shop/live/' + slug;
                 const res = await fetch(API + endpoint);
@@ -906,6 +900,16 @@
                         } else {
                             appEl.innerHTML = '<div class="error-state"><div class="error-card"><div class="icon">🏪</div><h2>"' + slug + '" not found</h2><p>This shop doesn\'t exist or hasn\'t been activated yet.</p><a href="/app.html">Create Your Shop</a></div></div>';
                         }
+                        return;
+                    }
+                    throw new Error('Server error');
+                }
+                const shop = await res.json();
+                renderShop(shop, isPreview);
+            } catch(e) 
+            {
+                appEl.innerHTML = '<div class="error-state"><div class="error-card"><div class="icon">⚠️</div><h2>Unable to load</h2><p>' + e.message + '</p><a href="/">Go Home</a></div></div>';
+        }
                         return;
                     }
                     throw new Error('Server error');
