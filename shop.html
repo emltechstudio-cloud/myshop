@@ -400,6 +400,7 @@
             margin-top: 40px;
         }
         .site-footer a { color: var(--brand); text-decoration: none; font-weight: 600; }
+        .site-footer a { color: var(--brand); text-decoration: none; font-weight: 600; }
         .watermark {
             display: inline-flex;
             align-items: center;
@@ -408,8 +409,13 @@
             padding: 12px 24px;
             border-radius: 50px;
             border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
             margin-top: 16px;
+            transition: box-shadow var(--transition);
         }
+        .watermark:hover { box-shadow: var(--shadow-md); }
+        .watermark img { width: 24px; height: 24px; border-radius: 6px; }
+
         .loading-screen {
             min-height: 100vh;
             display: flex;
