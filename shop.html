@@ -5,13 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#1e40af">
     <title>MyShop Hub</title>
-    <link rel="manifest" href="/manifest.json">
-    <link rel="icon" type="image/svg+xml" href="/icon.svg">
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700;800&family=Open+Sans:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* ===== original styles (keep everything) ===== */
         *{margin:0;padding:0;box-sizing:border-box;}
         :root {
             --bg: #f8fafc;
@@ -23,34 +19,42 @@
             --brand: #1e40af;
             --brand-light: #3b82f6;
             --brand-dark: #1e3a8a;
+            --brand-rgb: 30, 64, 175;
             --success: #10b981;
             --whatsapp: #25d366;
-            --telegram: #26a5e4;
-            --signal: #3b76f0;
-            --messenger: #0084ff;
-            --viber: #7360f2;
-            --line: #00c300;
-            --wechat: #2b9c2b;
             --radius: 20px;
+            --radius-sm: 14px;
+            --radius-lg: 28px;
             --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
             --shadow-md: 0 4px 20px rgba(0,0,0,0.06);
             --shadow-lg: 0 12px 40px rgba(0,0,0,0.1);
             --transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
         }
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #0f172a;
+                --card: #1e293b;
+                --text: #f1f5f9;
+                --text2: #94a3b8;
+                --text3: #64748b;
+                --border: #334155;
+            }
+        }
         html{scroll-behavior:smooth;}
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background: var(--bg);
             color: var(--text);
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
             overflow-x: hidden;
+            min-height: 100vh;
         }
         .navbar {
             position: fixed;
             top: 0; left: 0; right: 0;
             z-index: 1000;
-            background: rgba(255,255,255,0.9);
+            background: rgba(255,255,255,0.85);
             backdrop-filter: blur(24px);
             border-bottom: 1px solid transparent;
             transition: all var(--transition);
@@ -59,10 +63,13 @@
             border-bottom-color: var(--border);
             box-shadow: var(--shadow-md);
         }
+        @media (prefers-color-scheme: dark) {
+            .navbar { background: rgba(15, 23, 42, 0.85); }
+        }
         .nav-inner {
-            max-width: 1200px;
+            max-width: 720px;
             margin: 0 auto;
-            padding: 14px 24px;
+            padding: 12px 24px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -72,34 +79,29 @@
             align-items: center;
             gap: 10px;
             text-decoration: none;
-        }
-        .nav-brand img { width: 34px; height: 34px; border-radius: 8px; }
-        .nav-brand span {
             font-weight: 800;
-            font-size: 1.2rem;
+            font-size: 1.15rem;
             color: var(--brand);
-            letter-spacing: -0.5px;
         }
+        .nav-brand img { width: 30px; height: 30px; border-radius: 8px; }
         .nav-links {
             display: flex;
             align-items: center;
-            gap: 28px;
+            gap: 24px;
         }
         .nav-links a {
             color: var(--text2);
             text-decoration: none;
             font-weight: 500;
-            font-size: 0.88rem;
+            font-size: 0.85rem;
             transition: color 0.2s;
             position: relative;
         }
         .nav-links a::after {
             content: '';
             position: absolute;
-            bottom: -4px;
-            left: 0;
-            width: 0;
-            height: 2px;
+            bottom: -4px; left: 0;
+            width: 0; height: 2px;
             background: var(--brand);
             border-radius: 2px;
             transition: width 0.25s;
@@ -109,808 +111,630 @@
         .nav-cta {
             background: var(--brand);
             color: white !important;
-            padding: 10px 22px;
+            padding: 9px 20px;
             border-radius: 50px;
             font-weight: 600;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             text-decoration: none;
             transition: all var(--transition);
-            box-shadow: 0 4px 14px rgba(30,64,175,0.2);
+            box-shadow: 0 4px 14px rgba(var(--brand-rgb), 0.2);
         }
         .nav-cta:hover {
             background: var(--brand-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(30,64,175,0.3);
+            transform: translateY(-1px);
         }
         .nav-cta::after { display: none !important; }
         .nav-toggle {
             display: none;
             background: none;
             border: none;
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             color: var(--text);
             cursor: pointer;
             padding: 8px;
-            border-radius: 12px;
+            border-radius: 10px;
         }
-        .nav-toggle:active { background: var(--border); }
-        @media (max-width: 640px) { .nav-links { display: none; } .nav-toggle { display: block; } }
+        @media (max-width: 640px) {
+            .nav-links { display: none; }
+            .nav-links.active {
+                display: flex;
+                position: absolute;
+                top: 60px; left: 0; right: 0;
+                flex-direction: column;
+                background: var(--card);
+                padding: 20px 24px;
+                gap: 14px;
+                border-bottom: 1px solid var(--border);
+                z-index: 999;
+            }
+            .nav-toggle { display: block; }
+        }
         .hero {
             position: relative;
-            padding: 130px 24px 70px;
+            padding: 100px 24px 48px;
             text-align: center;
-            background: linear-gradient(180deg, #eef2ff 0%, #f8fafc 100%);
             overflow: hidden;
         }
-        .hero::before {
-            content: '';
+        .hero-glow {
             position: absolute;
-            top: -40%; left: -30%;
-            width: 160%; height: 180%;
-            background: radial-gradient(ellipse at 30% 40%, rgba(30,64,175,0.05) 0%, transparent 55%),
-                        radial-gradient(ellipse at 70% 20%, rgba(59,130,246,0.04) 0%, transparent 55%);
+            top: -30%; left: 50%;
+            transform: translateX(-50%);
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(var(--brand-rgb), 0.06) 0%, transparent 70%);
             pointer-events: none;
         }
         .hero > * { position: relative; z-index: 1; }
         .hero-logo {
-            width: 120px;
-            height: 120px;
-            border-radius: 28px;
+            width: 96px;
+            height: 96px;
+            border-radius: 24px;
             object-fit: cover;
-            margin: 0 auto 20px;
-            border: 4px solid white;
-            box-shadow: 0 8px 36px rgba(0,0,0,0.1);
+            margin: 0 auto 18px;
+            border: 3px solid white;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1), 0 0 0 1px var(--border);
             background: white;
             transition: transform var(--transition);
         }
-        .hero-logo:hover { transform: scale(1.04); }
+        .hero-logo:hover { transform: scale(1.03); }
         .hero-name {
-            font-size: 2.8rem;
-            font-weight: 900;
-            letter-spacing: -1.5px;
-            margin-bottom: 8px;
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 6px;
             color: var(--text);
         }
         .hero-tagline {
-            font-size: 1.15rem;
+            font-size: 1rem;
             color: var(--text2);
-            font-weight: 500;
-            max-width: 520px;
-            margin: 0 auto 24px;
+            max-width: 440px;
+            margin: 0 auto 14px;
         }
         .hero-meta {
             display: flex;
             justify-content: center;
-            gap: 24px;
+            gap: 18px;
             flex-wrap: wrap;
             color: var(--text3);
-            font-size: 0.9rem;
+            font-size: 0.82rem;
         }
-        .hero-meta span { display: flex; align-items: center; gap: 7px; }
-        .pulse-dot {
-            display: inline-block;
-            width: 9px;
-            height: 9px;
-            border-radius: 50%;
-            background: var(--success);
-            animation: pulse 2s ease-in-out infinite;
+        .hero-meta span { display: inline-flex; align-items: center; gap: 5px; }
+        .hero-meta .verified {
+            color: var(--success);
+            background: rgba(16,185,129,0.08);
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-weight: 600;
         }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.4; transform: scale(1.5); }
-        }
-        .quick-actions {
+        .hero-cta {
+            margin-top: 24px;
             display: flex;
             justify-content: center;
-            gap: 14px;
+            gap: 12px;
             flex-wrap: wrap;
-            padding: 0 24px 40px;
-            max-width: 700px;
-            margin: 0 auto;
         }
-        .action-btn {
+        .hero-cta a, .hero-cta button {
             display: inline-flex;
             align-items: center;
             gap: 10px;
-            padding: 15px 30px;
+            padding: 14px 28px;
             border-radius: 50px;
             font-weight: 700;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             text-decoration: none;
             transition: all var(--transition);
-            white-space: nowrap;
+            border: none;
+            cursor: pointer;
         }
-        .action-btn.primary {
+        .hero-cta a:hover, .hero-cta button:hover { transform: translateY(-2px); }
+        .hero-cta .btn-primary {
             background: var(--brand);
             color: white;
-            box-shadow: 0 8px 24px rgba(30,64,175,0.25);
+            box-shadow: 0 8px 24px rgba(var(--brand-rgb), 0.25);
         }
-        .action-btn.primary:hover {
-            background: var(--brand-dark);
-            transform: translateY(-3px);
-        }
-        .action-btn.whatsapp {
-            background: var(--whatsapp);
-            color: white;
-            box-shadow: 0 8px 24px rgba(37,211,102,0.25);
-        }
-        .action-btn.whatsapp:hover {
-            transform: translateY(-3px);
-        }
-        .action-btn.ghost {
-            background: white;
+        .hero-cta .btn-primary:hover { background: var(--brand-dark); }
+        .hero-cta .btn-ghost {
+            background: var(--card);
             color: var(--text);
-            border: 2px solid var(--border);
+            border: 1.5px solid var(--border);
         }
-        .action-btn.ghost:hover {
-            border-color: var(--brand);
+        .hero-cta .btn-ghost:hover {
+            border-color: var(--brand-light);
             color: var(--brand);
         }
         .section {
-            max-width: 900px;
+            max-width: 640px;
             margin: 0 auto;
-            padding: 60px 24px;
+            padding: 32px 24px;
         }
         .section-title {
-            font-size: 1.5rem;
-            font-weight: 800;
-            margin-bottom: 28px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text3);
+            margin-bottom: 16px;
             display: flex;
             align-items: center;
-            gap: 14px;
-        }
-        .section-title i { color: var(--brand); font-size: 1.3rem; }
-        .section-title .line {
-            flex: 1;
-            height: 2px;
-            background: var(--border);
-            border-radius: 2px;
-        }
-        .about-card {
-            background: var(--card);
-            padding: 32px;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow-sm);
-            border: 1px solid var(--border);
-        }
-        .about-text {
-            color: var(--text2);
-            font-size: 1.05rem;
-            line-height: 1.8;
-        }
-        .catalog-card {
-            background: var(--card);
-            padding: 40px 32px;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow-sm);
-            border: 1px solid var(--border);
-            text-align: center;
-        }
-        .catalog-card.whatsapp-card {
-            background: linear-gradient(135deg, #dcfce7, #d1fae5);
-            border-color: #bbf7d0;
-        }
-        .catalog-card.coming-soon {
-            background: linear-gradient(135deg, #fef3c7, #fde68a);
-            border-color: #fcd34d;
-        }
-        .catalog-icon { font-size: 3.5rem; margin-bottom: 16px; }
-        .catalog-card h3 { font-size: 1.3rem; font-weight: 800; margin-bottom: 8px; }
-        .catalog-card p { margin-bottom: 20px; font-size: 0.95rem; max-width: 450px; margin-left: auto; margin-right: auto; }
-        .whatsapp-card h3 { color: #166534; }
-        /* ===== new styles for dynamic socials & messaging ===== */
-        .social-scroll {
-            overflow-x: auto;
-            overflow-y: hidden;
-            white-space: nowrap;
-            padding: 8px 4px 16px;
-            margin: 0 -4px;
-            -webkit-overflow-scrolling: touch;
-        }
-        .social-scroll::-webkit-scrollbar { height: 4px; }
-        .social-scroll::-webkit-scrollbar-track { background: var(--border); border-radius: 4px; }
-        .social-scroll::-webkit-scrollbar-thumb { background: var(--brand-light); border-radius: 4px; }
-        .social-item {
-            display: inline-flex;
-            flex-direction: column;
-            align-items: center;
             gap: 8px;
-            width: 80px;
-            padding: 10px 0;
-            margin: 0 8px;
+        }
+        .card {
             background: var(--card);
+            border-radius: var(--radius-lg);
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+            transition: all var(--transition);
+        }
+        .card:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
+        .about-text { color: var(--text2); font-size: 0.95rem; line-height: 1.75; }
+        .custom-links-grid { display: flex; flex-direction: column; gap: 10px; }
+        .custom-link-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--card);
+            border: 1.5px solid var(--border);
             border-radius: 16px;
+            padding: 14px 20px;
             text-decoration: none;
             color: var(--text);
-            border: 1px solid var(--border);
-            transition: all 0.2s;
-        }
-        .social-item i { font-size: 1.8rem; color: var(--brand); }
-        .social-item span { font-size: 0.7rem; font-weight: 500; text-align: center; }
-        .social-item:hover { transform: translateY(-3px); border-color: var(--brand-light); box-shadow: var(--shadow-md); }
-        .social-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-            gap: 16px;
-            margin-top: 16px;
-        }
-        @media (min-width: 769px) {
-            .social-scroll { display: none; }
-            .social-grid { display: grid; }
-        }
-        @media (max-width: 768px) {
-            .social-grid { display: none; }
-            .social-scroll { display: block; }
-        }
-        .toggle-socials-btn {
-            margin-top: 16px;
-            background: transparent;
-            border: 1px solid var(--border);
-            padding: 8px 20px;
-            border-radius: 40px;
             font-weight: 600;
-            font-size: 0.85rem;
-            cursor: pointer;
+            transition: all var(--transition);
+        }
+        .custom-link-btn i {
+            width: 36px; height: 36px;
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(var(--brand-rgb), 0.08);
             color: var(--brand);
-            transition: all 0.2s;
+            border-radius: 10px;
         }
-        .toggle-socials-btn:hover { background: var(--brand); color: white; }
-        .messaging-scroll {
-            overflow-x: auto;
-            overflow-y: hidden;
-            white-space: nowrap;
-            padding: 8px 4px 16px;
-            -webkit-overflow-scrolling: touch;
+        .custom-link-btn:hover {
+            background: var(--brand);
+            color: white;
+            border-color: var(--brand);
+            transform: translateY(-2px);
         }
-        .messaging-item {
+        .custom-link-btn:hover i { background: rgba(255,255,255,0.2); color: white; }
+        .catalog-card { text-align: center; padding: 32px 24px; }
+        .catalog-icon {
+            width: 64px; height: 64px;
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(var(--brand-rgb), 0.06);
+            border-radius: 20px;
+            margin: 0 auto 16px;
+            color: var(--brand);
+            font-size: 1.6rem;
+        }
+        .catalog-card h3 { font-size: 1.1rem; font-weight: 800; margin-bottom: 6px; }
+        .catalog-card p { margin-bottom: 20px; font-size: 0.9rem; color: var(--text2); }
+        .catalog-btn {
             display: inline-flex;
-            flex-direction: column;
             align-items: center;
             gap: 8px;
-            width: 80px;
-            padding: 10px 0;
-            margin: 0 8px;
-            background: var(--card);
-            border-radius: 16px;
+            padding: 14px 28px;
+            border-radius: 50px;
+            font-weight: 700;
             text-decoration: none;
-            transition: all 0.2s;
-        }
-        .messaging-item .msg-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.4rem;
+            background: var(--brand);
             color: white;
-            margin-bottom: 4px;
+            transition: all var(--transition);
         }
-        .messaging-item.whatsapp .msg-icon { background: var(--whatsapp); }
-        .messaging-item.telegram .msg-icon { background: var(--telegram); }
-        .messaging-item.signal .msg-icon { background: var(--signal); }
-        .messaging-item.messenger .msg-icon { background: var(--messenger); }
-        .messaging-item.viber .msg-icon { background: var(--viber); }
-        .messaging-item.line .msg-icon { background: var(--line); }
-        .messaging-item.wechat .msg-icon { background: var(--wechat); }
-        .messaging-item span { font-size: 0.7rem; font-weight: 500; color: var(--text); }
-        .messaging-item:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
-        /* FAB – single instance, no duplication */
+        .catalog-btn:hover { background: var(--brand-dark); transform: translateY(-2px); }
+        .social-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(56px, 1fr));
+            gap: 12px;
+        }
+        .social-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 12px 8px;
+            border-radius: var(--radius-sm);
+            background: var(--card);
+            border: 1.5px solid var(--border);
+            text-decoration: none;
+            transition: all var(--transition);
+        }
+        .social-item i { font-size: 1.3rem; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 12px; }
+        .social-item:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); border-color: transparent; }
+        .social-item:hover i { color: white !important; }
+        .social-item.facebook:hover i, .social-item.facebook:hover { background: #1877f2; border-color: #1877f2; }
+        .social-item.instagram:hover i, .social-item.instagram:hover { background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285aeb 90%); border-color: transparent; }
+        .social-item.tiktok:hover i, .social-item.tiktok:hover { background: #000000; border-color: #000000; }
+        .social-item.twitter:hover i, .social-item.twitter:hover { background: #000000; border-color: #000000; }
+        .social-item.youtube:hover i, .social-item.youtube:hover { background: #ff0000; border-color: #ff0000; }
+        .social-item.linkedin:hover i, .social-item.linkedin:hover { background: #0a66c2; border-color: #0a66c2; }
+        .social-item.whatsapp:hover i, .social-item.whatsapp:hover { background: #25d366; border-color: #25d366; }
+        .social-item.telegram:hover i, .social-item.telegram:hover { background: #0088cc; border-color: #0088cc; }
+        .social-item.pinterest:hover i, .social-item.pinterest:hover { background: #bd081c; border-color: #bd081c; }
+        .social-item.snapchat:hover i, .social-item.snapchat:hover { background: #fffc00; border-color: #fffc00; }
+        .social-item.snapchat:hover i { color: black !important; }
+        .messaging-grid { display: flex; flex-wrap: wrap; gap: 10px; }
+        .msg-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            border-radius: 14px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-decoration: none;
+            color: white;
+            transition: all var(--transition);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .msg-btn:hover { transform: translateY(-2px); }
+        .msg-btn.whatsapp { background: #25d366; }
+        .msg-btn.telegram { background: #0088cc; }
+        .msg-btn.messenger { background: #0084ff; }
+        .msg-btn.signal { background: #3a76f0; }
+        .msg-btn.viber { background: #7360f2; }
+        .msg-btn.line { background: #06c755; }
+        .msg-btn.wechat { background: #07c160; }
+        .msg-btn.discord { background: #5865f2; }
+        .contact-icon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(56px, 1fr));
+            gap: 12px;
+        }
+        .contact-icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            padding: 12px 8px;
+            border-radius: var(--radius-sm);
+            background: var(--card);
+            border: 1.5px solid var(--border);
+            transition: all var(--transition);
+        }
+        .contact-icon-item i { font-size: 1.3rem; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 12px; color: var(--brand); }
+        .contact-icon-item span { font-size: 0.7rem; color: var(--text3); font-weight: 500; }
+        .contact-icon-item:hover { transform: translateY(-3px); border-color: var(--brand-light); }
+        .contact-icon-item:hover i { color: white; background: var(--brand); }
+        .site-footer { text-align: center; padding: 40px 24px 32px; border-top: 1px solid var(--border); margin-top: 20px; }
+        .footer-brand { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 8px; font-weight: 700; color: var(--text); text-decoration: none; }
+        .footer-brand img { width: 22px; height: 22px; border-radius: 6px; }
+        .footer-text { color: var(--text3); font-size: 0.8rem; }
+        .footer-text a { color: var(--brand); text-decoration: none; font-weight: 600; }
+        .ads-container { margin: 20px auto 0; max-width: 640px; padding: 0 24px; }
+        .ads-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
+        .ad-card {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border-radius: 16px;
+            padding: 16px;
+            text-align: center;
+            border: 1px solid #fcd34d;
+            transition: all var(--transition);
+        }
+        .ad-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+        .ad-card i { font-size: 1.5rem; color: #92400e; margin-bottom: 8px; }
+        .ad-card h4 { font-size: 0.85rem; font-weight: 700; color: #92400e; margin-bottom: 4px; }
+        .ad-card p { font-size: 0.7rem; color: #a16207; }
+        .ad-card a { display: inline-block; margin-top: 8px; font-size: 0.7rem; font-weight: 600; color: #92400e; text-decoration: none; }
         .fab {
             position: fixed;
-            bottom: 28px;
-            right: 28px;
-            width: 58px;
-            height: 58px;
+            bottom: 24px;
+            right: 24px;
+            width: 56px;
+            height: 56px;
             border-radius: 50%;
-            background: var(--whatsapp);
             color: white;
             display: none;
             align-items: center;
             justify-content: center;
-            font-size: 1.6rem;
-            box-shadow: 0 8px 28px rgba(37,211,102,0.35);
+            font-size: 1.5rem;
+            box-shadow: 0 6px 24px rgba(0,0,0,0.2);
             z-index: 999;
             text-decoration: none;
             transition: all var(--transition);
         }
-        .fab:hover { transform: scale(1.1); }
+        .fab:hover { transform: scale(1.08); }
         @media (max-width: 768px) { .fab { display: flex; } }
-        .site-footer {
-            text-align: center;
-            padding: 40px 24px;
-            color: var(--text3);
-            font-size: 0.85rem;
-            border-top: 1px solid var(--border);
-            margin-top: 40px;
-        }
-        .site-footer a { color: var(--brand); text-decoration: none; font-weight: 600; }
-        .watermark {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background: var(--card);
-            padding: 12px 24px;
-            border-radius: 50px;
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow-sm);
-            margin-top: 16px;
-            transition: box-shadow var(--transition);
-        }
-        .watermark:hover { box-shadow: var(--shadow-md); }
-        .watermark img { width: 24px; height: 24px; border-radius: 6px; }
-        .loading-screen {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+        /* Feedback Modal */
+        .feedback-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(4px);
+            z-index: 2000;
             align-items: center;
             justify-content: center;
-            gap: 16px;
         }
-        .spinner {
-            width: 48px;
-            height: 48px;
-            border: 4px solid var(--border);
-            border-top-color: var(--brand);
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .error-state {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 24px;
-        }
-        .error-card {
+        .feedback-modal.active { display: flex; }
+        .feedback-card {
             background: var(--card);
-            padding: 48px 36px;
             border-radius: 24px;
-            box-shadow: var(--shadow-lg);
-            border: 1px solid var(--border);
+            padding: 32px;
+            max-width: 400px;
+            width: 90%;
             text-align: center;
-            max-width: 440px;
         }
-        .error-card .icon { font-size: 4rem; margin-bottom: 16px; }
-        .error-card h2 { font-size: 1.6rem; font-weight: 800; margin-bottom: 8px; }
-        .error-card p { color: var(--text2); margin-bottom: 24px; }
-        .error-card a {
-            display: inline-block;
+        .feedback-card input, .feedback-card textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: var(--bg);
+        }
+        .feedback-card button {
             background: var(--brand);
             color: white;
-            padding: 12px 28px;
-            border-radius: 50px;
-            font-weight: 600;
-            text-decoration: none;
+            border: none;
+            padding: 12px;
+            border-radius: 40px;
+            width: 100%;
+            font-weight: 700;
+            cursor: pointer;
         }
-        .fade-in {
-            opacity: 0;
-            transform: translateY(24px);
-            transition: opacity 0.6s ease, transform 0.6s ease;
-        }
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        .error-state { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; }
+        .error-card { background: var(--card); padding: 40px 32px; border-radius: var(--radius-lg); text-align: center; max-width: 400px; }
+        .error-card .icon { font-size: 3rem; margin-bottom: 12px; }
+        .error-card h2 { font-size: 1.3rem; font-weight: 800; margin-bottom: 6px; }
+        .error-card p { color: var(--text2); margin-bottom: 20px; font-size: 0.9rem; }
+        .error-card a { background: var(--brand); color: white; padding: 10px 24px; border-radius: 50px; text-decoration: none; font-weight: 600; }
+        .fade-in { opacity: 0; transform: translateY(16px); transition: opacity 0.5s ease, transform 0.5s ease; }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
         @media (max-width: 640px) {
-            .hero { padding: 100px 16px 50px; }
-            .hero-name { font-size: 2rem; }
-            .hero-logo { width: 90px; height: 90px; }
-            .action-btn { padding: 13px 22px; font-size: 0.88rem; }
+            .hero { padding: 85px 20px 36px; }
+            .hero-name { font-size: 1.8rem; }
+            .hero-logo { width: 80px; height: 80px; }
+            .hero-cta a, .hero-cta button { padding: 12px 22px; font-size: 0.85rem; }
+            .section { padding: 24px 20px; }
+            .social-grid { grid-template-columns: repeat(auto-fill, minmax(52px, 1fr)); gap: 8px; }
+            .contact-icon-grid { grid-template-columns: repeat(auto-fill, minmax(48px, 1fr)); }
         }
+        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
+    <base target="_blank">
 </head>
 <body>
-    <div id="app">
-        <div class="loading-screen">
-            <div class="spinner"></div>
-            <p style="color: var(--text2); font-weight: 500;">Loading your hub...</p>
-        </div>
-    </div>
-    <!-- FAB container – single instance -->
-    <div id="fabContainer" style="position:fixed; bottom:28px; right:28px; z-index:999;"></div>
+    <div id="app"><div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;"><div style="width:48px;height:48px;border:4px solid var(--border);border-top-color:var(--brand);border-radius:50%;animation:spin 1s linear infinite;"></div><p style="color:var(--text2);">Loading your hub...</p></div></div>
+    <div id="feedbackModal" class="feedback-modal"><div class="feedback-card"><h3>Send Feedback to Shop Owner</h3><input type="text" id="feedbackName" placeholder="Your name (optional)"><input type="email" id="feedbackEmail" placeholder="Your email (optional)"><textarea id="feedbackMessage" rows="4" placeholder="Your feedback..."></textarea><button onclick="submitFeedback()">Send</button><button onclick="closeFeedbackModal()" style="background:#ccc; margin-top:8px;">Cancel</button></div></div>
 
     <script>
-        (async function() {
-            const API = 'https://emltechstudio-myshop-api.hf.space';
-
-            // ========== HELPER FUNCTIONS (preserve original) ==========
-            function fixUrl(url) {
-                if (!url) return '#';
-                url = url.trim();
-                if (url.startsWith('http://') || url.startsWith('https://')) return url;
-                return 'https://' + url;
-            }
-
-            function isWhatsAppUrl(url) {
-                if (!url) return false;
-                const lower = url.toLowerCase();
-                return lower.includes('wa.me') || lower.includes('whatsapp.com') || lower.includes('api.whatsapp');
-            }
-
-            function getPlatformFromUrl(url) {
-                if (!url) return 'none';
-                const lower = url.toLowerCase();
-                if (isWhatsAppUrl(url)) return 'whatsapp';
-                if (lower.includes('selar.co') || lower.includes('selar.com')) return 'selar';
-                if (lower.includes('shopify.com') || lower.includes('myshopify.com')) return 'shopify';
-                if (lower.includes('flutterwave.com') || lower.includes('paystack.com')) return 'payment';
-                return 'web';
-            }
-
-            // ========== PLATFORM DATA ==========
-            // Icon map for 30+ social platforms (any key not in map gets fas fa-link)
-            const SOCIAL_ICON_MAP = {
-                facebook: 'fab fa-facebook-f', instagram: 'fab fa-instagram', tiktok: 'fab fa-tiktok', twitter: 'fab fa-x-twitter',
-                youtube: 'fab fa-youtube', linkedin: 'fab fa-linkedin-in', pinterest: 'fab fa-pinterest-p', snapchat: 'fab fa-snapchat',
-                reddit: 'fab fa-reddit-alien', twitch: 'fab fa-twitch', github: 'fab fa-github', medium: 'fab fa-medium',
-                substack: 'fas fa-square-rss', wordpress: 'fab fa-wordpress', tumblr: 'fab fa-tumblr', flickr: 'fab fa-flickr',
-                behance: 'fab fa-behance', dribbble: 'fab fa-dribbble', spotify: 'fab fa-spotify', soundcloud: 'fab fa-soundcloud',
-                apple: 'fab fa-apple', amazon: 'fab fa-amazon', etsy: 'fab fa-etsy', ebay: 'fab fa-ebay',
-                aliexpress: 'fas fa-bag-shopping', patreon: 'fab fa-patreon', kickstarter: 'fab fa-kickstarter-k', quora: 'fab fa-quora',
-                whatsapp: 'fab fa-whatsapp', telegram: 'fab fa-telegram', signal: 'fas fa-message', messenger: 'fab fa-facebook-messenger',
-                viber: 'fab fa-viber', line: 'fab fa-line', wechat: 'fab fa-weixin'
-            };
-            function getSocialIcon(platform) {
-                return SOCIAL_ICON_MAP[platform.toLowerCase()] || 'fas fa-link';
-            }
-
-            // Messaging platforms with priority order and URL templates
-            const MESSAGING_PLATFORMS = [
-                { key: 'whatsapp', name: 'WhatsApp', icon: 'fab fa-whatsapp', urlTemplate: (id) => `https://wa.me/${id.replace(/\D/g, '')}` },
-                { key: 'telegram', name: 'Telegram', icon: 'fab fa-telegram', urlTemplate: (id) => `https://t.me/${id.replace('@', '')}` },
-                { key: 'signal', name: 'Signal', icon: 'fas fa-message', urlTemplate: (id) => `https://signal.me/#p/${id.replace(/\D/g, '')}` },
-                { key: 'messenger', name: 'Messenger', icon: 'fab fa-facebook-messenger', urlTemplate: (id) => `https://m.me/${id}` },
-                { key: 'viber', name: 'Viber', icon: 'fab fa-viber', urlTemplate: (id) => `viber://chat?number=${id.replace(/\D/g, '')}` },
-                { key: 'line', name: 'Line', icon: 'fab fa-line', urlTemplate: (id) => `https://line.me/ti/p/${id}` },
-                { key: 'wechat', name: 'WeChat', icon: 'fab fa-weixin', urlTemplate: (id) => `https://wechat.com/u/${id}` }
-            ];
-            const MESSAGING_PRIORITY = ['whatsapp', 'telegram', 'signal', 'messenger', 'viber', 'line', 'wechat'];
-
-            // ========== URL PARAMS ==========
-            const searchParams = new URLSearchParams(window.location.search);
-            let slug = searchParams.get('slug') || '';
-            let isPreview = searchParams.get('preview') === '1' || searchParams.get('preview') === 'true';
-            let emailParam = searchParams.get('email') || '';
-
-            if (!slug) {
-                const pathParts = window.location.pathname.split('/').filter(Boolean);
-                if (pathParts.length > 0) {
-                    const firstPart = pathParts[0];
-                    const knownFiles = ['index.html', 'app.html', 'shop.html', 'install.html', 'referral.html', '404.html'];
-                    if (!knownFiles.includes(firstPart) && !firstPart.endsWith('.html')) {
-                        slug = firstPart;
-                    }
+        const API = 'https://emltechstudio-myshop-api.hf.space';
+        const SOCIAL_ICON_MAP = {
+            'facebook': 'fa-brands fa-facebook-f', 'instagram': 'fa-brands fa-instagram',
+            'tiktok': 'fa-brands fa-tiktok', 'twitter': 'fa-brands fa-x-twitter',
+            'youtube': 'fa-brands fa-youtube', 'linkedin': 'fa-brands fa-linkedin-in',
+            'pinterest': 'fa-brands fa-pinterest-p', 'snapchat': 'fa-brands fa-snapchat',
+            'reddit': 'fa-brands fa-reddit-alien', 'twitch': 'fa-brands fa-twitch',
+            'github': 'fa-brands fa-github', 'medium': 'fa-brands fa-medium',
+            'whatsapp': 'fa-brands fa-whatsapp', 'telegram': 'fa-brands fa-telegram',
+            'signal': 'fa-solid fa-message', 'messenger': 'fa-brands fa-facebook-messenger',
+            'viber': 'fa-brands fa-viber', 'line': 'fa-brands fa-line',
+            'wechat': 'fa-brands fa-weixin', 'discord': 'fa-brands fa-discord',
+            'shopify': 'fa-brands fa-shopify', 'selar': 'fa-solid fa-bolt',
+            'paystack': 'fa-solid fa-credit-card', 'flutterwave': 'fa-solid fa-wave-square'
+        };
+        function getSocialIcon(p) { return SOCIAL_ICON_MAP[p.toLowerCase()] || 'fa-solid fa-link'; }
+        function getPlatformClass(p) {
+            const known = ['facebook','instagram','tiktok','twitter','youtube','linkedin','pinterest','snapchat','reddit','twitch','github','medium','whatsapp','telegram','signal','messenger','viber','line','wechat','discord','shopify','selar','paystack','flutterwave'];
+            const key = p.toLowerCase();
+            return known.includes(key) ? key : '';
+        }
+        function fixUrl(u) { if(!u) return '#'; let url=u.trim(); if(url.startsWith('http://')||url.startsWith('https://')) return url; if(url.startsWith('tel:')||url.startsWith('mailto:')||url.startsWith('sms:')) return url; return 'https://'+url; }
+        const MESSAGING_PLATFORMS = [
+            { key:'whatsapp', name:'WhatsApp', icon:'fa-brands fa-whatsapp', color:'#25d366', urlTemplate:(id)=>`https://wa.me/${id.replace(/\D/g,'')}` },
+            { key:'telegram', name:'Telegram', icon:'fa-brands fa-telegram', color:'#0088cc', urlTemplate:(id)=>`https://t.me/${id.replace('@','').trim()}` },
+            { key:'signal', name:'Signal', icon:'fa-solid fa-message', color:'#3a76f0', urlTemplate:(id)=>`https://signal.me/#p/${id.replace(/\D/g,'')}` },
+            { key:'messenger', name:'Messenger', icon:'fa-brands fa-facebook-messenger', color:'#0084ff', urlTemplate:(id)=>`https://m.me/${id}` }
+        ];
+        const MESSAGING_PRIORITY = ['whatsapp','telegram','messenger','signal'];
+        function getMessagingPlatform(k){ return MESSAGING_PLATFORMS.find(p=>p.key===k.toLowerCase()); }
+        function isMessagingPlatform(k){ return MESSAGING_PLATFORMS.some(p=>p.key===k.toLowerCase()); }
+        const PLAN_CONFIG = {
+            free: { socials:5, custom_links:0, brand_colors:false, gradients:false, fonts:false, ads:true, branding:true, feedback:false },
+            pro: { socials:10, custom_links:3, brand_colors:true, gradients:false, fonts:true, ads:false, branding:true, feedback:false },
+            premium: { socials:Infinity, custom_links:Infinity, brand_colors:true, gradients:true, fonts:true, ads:false, branding:false, feedback:true }
+        };
+        function detectCatalogPlatform(u){
+            if(!u) return 'none';
+            const l=u.toLowerCase();
+            if(l.includes('wa.me/c/')||l.includes('whatsapp.com/catalog')) return 'whatsapp';
+            if(l.includes('selar.co')) return 'selar';
+            if(l.includes('shopify.com')) return 'shopify';
+            return 'generic';
+        }
+        function escapeHtml(t){ const d=document.createElement('div'); d.textContent=t; return d.innerHTML; }
+        function capitalize(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
+        function applyTheme(shop){
+            const json=shop.shop_json||{}, brand=json.brand_colors||{}, plan=shop.plan||'free', cfg=PLAN_CONFIG[plan]||PLAN_CONFIG.free;
+            if(cfg.brand_colors&&brand.primary){
+                document.documentElement.style.setProperty('--brand',brand.primary);
+                const hex=brand.primary.replace('#','');
+                const r=parseInt(hex.substr(0,2),16),g=parseInt(hex.substr(2,2),16),b=parseInt(hex.substr(4,2),16);
+                if(!isNaN(r)&&!isNaN(g)&&!isNaN(b)) document.documentElement.style.setProperty('--brand-rgb',`${r},${g},${b}`);
+                if(cfg.gradients&&brand.gradient&&brand.gradient_colors&&brand.gradient_colors.length>=2){
+                    document.body.style.background=`linear-gradient(135deg, ${brand.gradient_colors[0]}, ${brand.gradient_colors[1]})`;
+                    document.body.style.minHeight='100vh';
+                }else if(cfg.brand_colors&&brand.secondary){
+                    document.body.style.backgroundColor=brand.secondary;
+                    document.body.style.backgroundImage='none';
                 }
             }
-
-            const appEl = document.getElementById('app');
-            let currentShopData = null;
-            let showAllSocials = false;
-            let fabEl = null;
-
-            // ========== FAB MANAGEMENT (single instance) ==========
-            function createFAB() {
-                if (fabEl) return fabEl;
-                fabEl = document.createElement('a');
-                fabEl.className = 'fab';
-                fabEl.setAttribute('target', '_blank');
-                fabEl.setAttribute('rel', 'noopener noreferrer');
-                document.getElementById('fabContainer').appendChild(fabEl);
-                return fabEl;
+            const typo=json.typography||{};
+            if(cfg.fonts){
+                const bodyFont=typo.body_font||typo.heading_font||'Inter';
+                document.body.style.fontFamily=`${bodyFont}, sans-serif`;
             }
-
-            function updateFAB(primaryPlatform, identifier, businessName) {
-                if (!fabEl) createFAB();
-                if (!primaryPlatform) {
-                    fabEl.style.display = 'none';
-                    return;
+            const mt=document.querySelector('meta[name="theme-color"]');
+            if(mt&&brand.primary) mt.setAttribute('content',brand.primary);
+        }
+        let fabEl=null, currentShopEmail='', currentPlan='free', isDemoMode=false;
+        function createFAB(){ if(fabEl) return fabEl; fabEl=document.createElement('a'); fabEl.className='fab'; fabEl.target='_blank'; document.body.appendChild(fabEl); return fabEl; }
+        function updateFAB(primaryPlatform,identifier,businessName,isDemo){
+            if(!fabEl) createFAB();
+            if(!primaryPlatform){ fabEl.style.display='none'; return; }
+            const p=getMessagingPlatform(primaryPlatform);
+            if(!p) return;
+            let link=p.urlTemplate(identifier);
+            if(primaryPlatform==='whatsapp') link+='?text='+encodeURIComponent('Hi '+(businessName||'there')+', I found your shop on MyShop.');
+            fabEl.href=isDemo?'#':link;
+            fabEl.innerHTML=`<i class="${p.icon}"></i>`;
+            fabEl.style.background=p.color;
+            fabEl.style.display=window.innerWidth<=768?'flex':'none';
+        }
+        // Feedback modal functions
+        window.openFeedbackModal = function() { document.getElementById('feedbackModal').classList.add('active'); };
+        window.closeFeedbackModal = function() { document.getElementById('feedbackModal').classList.remove('active'); };
+        window.submitFeedback = function() {
+            const name = document.getElementById('feedbackName').value.trim();
+            const email = document.getElementById('feedbackEmail').value.trim();
+            const message = document.getElementById('feedbackMessage').value.trim();
+            if (!message) { alert('Please enter a message'); return; }
+            if (!currentShopEmail) { alert('Shop email not available'); return; }
+            const subject = `Feedback for Shop`;
+            const body = `Name: ${name || 'Anonymous'}\nEmail: ${email || 'Not provided'}\n\nMessage:\n${message}`;
+            window.location.href = `mailto:${currentShopEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            closeFeedbackModal();
+        };
+        function renderShop(shop){
+            const json=shop.shop_json||shop;
+            currentPlan=shop.plan||'free';
+            currentShopEmail=json.email||shop.email||'';
+            isDemoMode=!!shop.demo||window.location.search.includes('demo=1');
+            const cfg=PLAN_CONFIG[currentPlan]||PLAN_CONFIG.free;
+            applyTheme(shop);
+            const socials=json.socials||{}, phone=json.phone||'', email=json.email||'', location=json.location||'', catalogUrl=json.catalog_url||'';
+            let socialList=[], messagingList=[];
+            for(let [key,url] of Object.entries(socials)){
+                if(!url) continue;
+                if(isMessagingPlatform(key)){
+                    let id=url;
+                    if(key==='whatsapp') id=url.replace(/\D/g,'');
+                    else if(key==='telegram') id=url.replace('https://t.me/','').replace('@','');
+                    else if(key==='messenger') id=url.replace('https://m.me/','');
+                    messagingList.push({platform:key,identifier:id});
+                }else{
+                    socialList.push({platform:key,url:fixUrl(url)});
                 }
-                const platform = MESSAGING_PLATFORMS.find(p => p.key === primaryPlatform);
-                if (!platform) return;
-                const link = platform.urlTemplate(identifier);
-                const msg = encodeURIComponent('Hi ' + (businessName || 'there') + ', I found your shop on MyShop.');
-                const finalLink = primaryPlatform === 'whatsapp' ? link + '?text=' + msg : link;
-                fabEl.href = finalLink;
-                fabEl.innerHTML = `<i class="${platform.icon}"></i>`;
-                fabEl.style.background = `var(--${primaryPlatform})`;
-                fabEl.style.display = window.innerWidth <= 768 ? 'flex' : 'none';
             }
-
-            // ========== DEMO DATA (real catalog button, no fake products) ==========
-            function getDemoData() {
-                return {
-                    shop_json: {
-                        business_name: "Demo Shop",
-                        tagline: "See how MyShop works",
-                        description: "This is a demo hub. Sign up to create your own professional storefront.",
-                        logo_url: "/icon.svg",
-                        phone: "+2348012345678",
-                        email: "demo@myshop.afric.site",
-                        location: "Online",
-                        catalog_url: "https://selar.co/myshop-demo",
-                        brand_colors: { primary: "#7c3aed" },
-                        socials: {
-                            facebook: "https://facebook.com/myshop",
-                            instagram: "https://instagram.com/myshop",
-                            tiktok: "https://tiktok.com/@myshop",
-                            twitter: "https://x.com/myshop",
-                            youtube: "https://youtube.com/@myshop",
-                            whatsapp: "+2348012345678",
-                            telegram: "myshopdemo"
-                        }
-                    }
-                };
+            messagingList.sort((a,b)=>MESSAGING_PRIORITY.indexOf(a.platform)-MESSAGING_PRIORITY.indexOf(b.platform));
+            const primaryMsg=messagingList[0]||null, otherMessaging=messagingList.slice(1);
+            updateFAB(primaryMsg?.platform,primaryMsg?.identifier,json.business_name,isDemoMode);
+            const hasCatalog=!!catalogUrl, catalogPlatform=detectCatalogPlatform(catalogUrl);
+            const customLinks=json.custom_links||[], canShowCustomLinks=cfg.custom_links>0&&customLinks.length>0;
+            let navLinks='';
+            if(json.description) navLinks+='<a href="#about">About</a>';
+            if(canShowCustomLinks) navLinks+='<a href="#links">Links</a>';
+            if(hasCatalog) navLinks+='<a href="#catalog">Catalog</a>';
+            if(socialList.length) navLinks+='<a href="#socials">Socials</a>';
+            if(otherMessaging.length||phone||email) navLinks+='<a href="#contact">Contact</a>';
+            let sections='';
+            if(json.description){
+                sections+=`<section class="section" id="about"><div class="section-title fade-in"><i class="fa-solid fa-circle-info"></i> About</div><div class="card fade-in"><p class="about-text">${escapeHtml(json.description)}</p></div></section>`;
             }
-
-            // ========== RENDER FUNCTION (updated for dynamic socials & messaging) ==========
-            function renderShop(shop, previewMode) {
-                const json = shop.shop_json || shop;
-                const primary = json.brand_colors?.primary || '#1e40af';
-                document.documentElement.style.setProperty('--brand', primary);
-                document.documentElement.style.setProperty('--brand-dark', primary);
-                const metaTheme = document.querySelector('meta[name="theme-color"]');
-                if (metaTheme) metaTheme.setAttribute('content', primary);
-
-                // Separate socials and messaging
-                const socials = json.socials || {};
-                const socialList = [];
-                const messagingList = [];
-
-                for (let [key, url] of Object.entries(socials)) {
-                    if (!url) continue;
-                    const isMsg = MESSAGING_PLATFORMS.some(p => p.key === key.toLowerCase());
-                    if (isMsg) {
-                        // Extract identifier
-                        let identifier = url;
-                        if (key === 'whatsapp') identifier = url.replace(/\D/g, '');
-                        else if (key === 'telegram') identifier = url.replace('https://t.me/', '').replace('@', '');
-                        else if (key === 'signal') identifier = url.replace(/\D/g, '');
-                        else if (key === 'messenger') identifier = url.replace('https://m.me/', '');
-                        else identifier = url.split('/').pop();
-                        messagingList.push({ platform: key, identifier, url });
-                    } else {
-                        socialList.push({ platform: key, url });
-                    }
-                }
-
-                // Sort messaging by priority
-                messagingList.sort((a,b) => MESSAGING_PRIORITY.indexOf(a.platform) - MESSAGING_PRIORITY.indexOf(b.platform));
-                const primaryMsg = messagingList.length > 0 ? messagingList[0] : null;
-                if (primaryMsg) updateFAB(primaryMsg.platform, primaryMsg.identifier, json.business_name);
-                else updateFAB(null);
-
-                const catalogUrl = json.catalog_url || '';
-                const catalogType = getPlatformFromUrl(catalogUrl);
-                const hasCatalog = !!catalogUrl;
-
-                // Build nav links
-                let navLinks = '';
-                if (json.description) navLinks += '<a href="#about">About</a>';
-                if (hasCatalog || slug === 'demo') navLinks += '<a href="#catalog">Catalog</a>';
-                if (socialList.length > 0) navLinks += '<a href="#connect">Connect</a>';
-                if (messagingList.length > 0 || json.phone || json.email) navLinks += '<a href="#contact">Contact</a>';
-
-                let sections = '';
-
-                // ABOUT
-                if (json.description) {
-                    sections += '<section class="section" id="about"><div class="section-title fade-in"><i class="fa-solid fa-circle-info"></i> About <div class="line"></div></div><div class="about-card fade-in"><p class="about-text">' + json.description + '</p></div></section>';
-                }
-
-                // CATALOG
-                sections += '<section class="section" id="catalog"><div class="section-title fade-in"><i class="fa-solid fa-bag-shopping"></i> Catalog <div class="line"></div></div>';
-                if (slug === 'demo') {
-                    // Demo mode: button (no iframe) – always works
-                    const demoCatalogUrl = 'https://selar.co/myshop-demo';
-                    sections += `<div class="catalog-card fade-in"><div class="catalog-icon"><i class="fa-solid fa-store"></i></div><h3>Demo Catalog</h3><p>Explore our sample products</p><a href="${demoCatalogUrl}" target="_blank" rel="noopener noreferrer" class="action-btn primary"><i class="fa-solid fa-up-right-from-square"></i> View Demo Catalog</a></div>`;
-                } else if (catalogType === 'whatsapp') {
-                    sections += '<div class="catalog-card whatsapp-card fade-in"><div class="catalog-icon"><i class="fa-brands fa-whatsapp"></i></div><h3>WhatsApp Catalog</h3><p>Browse and order directly on WhatsApp.</p><a href="' + fixUrl(catalogUrl) + '" target="_blank" rel="noopener noreferrer" class="action-btn whatsapp"><i class="fa-brands fa-whatsapp"></i> View Catalog</a></div>';
-                } else if (catalogType === 'selar' || catalogType === 'shopify' || catalogType === 'web') {
-                    const platformName = { selar:'Selar', shopify:'Shopify', web:'Online' }[catalogType] || 'Store';
-                    sections += '<div class="catalog-card fade-in"><div class="catalog-icon"><i class="fa-solid fa-store"></i></div><h3>' + platformName + ' Catalog</h3><p>Browse full catalog on their store.</p><a href="' + fixUrl(catalogUrl) + '" target="_blank" rel="noopener noreferrer" class="action-btn primary"><i class="fa-solid fa-up-right-from-square"></i> Open Catalog</a></div>';
-                } else {
-                    sections += '<div class="catalog-card coming-soon fade-in"><div class="catalog-icon"><i class="fa-solid fa-clock"></i></div><h3>Catalog Coming Soon</h3><p>Reach out directly to place an order.</p>';
-                    if (primaryMsg) {
-                        const msgPlatform = MESSAGING_PLATFORMS.find(p => p.key === primaryMsg.platform);
-                        const chatLink = msgPlatform.urlTemplate(primaryMsg.identifier);
-                        sections += '<a href="' + chatLink + '" target="_blank" rel="noopener noreferrer" class="action-btn whatsapp" style="margin-top:8px;"><i class="' + msgPlatform.icon + '"></i> Order via ' + msgPlatform.name + '</a>';
-                    }
-                    sections += '</div>';
-                }
-                sections += '</section>';
-
-                // CONNECT (socials) – with show more toggle
-                if (socialList.length > 0) {
-                    const total = socialList.length;
-                    const limit = 8;
-                    const toShow = showAllSocials ? socialList : socialList.slice(0, limit);
-                    sections += '<section class="section" id="connect"><div class="section-title fade-in"><i class="fa-solid fa-share-nodes"></i> Connect <div class="line"></div></div>';
-                    // Mobile: horizontal scroll
-                    sections += '<div class="social-scroll">';
-                    toShow.forEach(s => {
-                        const icon = getSocialIcon(s.platform);
-                        const displayName = s.platform.charAt(0).toUpperCase() + s.platform.slice(1);
-                        sections += `<a href="${fixUrl(s.url)}" target="_blank" rel="noopener noreferrer" class="social-item"><i class="${icon}"></i><span>${displayName}</span></a>`;
-                    });
-                    sections += '</div>';
-                    // Desktop: grid
-                    sections += '<div class="social-grid">';
-                    toShow.forEach(s => {
-                        const icon = getSocialIcon(s.platform);
-                        const displayName = s.platform.charAt(0).toUpperCase() + s.platform.slice(1);
-                        sections += `<a href="${fixUrl(s.url)}" target="_blank" rel="noopener noreferrer" class="social-item"><i class="${icon}"></i><span>${displayName}</span></a>`;
-                    });
-                    sections += '</div>';
-                    if (total > limit) {
-                        sections += `<button class="toggle-socials-btn" onclick="window.toggleSocials()">${showAllSocials ? 'Show less' : `Show all ${total} social links`}</button>`;
-                    }
-                    sections += '</section>';
-                }
-
-                // CONTACT (messaging)
-                if (messagingList.length > 0 || json.phone || json.email) {
-                    sections += '<section class="section" id="contact"><div class="section-title fade-in"><i class="fa-solid fa-address-book"></i> Contact <div class="line"></div></div>';
-                    sections += '<div class="messaging-scroll">';
-                    messagingList.forEach(m => {
-                        const msgPlatform = MESSAGING_PLATFORMS.find(p => p.key === m.platform);
-                        const chatLink = msgPlatform.urlTemplate(m.identifier);
-                        const displayName = msgPlatform.name;
-                        sections += `<a href="${chatLink}" target="_blank" rel="noopener noreferrer" class="messaging-item ${m.platform}">
-                                        <div class="msg-icon"><i class="${msgPlatform.icon}"></i></div>
-                                        <span>${displayName}</span>
-                                    </a>`;
-                    });
-                    if (json.phone) {
-                        sections += `<a href="tel:${json.phone}" class="messaging-item" style="background:none; border:1px solid var(--border);"><div class="msg-icon" style="background:var(--brand);"><i class="fa-solid fa-phone"></i></div><span>Call</span></a>`;
-                    }
-                    if (json.email) {
-                        sections += `<a href="mailto:${json.email}" class="messaging-item" style="background:none; border:1px solid var(--border);"><div class="msg-icon" style="background:#ea4335;"><i class="fa-solid fa-envelope"></i></div><span>Email</span></a>`;
-                    }
-                    sections += '</div></section>';
-                }
-
-                // Build full page
-                const logoUrl = json.logo_url || '/icon.svg';
-                const businessName = json.business_name || 'My Hub';
-                const tagline = json.tagline || '';
-                const location = json.location || '';
-
-                let html = '<nav class="navbar" id="navbar"><div class="nav-inner"><a href="/" class="nav-brand"><img src="/icon.svg" alt="MyShop"><span>MyShop</span></a><div class="nav-links">' + navLinks + '<a href="/app.html" class="nav-cta">Get Your Hub</a></div><button class="nav-toggle" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i></button></div></nav>';
-                html += '<header class="hero"><img src="' + logoUrl + '" alt="' + businessName + '" class="hero-logo fade-in" onerror="this.src=\'/icon.svg\'"><h1 class="hero-name fade-in">' + businessName + '</h1>';
-                if (tagline) html += '<p class="hero-tagline fade-in">' + tagline + '</p>';
-                html += '<div class="hero-meta fade-in">';
-                if (location) html += '<span><i class="fa-solid fa-location-dot"></i> ' + location + '</span>';
-                html += '<span><span class="pulse-dot"></span> ' + (previewMode ? 'Pending Activation' : 'Active Store') + '</span>';
-                html += '</div></header>';
-                html += '<div class="quick-actions fade-in">';
-                if (slug === 'demo') html += '<a href="#catalog" class="action-btn primary"><i class="fa-solid fa-bag-shopping"></i> Browse Catalog</a>';
-                else if (catalogType === 'whatsapp') html += '<a href="' + fixUrl(catalogUrl) + '" target="_blank" rel="noopener noreferrer" class="action-btn whatsapp"><i class="fa-brands fa-whatsapp"></i> View Catalog</a>';
-                else if (catalogType === 'selar' || catalogType === 'shopify' || catalogType === 'web') html += '<a href="' + fixUrl(catalogUrl) + '" target="_blank" rel="noopener noreferrer" class="action-btn primary"><i class="fa-solid fa-store"></i> Open Catalog</a>';
-                else if (primaryMsg) {
-                    const msgPlatform = MESSAGING_PLATFORMS.find(p => p.key === primaryMsg.platform);
-                    const chatLink = msgPlatform.urlTemplate(primaryMsg.identifier);
-                    html += '<a href="' + chatLink + '" target="_blank" rel="noopener noreferrer" class="action-btn whatsapp"><i class="' + msgPlatform.icon + '"></i> Chat on ' + msgPlatform.name + '</a>';
-                }
-                html += '</div>' + sections;
-                html += '<footer class="site-footer"><p>Powered by <a href="/">MyShop</a> — EML Tech Studio</p><div class="watermark"><img src="/icon.svg" alt="MyShop"><span>Get your own hub at <strong>myshop.afric.site</strong></span></div></footer>';
-                appEl.innerHTML = html;
-
-                // Re-attach scroll and animation observers
-                window.addEventListener('scroll', function() { const nav = document.getElementById('navbar'); if (nav) window.scrollY > 20 ? nav.classList.add('scrolled') : nav.classList.remove('scrolled'); });
-                const observer = new IntersectionObserver((entries) => { entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }); }, { threshold: 0.15 });
-                document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-                setTimeout(() => { document.querySelectorAll('.fade-in').forEach(el => { if(el.getBoundingClientRect().top < window.innerHeight) el.classList.add('visible'); }); }, 100);
+            if(canShowCustomLinks){
+                sections+=`<section class="section" id="links"><div class="section-title fade-in"><i class="fa-solid fa-link"></i> Quick Links</div><div class="custom-links-grid fade-in">`;
+                customLinks.forEach(l=>{ sections+=`<a href="${fixUrl(l.url)}" target="_blank" class="custom-link-btn"><i class="fa-solid fa-${l.icon||'arrow-right'}"></i> ${escapeHtml(l.label)}</a>`; });
+                sections+=`</div></section>`;
             }
-
-            // ========== GLOBAL TOGGLE FOR SOCIALS ==========
-            window.toggleSocials = function() {
-                showAllSocials = !showAllSocials;
-                if (currentShopData) renderShop(currentShopData, isPreview);
-            };
-
-            window.toggleMenu = function() {
-                const links = document.querySelector('.nav-links');
-                if (!links) return;
-                if (links.style.display === 'flex') {
-                    links.style.display = '';
-                } else {
-                    links.style.display = 'flex';
-                    links.style.position = 'absolute';
-                    links.style.top = '60px';
-                    links.style.left = '0';
-                    links.style.right = '0';
-                    links.style.flexDirection = 'column';
-                    links.style.background = 'white';
-                    links.style.padding = '20px 24px';
-                    links.style.boxShadow = '0 12px 32px rgba(0,0,0,0.12)';
-                    links.style.gap = '16px';
-                    links.style.borderBottom = '1px solid var(--border)';
-                    links.style.zIndex = '999';
+            if(hasCatalog){
+                let icon='fa-solid fa-store', name='Online Store', btn='Browse Catalog';
+                if(catalogPlatform==='whatsapp'){ icon='fa-brands fa-whatsapp'; name='WhatsApp Catalog'; btn='View on WhatsApp'; }
+                else if(catalogPlatform==='selar'){ icon='fa-solid fa-bolt'; name='Selar Store'; btn='Shop on Selar'; }
+                else if(catalogPlatform==='shopify'){ icon='fa-brands fa-shopify'; name='Shopify Store'; btn='Shop on Shopify'; }
+                sections+=`<section class="section" id="catalog"><div class="section-title fade-in"><i class="fa-solid fa-bag-shopping"></i> Catalog</div><div class="card catalog-card fade-in"><div class="catalog-icon"><i class="${icon}"></i></div><h3>${name}</h3><a href="${fixUrl(catalogUrl)}" target="_blank" class="catalog-btn"><i class="fa-solid fa-up-right-from-square"></i> ${btn}</a></div></section>`;
+            }
+            if(socialList.length){
+                sections+=`<section class="section" id="socials"><div class="section-title fade-in"><i class="fa-solid fa-share-nodes"></i> Connect</div><div class="social-grid fade-in">`;
+                socialList.forEach(s=>{ sections+=`<a href="${s.url}" target="_blank" class="social-item ${getPlatformClass(s.platform)}" title="${capitalize(s.platform)}"><i class="${getSocialIcon(s.platform)}"></i></a>`; });
+                sections+=`</div></section>`;
+            }
+            if(otherMessaging.length){
+                sections+=`<section class="section" id="messaging"><div class="section-title fade-in"><i class="fa-solid fa-comments"></i> Message Us</div><div class="messaging-grid fade-in">`;
+                otherMessaging.forEach(m=>{
+                    const mp=getMessagingPlatform(m.platform);
+                    if(!mp) return;
+                    let link=mp.urlTemplate(m.identifier);
+                    if(m.platform==='whatsapp') link+='?text='+encodeURIComponent('Hi, I found your shop on MyShop.');
+                    sections+=`<a href="${link}" target="_blank" class="msg-btn ${m.platform}"><i class="${mp.icon}"></i> ${mp.name}</a>`;
+                });
+                sections+=`</div></section>`;
+            }
+            if(phone||email||location){
+                sections+=`<section class="section" id="contact"><div class="section-title fade-in"><i class="fa-solid fa-address-book"></i> Contact</div><div class="contact-icon-grid fade-in">`;
+                if(phone) sections+=`<a href="tel:${phone}" class="contact-icon-item"><i class="fa-solid fa-phone"></i><span>Call</span></a>`;
+                if(email) sections+=`<a href="mailto:${email}" class="contact-icon-item"><i class="fa-solid fa-envelope"></i><span>Email</span></a>`;
+                if(location) sections+=`<span class="contact-icon-item"><i class="fa-solid fa-location-dot"></i><span>Location</span></span>`;
+                sections+=`</div></section>`;
+            }
+            let footerHtml='';
+            if(cfg.branding||cfg.ads){
+                footerHtml=`<footer class="site-footer">`;
+                if(cfg.branding) footerHtml+=`<a href="index.html" class="footer-brand"><img src="icon.svg" alt="MyShop"> MyShop</a><p class="footer-text">Powered by <a href="index.html">MyShop</a> — <a href="https://emltechstudio.site" target="_blank">EML Tech Studio</a></p>`;
+                footerHtml+=`</footer>`;
+            }
+            let adsHtml='';
+            if(cfg.ads&&currentPlan==='free'){
+                adsHtml=`<div class="ads-container fade-in"><div class="ads-grid">
+                    <div class="ad-card"><i class="fa-solid fa-rocket"></i><h4>Get MyShop Pro</h4><p>Remove ads & get brand colors</p><a href="/app.html">Upgrade →</a></div>
+                    <div class="ad-card"><i class="fa-solid fa-chart-line"></i><h4>Analytics Dashboard</h4><p>Track your visitors daily</p><a href="/app.html">Learn more →</a></div>
+                    <div class="ad-card"><i class="fa-solid fa-palette"></i><h4>Custom Links</h4><p>Add up to 3 custom buttons</p><a href="/app.html">Upgrade →</a></div>
+                </div></div>`;
+            }
+            // Feedback button for Premium (non-demo)
+            let feedbackBtnHtml='';
+            if(cfg.feedback && currentPlan==='premium' && !isDemoMode && currentShopEmail){
+                feedbackBtnHtml=`<div style="position:fixed; bottom:100px; right:24px; z-index:998;"><button onclick="openFeedbackModal()" style="background:#f59e0b; width:56px; height:56px; border-radius:50%; border:none; color:white; font-size:1.5rem; cursor:pointer; box-shadow:0 4px 12px rgba(0,0,0,0.2);"><i class="fa-solid fa-comment"></i></button></div>`;
+            }
+            let heroCta='<div class="hero-cta fade-in">';
+            if(primaryMsg){
+                const mp=getMessagingPlatform(primaryMsg.platform);
+                if(mp){
+                    let link=mp.urlTemplate(primaryMsg.identifier);
+                    if(primaryMsg.platform==='whatsapp') link+='?text='+encodeURIComponent('Hi '+(json.business_name||'there')+', I found your shop on MyShop.');
+                    heroCta+=`<a href="${link}" target="_blank" class="btn-primary"><i class="${mp.icon}"></i> Chat on ${mp.name}</a>`;
                 }
-            };
-
-            // ========== POSTMESSAGE LISTENER (for index.html editor) ==========
-            window.addEventListener('message', function(event) {
-                if (event.data && event.data.type === 'myshop-update') {
-                    const newData = event.data.data;
-                    const updatedShop = {
-                        shop_json: {
-                            business_name: newData.business_name,
-                            tagline: newData.tagline,
-                            description: newData.description,
-                            logo_url: newData.logo_url,
-                            phone: newData.phone,
-                            email: newData.email,
-                            location: newData.location,
-                            catalog_url: newData.catalog_url || newData.whatsapp_catalog,
-                            brand_colors: { primary: '#1e40af' },
-                            socials: newData.socials || {}
-                        }
-                    };
-                    if (newData.whatsapp && !updatedShop.shop_json.socials.whatsapp) updatedShop.shop_json.socials.whatsapp = newData.whatsapp;
-                    currentShopData = updatedShop;
-                    renderShop(updatedShop, isPreview);
-                }
+            }else if(hasCatalog){
+                heroCta+=`<a href="${fixUrl(catalogUrl)}" target="_blank" class="btn-primary"><i class="fa-solid fa-store"></i> Browse Catalog</a>`;
+            }
+            heroCta+='</div>';
+            let verified='';
+            if(currentPlan==='pro'||currentPlan==='premium') verified='<span class="verified"><i class="fa-solid fa-circle-check"></i> Verified</span>';
+            const logoUrl=json.logo_url||'icon.svg', businessName=json.business_name||'My Hub', tagline=json.tagline||'';
+            let html='';
+            if(cfg.branding||currentPlan!=='premium'){
+                html=`<nav class="navbar" id="navbar"><div class="nav-inner"><a href="index.html" class="nav-brand"><img src="icon.svg" alt="MyShop"> MyShop</a><div class="nav-links" id="navLinks">${navLinks}<a href="app.html" class="nav-cta">Get Your Hub</a></div><button class="nav-toggle" id="menuToggle"><i class="fa-solid fa-bars"></i></button></div></nav>`;
+            }else{
+                html=`<nav class="navbar" id="navbar"><div class="nav-inner"><a href="#" class="nav-brand" style="color:var(--text);"><img src="${logoUrl}" onerror="this.src='icon.svg'" style="width:28px;"> <span>${escapeHtml(businessName)}</span></a><div class="nav-links" id="navLinks">${navLinks}</div><button class="nav-toggle" id="menuToggle"><i class="fa-solid fa-bars"></i></button></div></nav>`;
+            }
+            html+=`<header class="hero"><div class="hero-glow"></div><img src="${logoUrl}" alt="${escapeHtml(businessName)}" class="hero-logo fade-in" onerror="this.src='icon.svg'"><h1 class="hero-name fade-in">${escapeHtml(businessName)}</h1>${tagline?`<p class="hero-tagline fade-in">${escapeHtml(tagline)}</p>`:''}<div class="hero-meta fade-in">${location?`<span><i class="fa-solid fa-location-dot"></i> ${escapeHtml(location)}</span>`:''}${verified}</div>${heroCta}</header>`;
+            html+=sections;
+            html+=adsHtml;
+            html+=footerHtml;
+            html+=feedbackBtnHtml;
+            document.getElementById('app').innerHTML=html;
+            const observer=new IntersectionObserver(entries=>{ entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); }); },{threshold:0.1});
+            document.querySelectorAll('.fade-in').forEach(el=>observer.observe(el));
+            setTimeout(()=>{ document.querySelectorAll('.fade-in').forEach(el=>{ if(el.getBoundingClientRect().top<window.innerHeight) el.classList.add('visible'); }); },100);
+            window.addEventListener('scroll',()=>{ const nav=document.getElementById('navbar'); if(nav) window.scrollY>20?nav.classList.add('scrolled'):nav.classList.remove('scrolled'); });
+            document.getElementById('menuToggle')?.addEventListener('click',()=>{ document.getElementById('navLinks')?.classList.toggle('active'); });
+        }
+        const DEMO_DATA={
+            free:{plan:'free',demo:true,shop_json:{business_name:"Demo Free Shop",tagline:"5 socials, no custom links",description:"Free plan demo. Get started with 5 social platforms and a catalog link.",logo_url:"icon.svg",phone:"+2348012345678",email:"demo@myshop.afric.site",location:"Lagos, Nigeria",catalog_url:"https://selar.co/demo",brand_colors:{primary:"#1e40af"},typography:{heading_font:"Inter",body_font:"Inter"},socials:{facebook:"https://facebook.com/demo",instagram:"https://instagram.com/demo",tiktok:"https://tiktok.com/@demo",twitter:"https://x.com/demo",whatsapp:"+2348012345678"},custom_links:[],analytics:{visit_count:42}}},
+            pro:{plan:'pro',demo:true,shop_json:{business_name:"Demo Pro Shop",tagline:"Brand colors, custom links",description:"Pro plan demo. Customize your brand colors, add up to 3 custom links, and remove ads.",logo_url:"icon.svg",phone:"+2348012345678",email:"demo@myshop.afric.site",location:"Abuja, Nigeria",catalog_url:"https://selar.co/demo",brand_colors:{primary:"#7c3aed",secondary:"#f5f3ff"},typography:{heading_font:"Poppins",body_font:"Inter"},socials:{facebook:"https://facebook.com/demo",instagram:"https://instagram.com/demo",tiktok:"https://tiktok.com/@demo",twitter:"https://x.com/demo",youtube:"https://youtube.com/@demo",linkedin:"https://linkedin.com/in/demo",whatsapp:"+2348012345678",telegram:"demo"},custom_links:[{label:"Book Appointment",url:"https://calendly.com/demo",icon:"calendar"}],analytics:{visit_count:156}}},
+            premium:{plan:'premium',demo:true,shop_json:{business_name:"Demo Premium Shop",tagline:"Unlimited everything, gradients",description:"Premium plan demo. Unlimited socials, custom links, gradient backgrounds, and white-label experience.",logo_url:"icon.svg",phone:"+2348012345678",email:"demo@myshop.afric.site",location:"Port Harcourt, Nigeria",catalog_url:"https://selar.co/demo",brand_colors:{primary:"#f59e0b",secondary:"#fff7ed",gradient:true,gradient_colors:["#f59e0b","#ef4444"]},typography:{heading_font:"Space Grotesk",body_font:"DM Sans"},socials:{facebook:"https://facebook.com/demo",instagram:"https://instagram.com/demo",tiktok:"https://tiktok.com/@demo",twitter:"https://x.com/demo",youtube:"https://youtube.com/@demo",linkedin:"https://linkedin.com/in/demo",pinterest:"https://pinterest.com/demo",whatsapp:"+2348012345678",telegram:"demo"},custom_links:[{label:"Book Now",url:"https://calendly.com/demo",icon:"calendar"}],analytics:{visit_count:512}}}
+        };
+        const urlParams=new URLSearchParams(window.location.search);
+        const demoPlan=urlParams.get('plan');
+        const slug=urlParams.get('slug')||(()=>{ const p=window.location.pathname.split('/').filter(Boolean); if(p.length&&!['index.html','app.html','shop.html','install.html','404.html'].includes(p[0])) return p[0]; return ''; })();
+        if(demoPlan&&DEMO_DATA[demoPlan]){
+            renderShop(DEMO_DATA[demoPlan]);
+        }else if(slug){
+            fetch(`${API}/shop/live/${slug}`).then(res=>res.ok?res.json():Promise.reject()).then(shop=>renderShop(shop)).catch(()=>{
+                document.getElementById('app').innerHTML=`<div class="error-state"><div class="error-card"><div class="icon">🏪</div><h2>Shop not found</h2><a href="index.html">Go Home</a></div></div>`;
             });
-
-            // ========== MAIN LOAD LOGIC ==========
-            if (!slug) {
-                appEl.innerHTML = '<div class="error-state"><div class="error-card"><div class="icon">🔍</div><h2>No shop specified</h2><p>Add a shop name to the URL like <code>myshop.afric.site/your-shop</code></p><a href="/">Go to MyShop</a></div></div>';
-                return;
-            }
-
-            if (slug === 'demo') {
-                const demoData = getDemoData();
-                currentShopData = demoData;
-                renderShop(demoData, false);
-                createFAB();
-                return;
-            }
-
-            try {
-                let endpoint;
-                if (isPreview) {
-                    if (!emailParam) {
-                        appEl.innerHTML = '<div class="error-state"><div class="error-card"><div class="icon">🔒</div><h2>Preview requires login</h2><p>Please sign in to preview your shop.</p><a href="/app.html">Go to Dashboard</a></div></div>';
-                        return;
-                    }
-                    endpoint = `${API}/shop/preview/${slug}?email=${encodeURIComponent(emailParam)}`;
-                } else {
-                    endpoint = `${API}/shop/live/${slug}`;
-                }
-                const res = await fetch(endpoint);
-                if (!res.ok) {
-                    if (res.status === 403) {
-                        appEl.innerHTML = '<div class="error-state"><div class="error-card"><div class="icon">⛔</div><h2>Access Denied</h2><p>You do not own this shop, or the preview link is invalid.</p><a href="/app.html">Go to Dashboard</a></div></div>';
-                        return;
-                    }
-                    if (res.status === 404) {
-                        if (isPreview) {
-                            appEl.innerHTML = '<div class="error-state"><div class="error-card"><div class="icon">👀</div><h2>Preview Not Available</h2><p>This shop doesn\'t exist yet or the preview link is invalid.</p><a href="/app.html">Go to Dashboard</a></div></div>';
-                        } else {
-                            appEl.innerHTML = '<div class="error-state"><div class="error-card"><div class="icon">🏪</div><h2>Shop not found</h2><p>This shop doesn\'t exist or hasn\'t been activated yet.</p><a href="/app.html">Create Your Shop</a></div></div>';
-                        }
-                        return;
-                    }
-                    throw new Error('Server error');
-                }
-                const shop = await res.json();
-                currentShopData = shop;
-                renderShop(shop, isPreview);
-                createFAB();
-            } catch(e) {
-                appEl.innerHTML = '<div class="error-state"><div class="error-card"><div class="icon">⚠️</div><h2>Unable to load</h2><p>' + e.message + '</p><a href="/">Go Home</a></div></div>';
-            }
-
-            // Handle window resize for FAB
-            window.addEventListener('resize', () => {
-                if (fabEl) {
-                    fabEl.style.display = window.innerWidth <= 768 ? 'flex' : 'none';
-                }
-            });
-        })();
+        }else{
+            document.getElementById('app').innerHTML=`<div class="error-state"><div class="error-card"><div class="icon">🔍</div><h2>No shop specified</h2><p>Add ?plan=free&demo=1 or ?slug=your-shop</p><a href="index.html">Go to MyShop</a></div></div>`;
+        }
+        window.addEventListener('resize',()=>{ if(fabEl) fabEl.style.display=window.innerWidth<=768?'flex':'none'; });
     </script>
 </body>
 </html>
