@@ -1128,20 +1128,101 @@
     }
 
     /* ─────────────────────────────────────────────
-       DEMO DATA
+       DEMO DATA — Realistic shops with free Unsplash images
     ───────────────────────────────────────────── */
     const DEMO_DATA = {
         free: {
             plan:'free', demo:true,
-            shop_json:{ business_name:'Demo Free Shop', tagline:'5 socials, no custom links', description:'Free plan demo. Get started with 5 social platforms and a catalog link.', logo_url:'icon.svg', phone:'+2348012345678', email:'demo@myshop.afric.site', location:'Lagos, Nigeria', catalog_url:'https://selar.co/demo', brand_colors:{ primary:'#1e40af' }, typography:{ heading_font:'Inter', body_font:'Inter' }, socials:{ facebook:'https://facebook.com/demo', instagram:'https://instagram.com/demo', tiktok:'https://tiktok.com/@demo', twitter:'https://x.com/demo', whatsapp:'+2348012345678' }, custom_links:[], analytics:{ visit_count:42 } }
+            shop_json:{
+                business_name: 'Brew & Bloom Café',
+                tagline: 'Fresh coffee & pastries daily',
+                description: 'Local café serving artisanal coffee, fresh pastries, and light meals. Visit us for a cozy workspace or grab-and-go. We roast our own beans and partner with local bakeries for the freshest croissants in Lagos.',
+                logo_url: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400&h=400&fit=crop',
+                phone: '+2348012345678',
+                email: 'hello@brewandbloom.ng',
+                location: 'Lagos, Nigeria',
+                catalog_url: 'https://wa.me/c/2348012345678',
+                brand_colors: { primary:'#1e40af' },
+                typography: { heading_font:'Inter', body_font:'Inter' },
+                socials: {
+                    facebook:'https://facebook.com/brewandbloom',
+                    instagram:'https://instagram.com/brewandbloom',
+                    tiktok:'https://tiktok.com/@brewandbloom',
+                    twitter:'https://x.com/brewandbloom',
+                    whatsapp:'+2348012345678'
+                },
+                custom_links:[],
+                analytics:{ visit_count:142 }
+            }
         },
         pro: {
             plan:'pro', demo:true,
-            shop_json:{ business_name:'Demo Pro Shop', tagline:'Brand colors, custom links', description:'Pro plan demo. Customize your brand colors, add up to 3 custom links, and remove ads.', logo_url:'icon.svg', phone:'+2348012345678', email:'demo@myshop.afric.site', location:'Abuja, Nigeria', catalog_url:'https://selar.co/demo', brand_colors:{ primary:'#7c3aed', secondary:'#f5f3ff' }, typography:{ heading_font:'Poppins', body_font:'Inter' }, socials:{ facebook:'https://facebook.com/demo', instagram:'https://instagram.com/demo', tiktok:'https://tiktok.com/@demo', twitter:'https://x.com/demo', youtube:'https://youtube.com/@demo', linkedin:'https://linkedin.com/in/demo', whatsapp:'+2348012345678', telegram:'demo' }, custom_links:[{ label:'Book Appointment', url:'https://calendly.com/demo', icon:'calendar' }], analytics:{ visit_count:156 } }
+            shop_json:{
+                business_name: 'Nexa Digital',
+                tagline: 'Web design & digital marketing',
+                description: 'We build stunning websites, manage social media, and run ad campaigns that convert. From SEO to brand strategy, our Abuja-based team helps businesses grow their online presence and reach more customers.',
+                logo_url: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=400&h=400&fit=crop',
+                phone: '+2348023456789',
+                email: 'contact@nexadigital.ng',
+                location: 'Abuja, Nigeria',
+                catalog_url: 'https://selar.co/nexa-services',
+                brand_colors: { primary:'#7c3aed', secondary:'#f5f3ff' },
+                typography: { heading_font:'Poppins', body_font:'Inter' },
+                socials: {
+                    facebook:'https://facebook.com/nexadigital',
+                    instagram:'https://instagram.com/nexadigital',
+                    tiktok:'https://tiktok.com/@nexadigital',
+                    twitter:'https://x.com/nexadigital',
+                    youtube:'https://youtube.com/@nexadigital',
+                    linkedin:'https://linkedin.com/company/nexadigital',
+                    whatsapp:'+2348023456789',
+                    telegram:'nexadigital',
+                    github:'https://github.com/nexadigital',
+                    medium:'https://medium.com/@nexadigital'
+                },
+                custom_links:[
+                    { label:'Book Appointment', url:'https://calendly.com/nexadigital', icon:'calendar' },
+                    { label:'View Portfolio', url:'https://nexadigital.ng/portfolio', icon:'briefcase' },
+                    { label:'Read Our Blog', url:'https://nexadigital.ng/blog', icon:'newspaper' }
+                ],
+                analytics:{ visit_count:856 }
+            }
         },
         premium: {
             plan:'premium', demo:true,
-            shop_json:{ business_name:'Demo Premium Shop', tagline:'Unlimited everything, gradients', description:'Premium plan demo. Unlimited socials, custom links, gradient backgrounds, and white-label experience.', logo_url:'icon.svg', phone:'+2348012345678', email:'demo@myshop.afric.site', location:'Port Harcourt, Nigeria', catalog_url:'https://selar.co/demo', brand_colors:{ primary:'#f59e0b', secondary:'#fff7ed', gradient:true, gradient_colors:['#f59e0b','#ef4444'] }, typography:{ heading_font:'Space Grotesk', body_font:'DM Sans' }, socials:{ facebook:'https://facebook.com/demo', instagram:'https://instagram.com/demo', tiktok:'https://tiktok.com/@demo', twitter:'https://x.com/demo', youtube:'https://youtube.com/@demo', linkedin:'https://linkedin.com/in/demo', pinterest:'https://pinterest.com/demo', whatsapp:'+2348012345678', telegram:'demo' }, custom_links:[{ label:'Book Now', url:'https://calendly.com/demo', icon:'calendar' }], analytics:{ visit_count:512 } }
+            shop_json:{
+                business_name: 'Luxe Threads',
+                tagline: 'Elevated style for the modern wardrobe',
+                description: 'Curated luxury fashion — from statement pieces to everyday elegance. Shop our latest collection online or DM us for personal styling appointments. We ship nationwide and offer same-day delivery in Port Harcourt.',
+                logo_url: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=400&fit=crop',
+                phone: '+2348034567890',
+                email: 'style@luxethreads.ng',
+                location: 'Port Harcourt, Nigeria',
+                catalog_url: 'https://luxethreads.ng/collections/all',
+                brand_colors: { primary:'#f59e0b', secondary:'#fff7ed', gradient:true, gradient_colors:['#f59e0b','#ef4444'] },
+                typography: { heading_font:'Space Grotesk', body_font:'DM Sans' },
+                socials: {
+                    facebook:'https://facebook.com/luxethreads',
+                    instagram:'https://instagram.com/luxethreads',
+                    tiktok:'https://tiktok.com/@luxethreads',
+                    twitter:'https://x.com/luxethreads',
+                    youtube:'https://youtube.com/@luxethreads',
+                    linkedin:'https://linkedin.com/company/luxethreads',
+                    pinterest:'https://pinterest.com/luxethreads',
+                    snapchat:'https://snapchat.com/add/luxethreads',
+                    whatsapp:'+2348034567890',
+                    telegram:'luxethreads',
+                    reddit:'https://reddit.com/r/luxethreads',
+                    discord:'https://discord.gg/luxethreads'
+                },
+                custom_links:[
+                    { label:'New Arrivals', url:'https://luxethreads.ng/new', icon:'sparkles' },
+                    { label:'Lookbook 2024', url:'https://luxethreads.ng/lookbook', icon:'shirt' },
+                    { label:'Size Guide', url:'https://luxethreads.ng/sizes', icon:'ruler' },
+                    { label:'Shipping Info', url:'https://luxethreads.ng/shipping', icon:'truck' }
+                ],
+                analytics:{ visit_count:3421 }
+            }
         }
     };
 
