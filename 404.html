@@ -15,7 +15,7 @@
     <meta name="twitter:title" content="MyShop Hub">
     <meta name="twitter:description" content="Discover businesses on MyShop.">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700;800&family=Open+Sans:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700;800&family=Lato:wght@300;400;700&family=Oswald:wght@300;400;500;600;700&family=Raleway:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;700&family=Nunito:wght@300;400;600;700;800&family=Outfit:wght@300;400;500;600;700&family=Sora:wght@300;400;500;600;700&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         *{margin:0;padding:0;box-sizing:border-box;}
         :root {
@@ -744,8 +744,10 @@
                 document.body.style.backgroundImage = 'none';
             }
         }
-        if (cfg.fonts && (json.typography?.body_font || json.typography?.heading_font)) {
-            document.body.style.fontFamily = `${json.typography.body_font || json.typography.heading_font}, sans-serif`;
+        // Apply custom fonts for ALL tiers if typography data exists (backend provides it)
+        // This ensures Free, Pro, Premium all get custom fonts when available
+        if (json.typography?.body_font) {
+            document.body.style.fontFamily = `${json.typography.body_font}, sans-serif`;
         }
     }
 
@@ -827,11 +829,11 @@
         document.getElementById('feedbackMessage').value = '';
     };
 
+    // Updated ads (removed "Digital Marketing")
     const ACTUAL_ADS = [
         { title:'Boost Your Business', desc:'Get premium tools to grow online.',  icon:'fa-solid fa-rocket',   link:'https://emltechstudio.site/app-suite', color:'#fef3c7' },
-        { title:'Digital Marketing',   desc:'Reach more customers with ads.',     icon:'fa-solid fa-bullhorn', link:'#', color:'#dbeafe' },
         { title:'Brand Design',        desc:'Professional logos & identity.',     icon:'fa-solid fa-palette',  link:'https://emltechstudio.site/services#brand-designs', color:'#fce7f3' },
-        { title:'Web Development',     desc:'Custom websites built for you.',     icon:'fa-solid fa-code',     link:'https://emltechdtudio.site/services', color:'#d1fae5' }
+        { title:'Web Development',     desc:'Custom websites built for you.',     icon:'fa-solid fa-code',     link:'https://emltechstudio.site/services', color:'#d1fae5' }
     ];
     function renderActualAds() {
         let html = `<div class="actual-ads-container fade-in"><div class="actual-ads-grid">`;
@@ -843,7 +845,7 @@
                 <p>${escapeHtml(ad.desc)}</p>
             </a>`;
         });
-        html += `</div><div class="actual-ads-footer">Want to advertise here? <a href="maito:hello.myshophub@gmail.com">Contact us</a></div></div>`;
+        html += `</div><div class="actual-ads-footer">Want to advertise here? <a href="mailto:hello.myshophub@gmail.com">Contact us</a></div></div>`;
         return html;
     }
 
@@ -987,6 +989,7 @@
                </div>`
             : '';
 
+        // For demo shops, use Unsplash images; for live shops, use backend logo or fallback
         const logoUrl = (isDemoMode && DEMO_UNSPLASH_LOGOS[currentPlan]) ? DEMO_UNSPLASH_LOGOS[currentPlan] : (json.logo_url || 'icon.svg');
         const businessName = json.business_name || 'My Hub';
         const tagline = json.tagline || '';
@@ -1054,19 +1057,19 @@
         });
     }
 
-    // Demo data with Unsplash images only for demo shops
+    // Demo data with Unsplash images (logo_url now set to Unsplash for validity)
     const DEMO_DATA = {
         free: {
             plan:'free', demo:true,
-            shop_json:{ business_name:'Demo Free Shop', tagline:'5 socials, no custom links', description:'Free plan demo. Get started with 5 social platforms and a catalog link.', logo_url:'', phone:'+2348012345678', email:'demo@myshop.afric.site', location:'Lagos, Nigeria', catalog_url:'https://selar.co/demo', brand_colors:{ primary:'#1e40af' }, typography:{ heading_font:'Inter', body_font:'Inter' }, socials:{ facebook:'https://facebook.com/demo', instagram:'https://instagram.com/demo', tiktok:'https://tiktok.com/@demo', twitter:'https://x.com/demo', whatsapp:'+2348012345678' }, custom_links:[] }
+            shop_json:{ business_name:'Demo Free Shop', tagline:'5 socials, no custom links', description:'Free plan demo. Get started with 5 social platforms and a catalog link.', logo_url:DEMO_UNSPLASH_LOGOS.free, phone:'+2348012345678', email:'demo@myshop.afric.site', location:'Lagos, Nigeria', catalog_url:'https://selar.co/demo', brand_colors:{ primary:'#1e40af' }, typography:{ heading_font:'Inter', body_font:'Inter' }, socials:{ facebook:'https://facebook.com/demo', instagram:'https://instagram.com/demo', tiktok:'https://tiktok.com/@demo', twitter:'https://x.com/demo', whatsapp:'+2348012345678' }, custom_links:[] }
         },
         pro: {
             plan:'pro', demo:true,
-            shop_json:{ business_name:'Demo Pro Shop', tagline:'Brand colors, custom links', description:'Pro plan demo. Customize your brand colors, add up to 3 custom links, and remove ads.', logo_url:'', phone:'+2348012345678', email:'demo@myshop.afric.site', location:'Abuja, Nigeria', catalog_url:'https://selar.co/demo', brand_colors:{ primary:'#7c3aed', secondary:'#f5f3ff' }, typography:{ heading_font:'Poppins', body_font:'Inter' }, socials:{ facebook:'https://facebook.com/demo', instagram:'https://instagram.com/demo', tiktok:'https://tiktok.com/@demo', twitter:'https://x.com/demo', youtube:'https://youtube.com/@demo', linkedin:'https://linkedin.com/in/demo', whatsapp:'+2348012345678', telegram:'demo' }, custom_links:[{ label:'Book Appointment', url:'https://calendly.com/demo', icon:'calendar' }] }
+            shop_json:{ business_name:'Demo Pro Shop', tagline:'Brand colors, custom links', description:'Pro plan demo. Customize your brand colors, add up to 3 custom links, and remove ads.', logo_url:DEMO_UNSPLASH_LOGOS.pro, phone:'+2348012345678', email:'demo@myshop.afric.site', location:'Abuja, Nigeria', catalog_url:'https://selar.co/demo', brand_colors:{ primary:'#7c3aed', secondary:'#f5f3ff' }, typography:{ heading_font:'Poppins', body_font:'Inter' }, socials:{ facebook:'https://facebook.com/demo', instagram:'https://instagram.com/demo', tiktok:'https://tiktok.com/@demo', twitter:'https://x.com/demo', youtube:'https://youtube.com/@demo', linkedin:'https://linkedin.com/in/demo', whatsapp:'+2348012345678', telegram:'demo' }, custom_links:[{ label:'Book Appointment', url:'https://calendly.com/demo', icon:'calendar' }] }
         },
         premium: {
             plan:'premium', demo:true,
-            shop_json:{ business_name:'Demo Premium Shop', tagline:'Unlimited everything, gradients', description:'Premium plan demo. Unlimited socials, custom links, gradient backgrounds, and white-label experience.', logo_url:'', phone:'+2348012345678', email:'demo@myshop.afric.site', location:'Port Harcourt, Nigeria', catalog_url:'https://selar.co/demo', brand_colors:{ primary:'#f59e0b', secondary:'#fff7ed', gradient:true, gradient_colors:['#f59e0b','#ef4444'] }, typography:{ heading_font:'Space Grotesk', body_font:'DM Sans' }, socials:{ facebook:'https://facebook.com/demo', instagram:'https://instagram.com/demo', tiktok:'https://tiktok.com/@demo', twitter:'https://x.com/demo', youtube:'https://youtube.com/@demo', linkedin:'https://linkedin.com/in/demo', pinterest:'https://pinterest.com/demo', whatsapp:'+2348012345678', telegram:'demo' }, custom_links:[{ label:'Book Now', url:'https://calendly.com/demo', icon:'calendar' }] }
+            shop_json:{ business_name:'Demo Premium Shop', tagline:'Unlimited everything, gradients', description:'Premium plan demo. Unlimited socials, custom links, gradient backgrounds, and white-label experience.', logo_url:DEMO_UNSPLASH_LOGOS.premium, phone:'+2348012345678', email:'demo@myshop.afric.site', location:'Port Harcourt, Nigeria', catalog_url:'https://selar.co/demo', brand_colors:{ primary:'#f59e0b', secondary:'#fff7ed', gradient:true, gradient_colors:['#f59e0b','#ef4444'] }, typography:{ heading_font:'Space Grotesk', body_font:'DM Sans' }, socials:{ facebook:'https://facebook.com/demo', instagram:'https://instagram.com/demo', tiktok:'https://tiktok.com/@demo', twitter:'https://x.com/demo', youtube:'https://youtube.com/@demo', linkedin:'https://linkedin.com/in/demo', pinterest:'https://pinterest.com/demo', whatsapp:'+2348012345678', telegram:'demo' }, custom_links:[{ label:'Book Now', url:'https://calendly.com/demo', icon:'calendar' }] }
         }
     };
 
@@ -1104,4 +1107,4 @@
     }
     </script>
 </body>
-</html>
+    </html>
