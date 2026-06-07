@@ -6,10 +6,64 @@
     <meta name="theme-color" content="#2563eb">
     <title>MyShop — Turn Your Scattered Links Into a Storefront That Sells</title>
     <meta name="description" content="One professional hub for your catalog, WhatsApp, Instagram, TikTok — built for sellers who mean business. Trusted by 2,000+ merchants.">
+    <meta name="keywords" content="MyShop, link in bio, storefront aggregator, ecommerce hub, social media links, online store, bio links, Selar, Shopify, WhatsApp catalog">
+    <meta name="author" content="EML Tech Studio">
+    <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://myshop.afric.site/">
     <link rel="manifest" href="/manifest.json">
     <link rel="icon" href="/icon.svg">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://myshop.afric.site/">
+    <meta property="og:title" content="MyShop — Turn Your Scattered Links Into a Storefront That Sells">
+    <meta property="og:description" content="One professional hub for your catalog, WhatsApp, Instagram, TikTok — built for sellers who mean business.">
+    <meta property="og:image" content="https://myshop.afric.site/icon.svg">
+    <meta property="og:site_name" content="MyShop">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="MyShop — Turn Your Scattered Links Into a Storefront That Sells">
+    <meta name="twitter:description" content="One professional hub for your catalog, WhatsApp, Instagram, TikTok — built for sellers who mean business.">
+    <meta name="twitter:image" content="https://myshop.afric.site/icon.svg">
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "MyShop",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web",
+      "description": "Create a single hub for all your e‑commerce stores, social links, and online catalogs.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "NGN"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "ratingCount": "124"
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "MyShop",
+      "url": "https://myshop.afric.site",
+      "logo": "https://myshop.afric.site/icon.svg",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "email": "emltechstudio@gmail.com",
+        "contactType": "customer support"
+      }
+    }
+    </script>
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet">
     <style>
@@ -301,11 +355,11 @@
             </div>
             <a href="/app.html" class="btn">Upgrade to Pro →</a>
         </div>
-        <!-- Premium Card -->
+        <!-- Premium Card - price updated to ₦3,500 -->
         <div class="plan-card premium">
             <div class="plan-card-header">
                 <h3>Premium</h3>
-                <div class="plan-price">₦5,000 <span>/month</span><br><small>$15 USD</small></div>
+                <div class="plan-price">₦3,500 <span>/month</span><br><small>$10 USD</small></div>
             </div>
             <div class="plan-preview">
                 <iframe src="shop.html?plan=premium&demo=1" title="Premium plan preview" loading="lazy"></iframe>
@@ -355,7 +409,7 @@
             </div>
             <div class="pricing-card">
                 <h3>Premium</h3>
-                <div class="pricing-price">₦5,000 <small>/month</small><br><small>$15 USD</small></div>
+                <div class="pricing-price">₦3,500 <small>/month</small><br><small>$10 USD</small></div>
                 <ul class="pricing-features">
                     <li><i class="fa-solid fa-check"></i> Unlimited socials</li>
                     <li><i class="fa-solid fa-check"></i> Unlimited custom links</li>
@@ -364,7 +418,7 @@
                     <li><i class="fa-solid fa-check"></i> White‑label (no MyShop branding)</li>
                     <li><i class="fa-solid fa-check"></i> Full analytics + export</li>
                     <li><i class="fa-solid fa-check"></i> Priority support + feedback form</li>
-                    <li><i class="fa-solid fa-check"></i> Premium SEO / social cards</li>
+                    <!-- Removed: Premium SEO / social cards -->
                 </ul>
                 <a href="/app.html" class="pricing-btn">Get Premium</a>
             </div>
@@ -470,12 +524,12 @@
 
     const faqData = [
         {q:"What is MyShop?",a:"MyShop is a professional hub page that connects all your online sales channels into ONE shareable link."},
-        {q:"How much does MyShop cost?",a:"Free plan forever. Pro: ₦1,500/month ($5 USD). Premium: ₦5,000/month ($15 USD). One‑time payment via Selar."},
+        {q:"How much does MyShop cost?",a:"Free plan forever. Pro: ₦1,500/month ($5 USD). Premium: ₦3,500/month ($10 USD). One‑time payment via Selar."},
         {q:"Does MyShop work with any store platform?",a:"Yes. Paste ANY catalog URL — Selar, Shopify, WooCommerce, even a Google Sheet."},
         {q:"Can I use MyShop without a website?",a:"Absolutely. Just add your catalog link, WhatsApp number, social handles."},
         {q:"How do I add my WhatsApp catalog?",a:"Paste your WhatsApp catalog link (wa.me/c/...). MyShop shows a dedicated button."},
         {q:"Can I track visitors?",a:"Yes. Every hub includes visitor analytics. Pro and Premium get detailed insights."},
-        {q:"What makes MyShop different from Linktree?",a:"MyShop is built for sellers: embeds any catalog, WhatsApp-first, one-tap calls, and plan‑based SEO."},
+        {q:"What makes MyShop different from Linktree?",a:"MyShop is built for sellers: embeds any catalog, WhatsApp-first, one-tap calls, and plan‑based customization."},
         {q:"Do I need to pay before trying?",a:"No. Build and preview your hub completely free. Pay only when you want to activate Pro or Premium."},
         {q:"Can I use my own logo?",a:"Yes. Upload your logo. The hub uses a clean, professional design."},
         {q:"How do I get my custom link?",a:"After registering, you get myshop.afric.site/yourname. Share it everywhere."}

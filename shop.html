@@ -4,25 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#1e40af">
-
-    <!-- Base SEO — overwritten per tier after shop data loads -->
     <title>MyShop Hub</title>
     <meta name="description" content="Discover businesses on MyShop — Nigeria's business hub platform.">
-
-    <!-- Open Graph base (overwritten for Pro/Premium) -->
     <meta property="og:title" content="MyShop Hub">
     <meta property="og:description" content="Discover businesses on MyShop.">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="MyShop">
     <meta property="og:image" content="https://myshop.afric.site/icon.svg">
-
-    <!-- Twitter Card base (overwritten for Pro/Premium) -->
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="MyShop Hub">
     <meta name="twitter:description" content="Discover businesses on MyShop.">
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700;800&family=Open+Sans:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700;800&family=Lato:wght@300;400;700&family=Oswald:wght@300;400;500;600;700&family=Raleway:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;700&family=Nunito:wght@300;400;600;700;800&family=Outfit:wght@300;400;500;600;700&family=Sora:wght@300;400;500;600;700&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         *{margin:0;padding:0;box-sizing:border-box;}
         :root {
@@ -36,8 +29,6 @@
             --brand-light: #3b82f6;
             --brand-dark: #1e3a8a;
             --brand-rgb: 30, 64, 175;
-            --success: #10b981;
-            --whatsapp: #25d366;
             --radius: 20px;
             --radius-sm: 14px;
             --radius-lg: 28px;
@@ -56,35 +47,26 @@
                 --border: #334155;
             }
         }
-        html { scroll-behavior: smooth; }
-
-        /* ── APP CONTAINER ── */
-        #app {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-        #app > .content-wrap {
-            flex: 1;
+        html { 
+            scroll-behavior: smooth;
+            scroll-padding-top: 80px;
         }
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background: var(--bg);
             color: var(--text);
-            line-height: 1.6;
+            line-height: 1.5;
             -webkit-font-smoothing: antialiased;
-            overflow-x: hidden;
             min-height: 100vh;
         }
 
-        /* ── NAVBAR ── */
+        /* Navbar */
         .navbar {
             position: fixed;
             top: 0; left: 0; right: 0;
             z-index: 1000;
             background: rgba(255,255,255,0.85);
             backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
             border-bottom: 1px solid transparent;
             transition: all var(--transition);
         }
@@ -93,7 +75,7 @@
         .nav-inner {
             max-width: 720px;
             margin: 0 auto;
-            padding: 10px 24px;
+            padding: 12px 24px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -156,7 +138,7 @@
             .nav-links.active {
                 display: flex;
                 position: absolute;
-                top: 50px; left: 0; right: 0;
+                top: 56px; left: 0; right: 0;
                 flex-direction: column;
                 background: var(--card);
                 padding: 16px 24px;
@@ -168,94 +150,74 @@
             .nav-toggle { display: block; }
         }
 
-        /* ── HERO ──
-           Navbar height ≈ 48px (10px top + 10px bottom + 28px logo).
-           8px breathing room below navbar = 56px total.
-        */
+        /* Hero Base (Free/Pro) */
         .hero {
-            position: relative;
-            padding: 20px 24px 16px;
+            padding: 100px 24px 40px;
             text-align: center;
-            overflow: hidden;
         }
-        .hero-glow {
-            display: none;
-        }
-        .hero > * { position: relative; z-index: 1; }
         .hero-logo {
-            width: 72px; height: 72px;
-            border-radius: 18px;
+            width: 80px; height: 80px;
+            border-radius: 24px;
             object-fit: cover;
-            margin: 0 auto 8px;
+            margin: 0 auto 16px;
             border: 3px solid white;
             box-shadow: 0 8px 32px rgba(0,0,0,0.1), 0 0 0 1px var(--border);
-            background: white;
+            background: var(--card);
             display: block;
-            animation: heroFadeUp 0.45s ease both;
         }
         .hero-name {
-            font-size: 1.75rem;
+            font-size: 2rem;
             font-weight: 800;
             letter-spacing: -0.5px;
-            margin-bottom: 2px;
+            margin-bottom: 8px;
             color: var(--text);
             display: inline-flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
             flex-wrap: wrap;
             justify-content: center;
-            animation: heroFadeUp 0.45s 0.07s ease both;
         }
         .hero-tagline {
-            font-size: 0.95rem;
+            font-size: 1rem;
             color: var(--text2);
-            max-width: 440px;
-            margin: 0 auto 6px;
-            animation: heroFadeUp 0.45s 0.12s ease both;
-        }
-        /* Pro/Premium taglines use brand color instead of gray */
-        .hero-premium .hero-tagline {
-            color: var(--text);
-            font-weight: 600;
+            max-width: 500px;
+            margin: 0 auto 8px;
         }
         .hero-meta {
             display: flex;
             justify-content: center;
-            gap: 14px;
+            gap: 16px;
             flex-wrap: wrap;
             color: var(--text3);
-            font-size: 0.8rem;
-            animation: heroFadeUp 0.45s 0.17s ease both;
+            font-size: 0.85rem;
+            margin-bottom: 16px;
         }
-        .hero-meta span { display: inline-flex; align-items: center; gap: 4px; }
         .hero-cta {
-            margin-top: 12px;
+            margin-top: 16px;
             display: flex;
             justify-content: center;
-            gap: 10px;
+            gap: 12px;
             flex-wrap: wrap;
-            animation: heroFadeUp 0.45s 0.22s ease both;
         }
         .hero-cta a, .hero-cta button {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            padding: 12px 24px;
+            padding: 12px 28px;
             border-radius: 50px;
             font-weight: 700;
-            font-size: 0.88rem;
+            font-size: 0.9rem;
             text-decoration: none;
             transition: all var(--transition);
             border: none;
             cursor: pointer;
         }
-        .hero-cta a:hover, .hero-cta button:hover { transform: translateY(-2px); }
         .hero-cta .btn-primary {
             background: var(--brand);
             color: white;
             box-shadow: 0 8px 24px rgba(var(--brand-rgb), 0.25);
         }
-        .hero-cta .btn-primary:hover { background: var(--brand-dark); }
+        .hero-cta .btn-primary:hover { background: var(--brand-dark); transform: translateY(-2px); }
         .hero-cta .btn-ghost {
             background: var(--card);
             color: var(--text);
@@ -263,25 +225,49 @@
         }
         .hero-cta .btn-ghost:hover { border-color: var(--brand-light); color: var(--brand); }
 
-        /* Premium hero */
-        .hero-premium { padding: 20px 24px 12px; text-align: center; }
-        .hero-premium .hero-tagline {
-            font-size: 1.75rem;
+        /* Premium Hero (no image, gradient + typography) */
+        .premium-hero {
+            padding: 120px 24px 60px;
+            text-align: center;
+            background: linear-gradient(135deg, var(--brand-dark), var(--brand), var(--brand-light));
+            color: white;
+            margin-bottom: 20px;
+            border-radius: 0 0 32px 32px;
+        }
+        .premium-hero .premium-tagline {
+            font-size: 2.5rem;
             font-weight: 800;
-            letter-spacing: -0.5px;
-            color: var(--text);
-            max-width: 480px;
-            margin: 0 auto 6px;
-            line-height: 1.3;
+            letter-spacing: -1px;
+            max-width: 700px;
+            margin: 0 auto 16px;
+            line-height: 1.2;
         }
-        .hero-premium .hero-meta { margin-bottom: 8px; }
-
-        @keyframes heroFadeUp {
-            from { opacity: 1; transform: translateY(14px); }
-            to   { opacity: 1; transform: translateY(0); }
+        .premium-hero .premium-sub {
+            font-size: 1rem;
+            opacity: 0.9;
+            max-width: 500px;
+            margin: 0 auto 16px;
+        }
+        .premium-hero .premium-location {
+            font-size: 0.95rem;
+            opacity: 0.85;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .premium-hero .hero-cta .btn-primary {
+            background: white;
+            color: var(--brand-dark);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+        }
+        .premium-hero .hero-cta .btn-primary:hover {
+            background: #f8fafc;
+            transform: translateY(-2px);
         }
 
-        /* ── VERIFIED BADGE ── */
+        /* Verified Badge */
         .verified-mark {
             display: inline-flex;
             align-items: center;
@@ -294,10 +280,10 @@
             margin-left: 2px;
             vertical-align: middle;
         }
-        .verified-mark.pro { background: #0084ff; box-shadow: 0 0 0 1.5px rgba(0,132,255,0.15); }
-        .verified-mark.premium { background: linear-gradient(135deg, #f59e0b, #fbbf24); box-shadow: 0 0 0 1.5px rgba(245,158,11,0.15); }
+        .verified-mark.pro { background: #0084ff; }
+        .verified-mark.premium { background: linear-gradient(135deg, #f59e0b, #fbbf24); }
 
-        /* ── SECTIONS ── */
+        /* Sections */
         .section { max-width: 640px; margin: 0 auto; padding: 8px 24px; }
         .section-title {
             font-size: 0.75rem;
@@ -320,8 +306,6 @@
         }
         .card:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
         .about-text { color: var(--text2); font-size: 0.95rem; line-height: 1.6; }
-
-        /* Custom links */
         .custom-links-grid { display: flex; flex-direction: column; gap: 6px; }
         .custom-link-btn {
             display: flex;
@@ -338,27 +322,27 @@
         }
         .custom-link-btn i {
             width: 36px; height: 36px;
-            display: flex; align-items: center; justify-content: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             background: rgba(var(--brand-rgb), 0.08);
             color: var(--brand);
             border-radius: 10px;
         }
         .custom-link-btn:hover { background: var(--brand); color: white; border-color: var(--brand); transform: translateY(-2px); }
         .custom-link-btn:hover i { background: rgba(255,255,255,0.2); color: white; }
-
-        /* Catalog */
         .catalog-card { text-align: center; padding: 20px 24px; }
         .catalog-icon {
             width: 48px; height: 48px;
-            display: flex; align-items: center; justify-content: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             background: rgba(var(--brand-rgb), 0.06);
             border-radius: 18px;
             margin: 0 auto 14px;
             color: var(--brand);
             font-size: 1.4rem;
         }
-        .catalog-card h3 { font-size: 1.05rem; font-weight: 800; margin-bottom: 4px; }
-        .catalog-card p { margin-bottom: 18px; font-size: 0.88rem; color: var(--text2); }
         .catalog-btn {
             display: inline-flex;
             align-items: center;
@@ -372,8 +356,6 @@
             transition: all var(--transition);
         }
         .catalog-btn:hover { background: var(--brand-dark); transform: translateY(-2px); }
-
-        /* Socials */
         .social-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(56px, 1fr)); gap: 8px; }
         .social-item {
             display: flex;
@@ -395,13 +377,6 @@
         .social-item.twitter:hover i, .social-item.twitter:hover { background: #000; border-color: #000; }
         .social-item.youtube:hover i, .social-item.youtube:hover { background: #ff0000; border-color: #ff0000; }
         .social-item.linkedin:hover i, .social-item.linkedin:hover { background: #0a66c2; border-color: #0a66c2; }
-        .social-item.whatsapp:hover i, .social-item.whatsapp:hover { background: #25d366; border-color: #25d366; }
-        .social-item.telegram:hover i, .social-item.telegram:hover { background: #0088cc; border-color: #0088cc; }
-        .social-item.pinterest:hover i, .social-item.pinterest:hover { background: #bd081c; border-color: #bd081c; }
-        .social-item.snapchat:hover i, .social-item.snapchat:hover { background: #fffc00; border-color: #fffc00; }
-        .social-item.snapchat:hover i { color: black !important; }
-
-        /* Messaging */
         .messaging-grid { display: flex; flex-wrap: wrap; gap: 6px; }
         .msg-btn {
             display: inline-flex;
@@ -421,14 +396,6 @@
         .msg-btn.telegram  { background: #0088cc; }
         .msg-btn.messenger { background: #0084ff; }
         .msg-btn.signal    { background: #3a76f0; }
-        .msg-btn.viber     { background: #7360f2; }
-        .msg-btn.line      { background: #06c755; }
-        .msg-btn.wechat    { background: #07c160; }
-        .msg-btn.discord   { background: #5865f2; }
-        .msg-btn.viber     { background: #7360f2; }
-        .msg-btn.line      { background: #06c755; }
-
-        /* Contact icons */
         .contact-icon-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(56px, 1fr)); gap: 8px; }
         .contact-icon-item {
             display: flex;
@@ -446,15 +413,11 @@
         .contact-icon-item span { font-size: 0.7rem; color: var(--text3); font-weight: 500; }
         .contact-icon-item:hover { transform: translateY(-3px); border-color: var(--brand-light); }
         .contact-icon-item:hover i { color: white; background: var(--brand); }
-
-        /* Footer */
         .site-footer { text-align: center; padding: 20px 24px 16px; border-top: 1px solid var(--border); margin-top: 0; }
         .footer-brand { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 6px; font-weight: 700; color: var(--text); text-decoration: none; }
         .footer-brand img { width: 22px; height: 22px; border-radius: 6px; }
         .footer-text { color: var(--text3); font-size: 0.78rem; }
         .footer-text a { color: var(--brand); text-decoration: none; font-weight: 600; }
-
-        /* FAB */
         .fab {
             position: fixed;
             bottom: 24px; right: 24px;
@@ -472,8 +435,6 @@
         }
         .fab:hover { transform: scale(1.08); }
         @media (max-width: 768px) { .fab { display: flex; } }
-
-        /* Feedback modal */
         .feedback-modal {
             display: none;
             position: fixed;
@@ -516,20 +477,19 @@
             transition: background var(--transition);
         }
         .feedback-card button:hover { background: var(--brand-dark); }
-
-        /* Error / loading */
+        .feedback-card button:last-of-type {
+            background: var(--border);
+            color: var(--text);
+            margin-top: 8px;
+        }
         .error-state { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; }
         .error-card { background: var(--card); padding: 40px 32px; border-radius: var(--radius-lg); text-align: center; max-width: 400px; border: 1px solid var(--border); }
         .error-card .icon { font-size: 3rem; margin-bottom: 12px; }
         .error-card h2 { font-size: 1.3rem; font-weight: 800; margin-bottom: 6px; }
         .error-card p { color: var(--text2); margin-bottom: 20px; font-size: 0.9rem; }
         .error-card a { background: var(--brand); color: white; padding: 10px 24px; border-radius: 50px; text-decoration: none; font-weight: 600; display: inline-block; }
-
-        /* Scroll fade-in — below-fold only */
         .fade-in { opacity: 1; transform: translateY(0); transition: opacity 0.4s ease, transform 0.4s ease; }
         .fade-in.visible { opacity: 1; transform: translateY(0); }
-
-        /* Ad cards */
         .actual-ads-container { margin: 0 auto; max-width: 640px; padding: 0 24px 12px; }
         .actual-ads-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; }
         .actual-ad-card {
@@ -539,7 +499,6 @@
             text-align: center;
             border: 1px solid var(--border);
             transition: all var(--transition);
-            cursor: pointer;
             text-decoration: none;
             color: var(--text);
             display: block;
@@ -557,8 +516,8 @@
             font-size: 1.3rem;
             color: var(--text3);
         }
-        .actual-ad-card h4 { font-size: 0.78rem; font-weight: 700; margin-bottom: 3px; line-height: 1.3; }
-        .actual-ad-card p { font-size: 0.65rem; color: var(--text2); line-height: 1.4; }
+        .actual-ad-card h4 { font-size: 0.78rem; font-weight: 700; margin-bottom: 3px; }
+        .actual-ad-card p { font-size: 0.65rem; color: var(--text2); }
         .actual-ad-card .ad-badge {
             display: inline-block;
             font-size: 0.55rem;
@@ -573,17 +532,12 @@
         }
         .actual-ads-footer { text-align: center; padding: 8px 0 0; font-size: 0.65rem; color: var(--text3); }
         .actual-ads-footer a { color: var(--brand); text-decoration: none; font-weight: 600; }
-
         @media (max-width: 640px) {
-            .hero { padding: 54px 20px 16px; }
-            .hero-premium { padding: 52px 20px 12px; }
+            .hero { padding: 80px 20px 30px; }
+            .premium-hero { padding: 100px 20px 50px; }
+            .premium-hero .premium-tagline { font-size: 1.8rem; }
             .hero-name { font-size: 1.5rem; }
             .hero-logo { width: 64px; height: 64px; }
-            .hero-premium .hero-tagline { font-size: 1.5rem; }
-            .hero-cta a, .hero-cta button { padding: 10px 20px; font-size: 0.85rem; }
-            .section { padding: 8px 20px; }
-            .social-grid { grid-template-columns: repeat(auto-fill, minmax(52px, 1fr)); gap: 8px; }
-            .contact-icon-grid { grid-template-columns: repeat(auto-fill, minmax(48px, 1fr)); }
         }
         @keyframes spin { to { transform: rotate(360deg); } }
     </style>
@@ -595,7 +549,7 @@
     <div id="app">
         <div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;">
             <div style="width:48px;height:48px;border:4px solid var(--border);border-top-color:var(--brand);border-radius:50%;animation:spin 1s linear infinite;"></div>
-            <p style="color:var(--text2);">Loading your hub...</p>
+            <p style="color:var(--text2);">Loading hub...</p>
         </div>
     </div>
 
@@ -606,14 +560,12 @@
             <input type="email" id="feedbackEmail"   placeholder="Your email (optional)">
             <textarea           id="feedbackMessage" rows="4" placeholder="Your message..."></textarea>
             <button onclick="submitFeedback()">Send Feedback</button>
-            <button onclick="closeFeedbackModal()" style="background:var(--border);color:var(--text);margin-top:8px;">Cancel</button>
+            <button onclick="closeFeedbackModal()">Cancel</button>
         </div>
     </div>
 
     <script>
-    /* ─────────────────────────────────────────────
-       CONFIG
-    ───────────────────────────────────────────── */
+    // ==================== CONFIG ====================
     const API = 'https://emltechstudio-myshop-api.hf.space';
     const BASE_URL = 'https://myshop.afric.site';
 
@@ -658,121 +610,24 @@
     const MESSAGING_PRIORITY = ['whatsapp','telegram','messenger','signal','viber','line','discord'];
 
     const PLAN_CONFIG = {
-        free:    { socials:5,        custom_links:0,        brand_colors:false, gradients:false, fonts:false, ads:true,  branding:true,  feedback:false,
-                   seo_title:true,   seo_og:false,  seo_structured:false },
-        pro:     { socials:10,       custom_links:3,        brand_colors:true,  gradients:false, fonts:true,  ads:false, branding:true,  feedback:false,
-                   seo_title:true,   seo_og:true,   seo_structured:false },
-        premium: { socials:Infinity, custom_links:Infinity, brand_colors:true,  gradients:true,  fonts:true,  ads:false, branding:false, feedback:true,
-                   seo_title:true,   seo_og:true,   seo_structured:true  }
+        free:    { socials:5,        custom_links:0,        brand_colors:false, gradients:false, fonts:false, ads:true,  branding:true,  feedback:false },
+        pro:     { socials:10,       custom_links:3,        brand_colors:true,  gradients:false, fonts:true,  ads:false, branding:true,  feedback:false },
+        premium: { socials:Infinity, custom_links:Infinity, brand_colors:true,  gradients:true,  fonts:true,  ads:false, branding:false, feedback:true  }
     };
 
-    /* ─────────────────────────────────────────────
-       SEO — tiered meta injection
-       Free    → title + description only
-       Pro     → + Open Graph + Twitter Card (rich previews when shared on WhatsApp, Telegram, Twitter, etc.)
-       Premium → + canonical link + JSON-LD LocalBusiness structured data (Google rich results)
-    ───────────────────────────────────────────── */
-    function setMeta(name, content) {
-        let el = document.querySelector(`meta[name="${CSS.escape(name)}"]`);
-        if (!el) { el = document.createElement('meta'); el.setAttribute('name', name); document.head.appendChild(el); }
-        el.setAttribute('content', content);
-    }
-    function setOG(prop, content) {
-        let el = document.querySelector(`meta[property="${CSS.escape(prop)}"]`);
-        if (!el) { el = document.createElement('meta'); el.setAttribute('property', prop); document.head.appendChild(el); }
-        el.setAttribute('content', content);
-    }
+    // Unsplash images for demo shops only (fixed set)
+    const DEMO_UNSPLASH_LOGOS = {
+        free: 'https://images.unsplash.com/photo-1556741533-6e6a3bd8e0d7?w=200&h=200&fit=crop',
+        pro: 'https://images.unsplash.com/photo-1556742049-0cfed2f6c2e6?w=200&h=200&fit=crop',
+        premium: 'https://images.unsplash.com/photo-1556742031-c6961e8560b0?w=200&h=200&fit=crop'
+    };
 
-    function injectSEO(shop) {
-        const json   = shop.shop_json || {};
-        const plan   = shop.plan || 'free';
-        const cfg    = PLAN_CONFIG[plan] || PLAN_CONFIG.free;
-        const name   = json.business_name || 'MyShop Hub';
-        const raw    = json.description || json.tagline || `Discover ${name} on MyShop`;
-        const desc   = raw.slice(0, 160);
-        const logo   = json.logo_url || '';
-        const hasImg = logo && !logo.includes('icon.svg') && logo.startsWith('http');
-        const slug   = resolveSlug();
-        const pageUrl = slug ? `${BASE_URL}/${slug}` : BASE_URL;
-        // Use absolute logo URL; fall back to platform OG image
-        const ogImg  = hasImg ? logo : `${BASE_URL}/og-default.png`;
+    let currentShopEmail = '';
+    let currentShopData = null;
+    let currentPlan = 'free';
+    let isDemoMode = false;
 
-        /* All tiers: title + description */
-        document.title = `${name} | MyShop`;
-        setMeta('description', desc);
-
-        /* Pro + Premium: Open Graph + Twitter Card
-           These are what WhatsApp, Telegram, Twitter, iMessage, Facebook
-           use to build the link preview card when someone shares the URL. */
-        if (cfg.seo_og) {
-            setOG('og:title',       name);
-            setOG('og:description', desc);
-            setOG('og:type',        'website');
-            setOG('og:url',         pageUrl);
-            setOG('og:image',       ogImg);
-            setOG('og:image:width', '1200');
-            setOG('og:image:height','630');
-            setOG('og:site_name',   'MyShop');
-            if (json.location) setOG('og:locale', 'en_NG');
-
-            setMeta('twitter:card',        'summary_large_image');
-            setMeta('twitter:title',       name);
-            setMeta('twitter:description', desc);
-            setMeta('twitter:image',       ogImg);
-            setMeta('twitter:site',        '@myshopafric');
-        }
-
-        /* Premium: canonical + JSON-LD LocalBusiness
-           Canonical prevents duplicate-content penalties when the same page
-           is served from both /slug and /404.html?slug=…
-           JSON-LD lets Google show the business as a rich result (name,
-           phone, address, hours) directly in search. */
-        if (cfg.seo_structured) {
-            /* Canonical */
-            let link = document.querySelector('link[rel="canonical"]');
-            if (!link) { link = document.createElement('link'); link.rel = 'canonical'; document.head.appendChild(link); }
-            link.href = pageUrl;
-
-            /* JSON-LD */
-            const ld = {
-                '@context': 'https://schema.org',
-                '@type':    'LocalBusiness',
-                name,
-                description: desc,
-                url:         pageUrl
-            };
-            if (hasImg)       ld.image     = logo;
-            if (json.phone)   ld.telephone = json.phone;
-            if (json.email)   ld.email     = json.email;
-            if (json.location) ld.address  = { '@type': 'PostalAddress', addressLocality: json.location, addressCountry: 'NG' };
-            if (json.catalog_url) ld.hasOfferCatalog = { '@type': 'OfferCatalog', url: json.catalog_url };
-
-            const s = document.createElement('script');
-            s.type = 'application/ld+json';
-            s.text = JSON.stringify(ld);
-            document.head.appendChild(s);
-        }
-
-        /* theme-color follows brand color for Pro/Premium */
-        if (cfg.brand_colors && json.brand_colors?.primary) {
-            document.querySelector('meta[name="theme-color"]')?.setAttribute('content', json.brand_colors.primary);
-        }
-
-        /* Favicon: Premium = shop logo, Free/Pro = MyShop icon */
-        const faviconUrl = (plan === 'premium' && hasImg) ? logo : `${BASE_URL}/icon.svg`;
-        let faviconLink = document.querySelector('link[rel="icon"]');
-        if (!faviconLink) { faviconLink = document.createElement('link'); faviconLink.rel = 'icon'; document.head.appendChild(faviconLink); }
-        faviconLink.href = faviconUrl;
-
-        /* Apple Touch Icon */
-        let appleLink = document.querySelector('link[rel="apple-touch-icon"]');
-        if (!appleLink) { appleLink = document.createElement('link'); appleLink.rel = 'apple-touch-icon'; document.head.appendChild(appleLink); }
-        appleLink.href = faviconUrl;
-    }
-
-    /* ─────────────────────────────────────────────
-       HELPERS
-    ───────────────────────────────────────────── */
+    // Helper functions
     function getSocialIcon(p)  { return SOCIAL_ICON_MAP[p.toLowerCase()] || 'fa-solid fa-link'; }
     function getPlatformClass(p) { return KNOWN_PLATFORMS.includes(p.toLowerCase()) ? p.toLowerCase() : ''; }
     function fixUrl(u) {
@@ -785,7 +640,6 @@
     function isMessagingPlatform(k)  { return MESSAGING_PLATFORMS.some(p => p.key === k.toLowerCase()); }
     function escapeHtml(t) { const d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
     function capitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
-
     function detectCatalogPlatform(u) {
         if (!u) return 'none';
         const l = u.toLowerCase();
@@ -794,15 +648,8 @@
         if (l.includes('shopify.com')) return 'shopify';
         return 'generic';
     }
-
-    /* ─────────────────────────────────────────────
-       SLUG RESOLUTION
-       Handles both /slug (GitHub Pages 404 routing)
-       and ?slug= query param
-    ───────────────────────────────────────────── */
-    const urlParams = new URLSearchParams(window.location.search);
-
     function resolveSlug() {
+        const urlParams = new URLSearchParams(window.location.search);
         const qSlug = urlParams.get('slug');
         if (qSlug) return qSlug;
         const parts = window.location.pathname.split('/').filter(Boolean);
@@ -811,9 +658,76 @@
         return '';
     }
 
-    /* ─────────────────────────────────────────────
-       THEME
-    ───────────────────────────────────────────── */
+    function setMeta(name, content) {
+        let el = document.querySelector(`meta[name="${CSS.escape(name)}"]`);
+        if (!el) { el = document.createElement('meta'); el.setAttribute('name', name); document.head.appendChild(el); }
+        el.setAttribute('content', content);
+    }
+    function setOG(prop, content) {
+        let el = document.querySelector(`meta[property="${CSS.escape(prop)}"]`);
+        if (!el) { el = document.createElement('meta'); el.setAttribute('property', prop); document.head.appendChild(el); }
+        el.setAttribute('content', content);
+    }
+
+    function injectSEO(shop) {
+        const json = shop.shop_json || {};
+        const plan = shop.plan || 'free';
+        const name = json.business_name || 'MyShop Hub';
+        const desc = (json.description || json.tagline || `Discover ${name} on MyShop`).slice(0, 160);
+        const logo = json.logo_url || '';
+        const hasImg = logo && logo.startsWith('http');
+        const slug = resolveSlug();
+        const pageUrl = slug ? `${BASE_URL}/${slug}` : BASE_URL;
+        const ogImg = hasImg ? logo : `${BASE_URL}/icon.svg`;
+        document.title = `${name} | MyShop`;
+        setMeta('description', desc);
+        if (plan !== 'free') {
+            setOG('og:title', name);
+            setOG('og:description', desc);
+            setOG('og:type', 'website');
+            setOG('og:url', pageUrl);
+            setOG('og:image', ogImg);
+            setOG('og:image:width', '1200');
+            setOG('og:image:height','630');
+            setOG('og:site_name', 'MyShop');
+            setMeta('twitter:card', 'summary_large_image');
+            setMeta('twitter:title', name);
+            setMeta('twitter:description', desc);
+            setMeta('twitter:image', ogImg);
+        }
+        if (plan === 'premium') {
+            let link = document.querySelector('link[rel="canonical"]');
+            if (!link) { link = document.createElement('link'); link.rel = 'canonical'; document.head.appendChild(link); }
+            link.href = pageUrl;
+            const ld = {
+                '@context': 'https://schema.org',
+                '@type': 'LocalBusiness',
+                name,
+                description: desc,
+                url: pageUrl
+            };
+            if (hasImg) ld.image = logo;
+            if (json.phone) ld.telephone = json.phone;
+            if (json.email) ld.email = json.email;
+            if (json.location) ld.address = { '@type': 'PostalAddress', addressLocality: json.location, addressCountry: 'NG' };
+            if (json.catalog_url) ld.hasOfferCatalog = { '@type': 'OfferCatalog', url: json.catalog_url };
+            const s = document.createElement('script');
+            s.type = 'application/ld+json';
+            s.text = JSON.stringify(ld);
+            document.head.appendChild(s);
+        }
+        if (plan === 'premium' && json.brand_colors?.primary) {
+            document.querySelector('meta[name="theme-color"]')?.setAttribute('content', json.brand_colors.primary);
+        }
+        const faviconUrl = (plan === 'premium' && hasImg) ? logo : `${BASE_URL}/icon.svg`;
+        let faviconLink = document.querySelector('link[rel="icon"]');
+        if (!faviconLink) { faviconLink = document.createElement('link'); faviconLink.rel = 'icon'; document.head.appendChild(faviconLink); }
+        faviconLink.href = faviconUrl;
+        let appleLink = document.querySelector('link[rel="apple-touch-icon"]');
+        if (!appleLink) { appleLink = document.createElement('link'); appleLink.rel = 'apple-touch-icon'; document.head.appendChild(appleLink); }
+        appleLink.href = faviconUrl;
+    }
+
     function applyTheme(shop) {
         const json = shop.shop_json || {}, brand = json.brand_colors || {};
         const plan = shop.plan || 'free', cfg = PLAN_CONFIG[plan] || PLAN_CONFIG.free;
@@ -835,10 +749,7 @@
         }
     }
 
-    /* ─────────────────────────────────────────────
-       FAB
-    ───────────────────────────────────────────── */
-    let fabEl = null, currentShopEmail = '', currentPlan = 'free', isDemoMode = false;
+    let fabEl = null;
     function createFAB() {
         if (fabEl) return fabEl;
         fabEl = document.createElement('a');
@@ -861,30 +772,66 @@
     }
     window.addEventListener('resize', () => { if (fabEl) fabEl.style.display = window.innerWidth <= 768 ? 'flex' : 'none'; });
 
-    /* ─────────────────────────────────────────────
-       FEEDBACK
-    ───────────────────────────────────────────── */
-    window.openFeedbackModal  = () => document.getElementById('feedbackModal').classList.add('active');
-    window.closeFeedbackModal = () => document.getElementById('feedbackModal').classList.remove('active');
+    // Feedback functions
+    window.openFeedbackModal = function() {
+        document.getElementById('feedbackModal').classList.add('active');
+    };
+    window.closeFeedbackModal = function() {
+        document.getElementById('feedbackModal').classList.remove('active');
+    };
+    function formatFeedbackPlainText(shopData, userData) {
+        const shopName = shopData.business_name || 'MyShop Store';
+        const shopEmail = shopData.email || '';
+        const location = shopData.location || '';
+        let text = '';
+        text += '╔════════════════════════════════════════╗\n';
+        text += '║          ✨ NEW FEEDBACK ✨            ║\n';
+        text += '╚════════════════════════════════════════╝\n\n';
+        text += `📦 Shop: ${shopName}\n`;
+        text += `📧 Shop email: ${shopEmail}\n`;
+        if (location) text += `📍 Location: ${location}\n`;
+        text += `\n${'─'.repeat(50)}\n\n`;
+        text += `👤 Customer name: ${userData.name || 'Anonymous'}\n`;
+        text += `📧 Customer email: ${userData.email || 'Not provided'}\n\n`;
+        text += `${'─'.repeat(50)}\n\n`;
+        text += `💬 MESSAGE:\n`;
+        text += `${'─'.repeat(30)}\n`;
+        text += `${userData.message}\n`;
+        text += `${'─'.repeat(30)}\n\n`;
+        text += `${'═'.repeat(50)}\n`;
+        text += `Sent from ${shopName}'s MyShop storefront\n`;
+        text += `MyShop — Create your professional storefront at https://myshop.afric.site\n`;
+        text += `${'═'.repeat(50)}`;
+        return text;
+    }
     window.submitFeedback = function() {
-        const name    = document.getElementById('feedbackName').value.trim();
-        const email   = document.getElementById('feedbackEmail').value.trim();
+        const name = document.getElementById('feedbackName').value.trim();
+        const email = document.getElementById('feedbackEmail').value.trim();
         const message = document.getElementById('feedbackMessage').value.trim();
         if (!message) { alert('Please enter a message'); return; }
-        if (!currentShopEmail) { alert('Shop email not available'); return; }
-        const body = `Name: ${name||'Anonymous'}\nEmail: ${email||'Not provided'}\n\nMessage:\n${message}`;
-        window.location.href = `mailto:${currentShopEmail}?subject=${encodeURIComponent('Feedback for Shop')}&body=${encodeURIComponent(body)}`;
+        if (!currentShopEmail) { alert('Shop email not available.'); return; }
+        const userData = { name, email, message };
+        const shopData = {
+            business_name: currentShopData?.business_name || 'MyShop Store',
+            email: currentShopEmail,
+            location: currentShopData?.location || ''
+        };
+        const plainBody = formatFeedbackPlainText(shopData, userData);
+        const subject = `✨ Feedback for ${shopData.business_name}`;
+        const mailtoUrl = `mailto:${currentShopEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(plainBody)}`;
+        window.location.href = mailtoUrl;
         closeFeedbackModal();
+        alert('Your email client will open with a pre‑filled message.\nPlease review and click Send.\n\nThank you for your feedback!');
+        document.getElementById('feedbackName').value = '';
+        document.getElementById('feedbackEmail').value = '';
+        document.getElementById('feedbackMessage').value = '';
     };
 
-    /* ─────────────────────────────────────────────
-       ADS
-    ───────────────────────────────────────────── */
     const ACTUAL_ADS = [
-        { title:'Boost Your Business', desc:'Get premium tools to grow online.',  icon:'fa-solid fa-rocket',   link:'#', color:'#fef3c7' },
+        { title:'Boost Your Business', desc:'Get premium tools to grow online.',  icon:'fa-solid fa-rocket',   link:'https://emltechstudio.site/app-suite', color:'#fef3c7' },
         { title:'Digital Marketing',   desc:'Reach more customers with ads.',     icon:'fa-solid fa-bullhorn', link:'#', color:'#dbeafe' },
-        { title:'Brand Design',        desc:'Professional logos & identity.',     icon:'fa-solid fa-palette',  link:'#', color:'#fce7f3' },
-        { title:'Web Development',     desc:'Custom websites built for you.',     icon:'fa-solid fa-code',     link:'#', color:'#d1fae5' }
+        { title:'Brand Design',        desc:'Professional logos & identity.',     icon:'fa-solid fa-palette',  link:'https://emltechstudio.site/services#brand-designs', color:'#fce7f3' },
+        { title:'Web Development',     desc:'Custom websites built for you.',     icon:'fa-solid fa-code',     link:'https://emltechdtudio.site/services', color:'#d1fae5' }
     ];
     function renderActualAds() {
         let html = `<div class="actual-ads-container fade-in"><div class="actual-ads-grid">`;
@@ -896,21 +843,17 @@
                 <p>${escapeHtml(ad.desc)}</p>
             </a>`;
         });
-        html += `</div><div class="actual-ads-footer">Want to advertise here? <a href="mailto:ads@myshop.afric.site">Contact us</a></div></div>`;
+        html += `</div><div class="actual-ads-footer">Want to advertise here? <a href="maito:hello.myshophub@gmail.com">Contact us</a></div></div>`;
         return html;
     }
 
-    /* ─────────────────────────────────────────────
-       RENDER
-    ───────────────────────────────────────────── */
     function renderShop(shop) {
-        /* SEO first — before any DOM paint */
         injectSEO(shop);
-
         const json = shop.shop_json || shop;
         currentPlan = shop.plan || 'free';
         currentShopEmail = json.email || shop.email || '';
-        isDemoMode = !!shop.demo || urlParams.has('demo');
+        currentShopData = json;
+        isDemoMode = !!shop.demo || new URLSearchParams(window.location.search).has('demo');
         const cfg = PLAN_CONFIG[currentPlan] || PLAN_CONFIG.free;
         const isPremium = currentPlan === 'premium';
 
@@ -918,7 +861,6 @@
 
         const socials = json.socials || {}, phone = json.phone || '', email = json.email || '';
         const location = json.location || '', catalogUrl = json.catalog_url || '';
-
         let socialList = [], messagingList = [];
         for (let [key, url] of Object.entries(socials)) {
             if (!url) continue;
@@ -938,14 +880,11 @@
 
         const hasCatalog = !!catalogUrl, catalogPlatform = detectCatalogPlatform(catalogUrl);
         const customLinks = json.custom_links || [], canShowCustomLinks = cfg.custom_links > 0 && customLinks.length > 0;
-        const isPro = currentPlan === 'pro';
 
-        /* Verified badge */
         let verifiedMark = '';
-        if (isPro)      verifiedMark = '<span class="verified-mark pro" title="Verified Pro"><i class="fa-solid fa-check"></i></span>';
-        if (isPremium)  verifiedMark = '<span class="verified-mark premium" title="Verified Premium"><i class="fa-solid fa-check"></i></span>';
+        if (currentPlan === 'pro') verifiedMark = '<span class="verified-mark pro" title="Verified Pro"><i class="fa-solid fa-check"></i></span>';
+        if (isPremium) verifiedMark = '<span class="verified-mark premium" title="Verified Premium"><i class="fa-solid fa-check"></i></span>';
 
-        /* Nav links */
         let navLinks = '';
         if (json.description)   navLinks += '<a href="#about">About</a>';
         if (canShowCustomLinks) navLinks += '<a href="#links">Links</a>';
@@ -953,7 +892,6 @@
         if (socialList.length)  navLinks += '<a href="#socials">Socials</a>';
         if (otherMessaging.length || phone || email) navLinks += '<a href="#contact">Contact</a>';
 
-        /* Hero CTA */
         let heroCta = '<div class="hero-cta">';
         if (primaryMsg) {
             const mp = getMessagingPlatform(primaryMsg.platform);
@@ -967,7 +905,6 @@
         }
         heroCta += '</div>';
 
-        /* Below-fold sections */
         let sections = '';
         if (json.description) {
             sections += `<section class="section" id="about">
@@ -995,7 +932,6 @@
                 <div class="section-title fade-in"><i class="fa-solid fa-bag-shopping"></i> Catalog</div>
                 <div class="card catalog-card fade-in">
                     <div class="catalog-icon"><i class="${icon}"></i></div>
-                    <h3>${catName}</h3>
                     <a href="${fixUrl(catalogUrl)}" target="_blank" class="catalog-btn"><i class="fa-solid fa-up-right-from-square"></i> ${btn}</a>
                 </div>
             </section>`;
@@ -1035,7 +971,6 @@
             sections += `</div></section>`;
         }
 
-        /* Footer */
         let footerHtml = '';
         if (cfg.branding || cfg.ads) {
             footerHtml = `<footer class="site-footer">`;
@@ -1043,12 +978,8 @@
                 <p class="footer-text">Powered by <a href="index.html">MyShop</a> — <a href="https://emltechstudio.site" target="_blank">EML Tech Studio</a></p>`;
             footerHtml += `</footer>`;
         }
-
-        /* Ads (free only) */
         const adsHtml = cfg.ads && currentPlan === 'free' ? renderActualAds() : '';
-
-        /* Premium feedback button */
-        const feedbackBtnHtml = cfg.feedback && !isDemoMode && currentShopEmail
+        const feedbackBtnHtml = cfg.feedback && currentShopEmail
             ? `<div style="position:fixed;bottom:100px;right:24px;z-index:998;">
                 <button onclick="openFeedbackModal()" style="background:#f59e0b;width:56px;height:56px;border-radius:50%;border:none;color:white;font-size:1.5rem;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,0.2);">
                     <i class="fa-solid fa-comment"></i>
@@ -1056,13 +987,12 @@
                </div>`
             : '';
 
-        const logoUrl = json.logo_url || 'icon.svg';
+        const logoUrl = (isDemoMode && DEMO_UNSPLASH_LOGOS[currentPlan]) ? DEMO_UNSPLASH_LOGOS[currentPlan] : (json.logo_url || 'icon.svg');
         const businessName = json.business_name || 'My Hub';
         const tagline = json.tagline || '';
 
         let html = '';
-
-        /* Navbar */
+        // Navbar
         if (!isPremium) {
             html = `<nav class="navbar" id="navbar">
                 <div class="nav-inner">
@@ -1084,10 +1014,9 @@
             </nav>`;
         }
 
-        /* Hero */
+        // Hero section
         if (!isPremium) {
             html += `<header class="hero">
-                <div class="hero-glow"></div>
                 <img src="${logoUrl}" alt="${escapeHtml(businessName)}" class="hero-logo" onerror="this.src='icon.svg'">
                 <h1 class="hero-name">${escapeHtml(businessName)}${verifiedMark}</h1>
                 ${tagline ? `<p class="hero-tagline">${escapeHtml(tagline)}</p>` : ''}
@@ -1095,18 +1024,17 @@
                 ${heroCta}
             </header>`;
         } else {
-            html += `<header class="hero hero-premium">
-                <div class="hero-glow"></div>
-                ${tagline ? `<p class="hero-tagline">${escapeHtml(tagline)}</p>` : ''}
-                <div class="hero-meta">${location ? `<span><i class="fa-solid fa-location-dot"></i> ${escapeHtml(location)}</span>` : ''}</div>
+            html += `<header class="premium-hero">
+                <div class="premium-tagline">${escapeHtml(tagline || businessName)}</div>
+                ${json.description ? `<div class="premium-sub">${escapeHtml(json.description.slice(0, 120))}</div>` : ''}
+                ${location ? `<div class="premium-location"><i class="fa-solid fa-location-dot"></i> ${escapeHtml(location)}</div>` : ''}
                 ${heroCta}
             </header>`;
         }
 
-        html += `<div class="content-wrap">` + sections + adsHtml + `</div>` + footerHtml + feedbackBtnHtml;
+        html += `<div class="content-wrap">${sections}${adsHtml}</div>${footerHtml}${feedbackBtnHtml}`;
         document.getElementById('app').innerHTML = html;
 
-        /* Scroll fade-in (below fold only) */
         const observer = new IntersectionObserver(entries => {
             entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
         }, { threshold: 0.1 });
@@ -1117,7 +1045,6 @@
             });
         }, 80);
 
-        /* Navbar scroll + mobile menu */
         window.addEventListener('scroll', () => {
             const nav = document.getElementById('navbar');
             if (nav) window.scrollY > 20 ? nav.classList.add('scrolled') : nav.classList.remove('scrolled');
@@ -1127,108 +1054,23 @@
         });
     }
 
-    /* ─────────────────────────────────────────────
-       DEMO DATA — Realistic shops with free Unsplash images
-    ───────────────────────────────────────────── */
+    // Demo data with Unsplash images only for demo shops
     const DEMO_DATA = {
         free: {
             plan:'free', demo:true,
-            shop_json:{
-                business_name: 'Brew & Bloom Café',
-                tagline: 'Fresh coffee & pastries daily',
-                description: 'Local café serving artisanal coffee, fresh pastries, and light meals. Visit us for a cozy workspace or grab-and-go. We roast our own beans and partner with local bakeries for the freshest croissants in Lagos.',
-                logo_url: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400&h=400&fit=crop',
-                phone: '+2348012345678',
-                email: 'hello@brewandbloom.ng',
-                location: 'Lagos, Nigeria',
-                catalog_url: 'https://wa.me/c/2348012345678',
-                brand_colors: { primary:'#1e40af' },
-                typography: { heading_font:'Inter', body_font:'Inter' },
-                socials: {
-                    facebook:'https://facebook.com/brewandbloom',
-                    instagram:'https://instagram.com/brewandbloom',
-                    tiktok:'https://tiktok.com/@brewandbloom',
-                    twitter:'https://x.com/brewandbloom',
-                    whatsapp:'+2348012345678'
-                },
-                custom_links:[],
-                analytics:{ visit_count:142 }
-            }
+            shop_json:{ business_name:'Demo Free Shop', tagline:'5 socials, no custom links', description:'Free plan demo. Get started with 5 social platforms and a catalog link.', logo_url:'', phone:'+2348012345678', email:'demo@myshop.afric.site', location:'Lagos, Nigeria', catalog_url:'https://selar.co/demo', brand_colors:{ primary:'#1e40af' }, typography:{ heading_font:'Inter', body_font:'Inter' }, socials:{ facebook:'https://facebook.com/demo', instagram:'https://instagram.com/demo', tiktok:'https://tiktok.com/@demo', twitter:'https://x.com/demo', whatsapp:'+2348012345678' }, custom_links:[] }
         },
         pro: {
             plan:'pro', demo:true,
-            shop_json:{
-                business_name: 'Nexa Digital',
-                tagline: 'Web design & digital marketing',
-                description: 'We build stunning websites, manage social media, and run ad campaigns that convert. From SEO to brand strategy, our Abuja-based team helps businesses grow their online presence and reach more customers.',
-                logo_url: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=400&h=400&fit=crop',
-                phone: '+2348023456789',
-                email: 'contact@nexadigital.ng',
-                location: 'Abuja, Nigeria',
-                catalog_url: 'https://selar.co/nexa-services',
-                brand_colors: { primary:'#7c3aed', secondary:'#f5f3ff' },
-                typography: { heading_font:'Poppins', body_font:'Inter' },
-                socials: {
-                    facebook:'https://facebook.com/nexadigital',
-                    instagram:'https://instagram.com/nexadigital',
-                    tiktok:'https://tiktok.com/@nexadigital',
-                    twitter:'https://x.com/nexadigital',
-                    youtube:'https://youtube.com/@nexadigital',
-                    linkedin:'https://linkedin.com/company/nexadigital',
-                    whatsapp:'+2348023456789',
-                    telegram:'nexadigital',
-                    github:'https://github.com/nexadigital',
-                    medium:'https://medium.com/@nexadigital'
-                },
-                custom_links:[
-                    { label:'Book Appointment', url:'https://calendly.com/nexadigital', icon:'calendar' },
-                    { label:'View Portfolio', url:'https://nexadigital.ng/portfolio', icon:'briefcase' },
-                    { label:'Read Our Blog', url:'https://nexadigital.ng/blog', icon:'newspaper' }
-                ],
-                analytics:{ visit_count:856 }
-            }
+            shop_json:{ business_name:'Demo Pro Shop', tagline:'Brand colors, custom links', description:'Pro plan demo. Customize your brand colors, add up to 3 custom links, and remove ads.', logo_url:'', phone:'+2348012345678', email:'demo@myshop.afric.site', location:'Abuja, Nigeria', catalog_url:'https://selar.co/demo', brand_colors:{ primary:'#7c3aed', secondary:'#f5f3ff' }, typography:{ heading_font:'Poppins', body_font:'Inter' }, socials:{ facebook:'https://facebook.com/demo', instagram:'https://instagram.com/demo', tiktok:'https://tiktok.com/@demo', twitter:'https://x.com/demo', youtube:'https://youtube.com/@demo', linkedin:'https://linkedin.com/in/demo', whatsapp:'+2348012345678', telegram:'demo' }, custom_links:[{ label:'Book Appointment', url:'https://calendly.com/demo', icon:'calendar' }] }
         },
         premium: {
             plan:'premium', demo:true,
-            shop_json:{
-                business_name: 'Luxe Threads',
-                tagline: 'Elevated style for the modern wardrobe',
-                description: 'Curated luxury fashion — from statement pieces to everyday elegance. Shop our latest collection online or DM us for personal styling appointments. We ship nationwide and offer same-day delivery in Port Harcourt.',
-                logo_url: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=400&fit=crop',
-                phone: '+2348034567890',
-                email: 'style@luxethreads.ng',
-                location: 'Port Harcourt, Nigeria',
-                catalog_url: 'https://luxethreads.ng/collections/all',
-                brand_colors: { primary:'#f59e0b', secondary:'#fff7ed', gradient:true, gradient_colors:['#f59e0b','#ef4444'] },
-                typography: { heading_font:'Space Grotesk', body_font:'DM Sans' },
-                socials: {
-                    facebook:'https://facebook.com/luxethreads',
-                    instagram:'https://instagram.com/luxethreads',
-                    tiktok:'https://tiktok.com/@luxethreads',
-                    twitter:'https://x.com/luxethreads',
-                    youtube:'https://youtube.com/@luxethreads',
-                    linkedin:'https://linkedin.com/company/luxethreads',
-                    pinterest:'https://pinterest.com/luxethreads',
-                    snapchat:'https://snapchat.com/add/luxethreads',
-                    whatsapp:'+2348034567890',
-                    telegram:'luxethreads',
-                    reddit:'https://reddit.com/r/luxethreads',
-                    discord:'https://discord.gg/luxethreads'
-                },
-                custom_links:[
-                    { label:'New Arrivals', url:'https://luxethreads.ng/new', icon:'sparkles' },
-                    { label:'Lookbook 2024', url:'https://luxethreads.ng/lookbook', icon:'shirt' },
-                    { label:'Size Guide', url:'https://luxethreads.ng/sizes', icon:'ruler' },
-                    { label:'Shipping Info', url:'https://luxethreads.ng/shipping', icon:'truck' }
-                ],
-                analytics:{ visit_count:3421 }
-            }
+            shop_json:{ business_name:'Demo Premium Shop', tagline:'Unlimited everything, gradients', description:'Premium plan demo. Unlimited socials, custom links, gradient backgrounds, and white-label experience.', logo_url:'', phone:'+2348012345678', email:'demo@myshop.afric.site', location:'Port Harcourt, Nigeria', catalog_url:'https://selar.co/demo', brand_colors:{ primary:'#f59e0b', secondary:'#fff7ed', gradient:true, gradient_colors:['#f59e0b','#ef4444'] }, typography:{ heading_font:'Space Grotesk', body_font:'DM Sans' }, socials:{ facebook:'https://facebook.com/demo', instagram:'https://instagram.com/demo', tiktok:'https://tiktok.com/@demo', twitter:'https://x.com/demo', youtube:'https://youtube.com/@demo', linkedin:'https://linkedin.com/in/demo', pinterest:'https://pinterest.com/demo', whatsapp:'+2348012345678', telegram:'demo' }, custom_links:[{ label:'Book Now', url:'https://calendly.com/demo', icon:'calendar' }] }
         }
     };
 
-    /* ─────────────────────────────────────────────
-       BOOT
-    ───────────────────────────────────────────── */
+    const urlParams = new URLSearchParams(window.location.search);
     const demoPlan = urlParams.get('plan');
     const slug = resolveSlug();
 
