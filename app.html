@@ -10,7 +10,7 @@
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <!-- Preload all possible font choices for instant preview -->
+    <!-- Preload all possible font choices -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -97,7 +97,7 @@
         .stat-card h3{font-size:2.2rem;font-weight:900;}
         .stat-card p{font-size:.9rem;opacity:.9;margin-top:4px;}
         .preview-frame{width:100%;height:560px;border:1px solid var(--border);border-radius:16px;background:white;}
-        .logo-upload-area{border:2px dashed var(--border);border-radius:16px;padding:32px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:14px;background:var(--bg);}
+        .logo-upload-area{border:2px dashed var(--border);border-radius:16px;padding:32px;text-align:center;cursor:pointer;transition:all .2s;background:var(--bg);}
         .logo-upload-area:hover{border-color:var(--brand-light);background:#eff6ff;transform:translateY(-2px);}
         .logo-upload-area.has-image{border-style:solid;border-color:var(--success);background:#f0fdf4;}
         .logo-preview-img{width:100px;height:100px;border-radius:20px;object-fit:cover;border:2px solid var(--border);margin-bottom:8px;}
@@ -108,7 +108,6 @@
         .remove-chip{background:none;border:none;color:#ef4444;cursor:pointer;margin-left:8px;font-size:0.8rem;}
         .add-btn{background:var(--brand);color:white;border:none;border-radius:40px;padding:8px 16px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:0.85rem;margin-top:8px;}
         .add-btn:disabled{background:var(--text2);cursor:not-allowed;}
-        .color-input{width:60px;height:48px;padding:2px;border:2px solid var(--border);border-radius:8px;cursor:pointer;}
         .custom-link-item{display:flex;gap:10px;margin-bottom:10px;align-items:center;}
         .custom-link-item input{flex:1;}
         .plan-card{background:var(--card);padding:32px;border-radius:20px;border:2px solid var(--border);text-align:center;margin-bottom:16px;transition:all .3s;}
@@ -155,6 +154,12 @@
         .font-preview-caption{font-size:0.8rem;color:var(--text2);margin-top:4px;}
         select.font-select option{font-size:1.1rem;padding:8px;}
         .reg-step{padding-bottom:80px;}
+        .upsell-banner{background:linear-gradient(135deg,#fef3c7,#fde68a);border-left:4px solid #f59e0b;padding:16px;border-radius:12px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+        .upsell-banner p{margin:0;font-weight:600;color:#92400e;}
+        .upsell-banner .btn-sm{background:#f59e0b;color:white;border:none;box-shadow:none;}
+        .upsell-banner .btn-sm:hover{background:#d97706;}
+        .plan-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px;}
+        @media(max-width:640px){.plan-grid{grid-template-columns:1fr;}}
         @media(max-width:640px){
             .container{padding:16px;}.card{padding:24px;}h1{font-size:1.5rem;}.preview-frame{height:450px;}.tab-bar{gap:4px;}.tab{padding:8px 12px;font-size:.85rem;}.stat-card h3{font-size:1.8rem;}.btn-group{flex-direction:column;}
             .analytics-canvas{height:220px;}
@@ -273,7 +278,7 @@
             <div class="btn-group"><button class="btn btn-outline" onclick="prevStep(1)">Back</button><button class="btn" onclick="nextStep(3)">Continue</button></div>
         </div>
 
-        <!-- Step 3: Social & Messaging (combined) -->
+        <!-- Step 3: Social & Messaging -->
         <div id="step3" class="hidden reg-step">
             <div class="form-section"><h3><i class="fa-solid fa-share-nodes"></i> Social & Messaging</h3>
                 <p class="sub">Add your social profiles and messaging apps (up to 4 for Free plan). You can add more later, but Free plan limits to 4 total.</p>
@@ -344,88 +349,47 @@
     let recoveryQuestions = [];
     let recoveryEmail = '';
 
-    // ─── Font Lists ───────────────────────────────────────────────
+    // Font lists
     const PRO_HEADING_FONTS = [
-        {name:'Inter',family:'Inter'},
-        {name:'Poppins',family:'Poppins'},
-        {name:'Playfair Display',family:'Playfair Display'},
-        {name:'Space Grotesk',family:'Space Grotesk'},
-        {name:'DM Sans',family:'DM Sans'},
-        {name:'Montserrat',family:'Montserrat'},
+        {name:'Inter',family:'Inter'},{name:'Poppins',family:'Poppins'},{name:'Playfair Display',family:'Playfair Display'},
+        {name:'Space Grotesk',family:'Space Grotesk'},{name:'DM Sans',family:'DM Sans'},{name:'Montserrat',family:'Montserrat'},
         {name:'Raleway',family:'Raleway'}
     ];
     const PRO_BODY_FONTS = [
-        {name:'Inter',family:'Inter'},
-        {name:'Poppins',family:'Poppins'},
-        {name:'Open Sans',family:'Open Sans'},
-        {name:'DM Sans',family:'DM Sans'},
-        {name:'Montserrat',family:'Montserrat'},
-        {name:'Raleway',family:'Raleway'},
+        {name:'Inter',family:'Inter'},{name:'Poppins',family:'Poppins'},{name:'Open Sans',family:'Open Sans'},
+        {name:'DM Sans',family:'DM Sans'},{name:'Montserrat',family:'Montserrat'},{name:'Raleway',family:'Raleway'},
         {name:'Nunito',family:'Nunito'}
     ];
     const PREMIUM_HEADING_FONTS = [
         ...PRO_HEADING_FONTS,
-        {name:'Outfit',family:'Outfit'},
-        {name:'Manrope',family:'Manrope'},
-        {name:'Work Sans',family:'Work Sans'},
-        {name:'Source Sans 3',family:'Source Sans 3'},
-        {name:'Merriweather',family:'Merriweather'},
-        {name:'Lora',family:'Lora'},
-        {name:'Bebas Neue',family:'Bebas Neue'},
-        {name:'Oswald',family:'Oswald'},
-        {name:'Josefin Sans',family:'Josefin Sans'},
-        {name:'Quicksand',family:'Quicksand'},
-        {name:'Fraunces',family:'Fraunces'},
-        {name:'Syne',family:'Syne'},
-        {name:'Sora',family:'Sora'},
-        {name:'Urbanist',family:'Urbanist'},
-        {name:'Lexend',family:'Lexend'},
-        {name:'Plus Jakarta Sans',family:'Plus Jakarta Sans'},
-        {name:'Geist',family:'Geist'},
-        {name:'Instrument Sans',family:'Instrument Sans'},
-        {name:'Onest',family:'Onest'},
-        {name:'Red Hat Display',family:'Red Hat Display'},
-        {name:'Figtree',family:'Figtree'},
-        {name:'Shrikhand',family:'Shrikhand'},
-        {name:'Pacifico',family:'Pacifico'},
-        {name:'Caveat',family:'Caveat'},
+        {name:'Outfit',family:'Outfit'},{name:'Manrope',family:'Manrope'},{name:'Work Sans',family:'Work Sans'},
+        {name:'Source Sans 3',family:'Source Sans 3'},{name:'Merriweather',family:'Merriweather'},{name:'Lora',family:'Lora'},
+        {name:'Bebas Neue',family:'Bebas Neue'},{name:'Oswald',family:'Oswald'},{name:'Josefin Sans',family:'Josefin Sans'},
+        {name:'Quicksand',family:'Quicksand'},{name:'Fraunces',family:'Fraunces'},{name:'Syne',family:'Syne'},
+        {name:'Sora',family:'Sora'},{name:'Urbanist',family:'Urbanist'},{name:'Lexend',family:'Lexend'},
+        {name:'Plus Jakarta Sans',family:'Plus Jakarta Sans'},{name:'Geist',family:'Geist'},{name:'Instrument Sans',family:'Instrument Sans'},
+        {name:'Onest',family:'Onest'},{name:'Red Hat Display',family:'Red Hat Display'},{name:'Figtree',family:'Figtree'},
+        {name:'Shrikhand',family:'Shrikhand'},{name:'Pacifico',family:'Pacifico'},{name:'Caveat',family:'Caveat'},
         {name:'Great Vibes',family:'Great Vibes'}
     ];
     const PREMIUM_BODY_FONTS = [
         ...PRO_BODY_FONTS,
-        {name:'Outfit',family:'Outfit'},
-        {name:'Manrope',family:'Manrope'},
-        {name:'Work Sans',family:'Work Sans'},
-        {name:'Source Sans 3',family:'Source Sans 3'},
-        {name:'Merriweather',family:'Merriweather'},
-        {name:'Lora',family:'Lora'},
-        {name:'Josefin Sans',family:'Josefin Sans'},
-        {name:'Quicksand',family:'Quicksand'},
-        {name:'Sora',family:'Sora'},
-        {name:'Urbanist',family:'Urbanist'},
-        {name:'Lexend',family:'Lexend'},
-        {name:'Plus Jakarta Sans',family:'Plus Jakarta Sans'},
-        {name:'Geist',family:'Geist'},
-        {name:'Onest',family:'Onest'},
-        {name:'Red Hat Display',family:'Red Hat Display'},
+        {name:'Outfit',family:'Outfit'},{name:'Manrope',family:'Manrope'},{name:'Work Sans',family:'Work Sans'},
+        {name:'Source Sans 3',family:'Source Sans 3'},{name:'Merriweather',family:'Merriweather'},{name:'Lora',family:'Lora'},
+        {name:'Josefin Sans',family:'Josefin Sans'},{name:'Quicksand',family:'Quicksand'},{name:'Sora',family:'Sora'},
+        {name:'Urbanist',family:'Urbanist'},{name:'Lexend',family:'Lexend'},{name:'Plus Jakarta Sans',family:'Plus Jakarta Sans'},
+        {name:'Geist',family:'Geist'},{name:'Onest',family:'Onest'},{name:'Red Hat Display',family:'Red Hat Display'},
         {name:'Figtree',family:'Figtree'}
     ];
 
-    // ─── Color Presets ────────────────────────────────────────────
     const COLOR_PRESETS = [
-        {name:'Ocean',primary:'#2563eb',secondary:'#ffffff'},
-        {name:'Sunset',primary:'#f97316',secondary:'#fff7ed'},
-        {name:'Forest',primary:'#16a34a',secondary:'#f0fdf4'},
-        {name:'Berry',primary:'#dc2626',secondary:'#fef2f2'},
-        {name:'Midnight',primary:'#1e293b',secondary:'#f8fafc'},
-        {name:'Violet',primary:'#7c3aed',secondary:'#faf5ff'},
-        {name:'Rose',primary:'#e11d48',secondary:'#fff1f2'},
-        {name:'Teal',primary:'#0d9488',secondary:'#f0fdfa'},
-        {name:'Gold',primary:'#d97706',secondary:'#fffbeb'},
-        {name:'Slate',primary:'#475569',secondary:'#f8fafc'},
+        {name:'Ocean',primary:'#2563eb',secondary:'#ffffff'},{name:'Sunset',primary:'#f97316',secondary:'#fff7ed'},
+        {name:'Forest',primary:'#16a34a',secondary:'#f0fdf4'},{name:'Berry',primary:'#dc2626',secondary:'#fef2f2'},
+        {name:'Midnight',primary:'#1e293b',secondary:'#f8fafc'},{name:'Violet',primary:'#7c3aed',secondary:'#faf5ff'},
+        {name:'Rose',primary:'#e11d48',secondary:'#fff1f2'},{name:'Teal',primary:'#0d9488',secondary:'#f0fdfa'},
+        {name:'Gold',primary:'#d97706',secondary:'#fffbeb'},{name:'Slate',primary:'#475569',secondary:'#f8fafc'}
     ];
 
-    // ─── Platform Lists ─────────────────────────────────────────
     const ALL_PLATFORMS = [
         { name: "Facebook", icon: "fab fa-facebook-f", category: "social", urlTemplate: "https://facebook.com/{username}" },
         { name: "Instagram", icon: "fab fa-instagram", category: "social", urlTemplate: "https://instagram.com/{username}" },
@@ -785,7 +749,8 @@
         const isActive = shop.status === 'active';
         document.getElementById('dash-title').textContent = json.business_name || 'Your Shop';
         document.getElementById('dash-url').innerHTML = isActive ? `<a href="/${shop.slug}" target="_blank" style="color:var(--brand);text-decoration:none;font-weight:600;">myshop.afric.site/${shop.slug}</a>` : '<span style="color:var(--warning);">Not yet active</span>';
-        const content = expiryHtml + `
+        const upsellHtml = plan === 'free' ? `<div class="upsell-banner"><p><i class="fa-solid fa-crown"></i> Upgrade to Pro for brand colors, custom links, and no ads!</p><button class="btn btn-sm" onclick="switchTab('activate', document.querySelectorAll('.tab')[3])">Upgrade Now</button></div>` : (plan === 'pro' ? `<div class="upsell-banner"><p><i class="fa-solid fa-gem"></i> Go Premium for white-label, gradients, and unlimited everything!</p><button class="btn btn-sm" onclick="switchTab('activate', document.querySelectorAll('.tab')[3])">Upgrade to Premium</button></div>` : '');
+        const content = expiryHtml + upsellHtml + `
             <div class="shop-url-card">
                 <h3><i class="fa-solid fa-link"></i> Your Hub Link</h3>
                 <div class="url-row">
@@ -824,7 +789,10 @@
     async function loadPreview(){
         if(!session) return;
         const previewUrl = `/shop.html?slug=${session.slug}&preview=1&email=${encodeURIComponent(session.email)}`;
-        document.getElementById('tab-content').innerHTML = `<iframe src="${previewUrl}" class="preview-frame" title="Preview"></iframe>`;
+        const shop = await fetchShop();
+        const plan = shop.plan || 'free';
+        const upsellHtml = plan === 'free' ? `<div class="upsell-banner" style="margin-top:16px;"><p>Unlock custom fonts and brand colors with Pro!</p><button class="btn btn-sm" onclick="switchTab('activate', document.querySelectorAll('.tab')[3])">Upgrade</button></div>` : (plan === 'pro' ? `<div class="upsell-banner" style="margin-top:16px;"><p>Premium gives you gradients, unlimited fonts, and white-label!</p><button class="btn btn-sm" onclick="switchTab('activate', document.querySelectorAll('.tab')[3])">Go Premium</button></div>` : '');
+        document.getElementById('tab-content').innerHTML = `<iframe src="${previewUrl}" class="preview-frame" title="Preview"></iframe>${upsellHtml}`;
     }
 
     // Edit Tab globals
@@ -1045,6 +1013,8 @@
                 <div id="edit-custom-links-list" class="custom-links-list"></div>
                 <button type="button" class="add-btn" onclick="addCustomLink()" ${editCustomLinks.length >= maxLinks && maxLinks !== Infinity ? 'disabled' : ''}>+ Add Custom Link</button>
             </div>`;
+        } else {
+            html += `<div class="upsell-banner" style="margin-top:8px;"><p><i class="fa-solid fa-lock"></i> Custom links are available from Pro plan.</p><button class="btn btn-sm" onclick="switchTab('activate', document.querySelectorAll('.tab')[3])">Upgrade</button></div>`;
         }
 
         if(currentPlanForEdit !== 'free'){
@@ -1077,6 +1047,8 @@
                     <div class="font-preview-caption" style="font-family:'${typo.body_font || 'Inter'}',sans-serif;">This is how your body text will look on your shop.</div>
                 </div>
             </div>`;
+        } else {
+            html += `<div class="upsell-banner"><p><i class="fa-solid fa-palette"></i> Brand colors and custom fonts are available from Pro plan.</p><button class="btn btn-sm" onclick="switchTab('activate', document.querySelectorAll('.tab')[3])">Upgrade</button></div>`;
         }
 
         html += `<button class="btn" onclick="saveEdit()">Save Changes</button></div>`;
@@ -1230,58 +1202,10 @@
         }catch(e){ showMsg('edit-msg', e.message, 'error'); }
     }
 
-    async function loadActivate(){
-        try{
-            const shop = await fetchShop();
-            const currentPlan = shop.plan || 'free';
-            const expiresAt = shop.expires_at;
-            let daysLeft = null;
-            let renewDisabled = false;
-            let renewTooltip = '';
-            if(currentPlan !== 'free' && expiresAt){
-                daysLeft = Math.ceil((new Date(expiresAt) - new Date()) / (1000*60*60*24));
-                if(daysLeft > 6){
-                    renewDisabled = true;
-                    renewTooltip = `Renew unlocks in ${daysLeft - 6} days`;
-                }
-            }
-            const expiryDate = expiresAt ? new Date(expiresAt).toLocaleDateString() : 'N/A';
-
-            let html = `<div class="card" style="text-align:center;"><h2>Upgrade Your Plan</h2><p>Choose the plan that fits your business. Manual payment via Selar (31 days).</p></div>`;
-
-            if(currentPlan !== 'free'){
-                html += `<div class="card"><h3>Your current plan: ${currentPlan.toUpperCase()}</h3><p>Valid until: ${expiryDate}</p>`;
-                if(daysLeft !== null){
-                    html += `<p style="color:${daysLeft <= 5 ? 'var(--danger)' : 'var(--text2)'};font-weight:600;">${daysLeft > 0 ? daysLeft + ' days remaining' : 'Expired'}</p>`;
-                }
-                html += `<button class="btn btn-outline" onclick="renewPlan()" ${renewDisabled ? 'disabled title="' + renewTooltip + '"' : ''} style="${renewDisabled ? 'opacity:0.5;cursor:not-allowed;' : ''}">Renew for another 31 days</button>`;
-                if(renewDisabled){
-                    html += `<p style="font-size:0.85rem;color:var(--text2);margin-top:8px;"><i class="fa-solid fa-lock"></i> ${renewTooltip}</p>`;
-                }
-                html += `</div>`;
-            }
-
-            // Always show upgrade options
-            if(currentPlan === 'free' || currentPlan === 'pro'){
-                html += `<div class="plan-card featured"><div class="plan-name">Pro</div><div class="plan-price">₦1,500 <span>/31 days</span><br><small>$5 USD</small></div><div class="plan-desc">Brand your hub, remove ads, get analytics</div><a href="https://selar.co/pro-manual" target="_blank" class="btn">Pay on Selar</a></div>`;
-            }
-            if(currentPlan !== 'premium'){
-                html += `<div class="plan-card" style="border-top:4px solid #f59e0b;"><div class="plan-name">Premium</div><div class="plan-price">₦5,000 <span>/31 days</span><br><small>$15 USD</small></div><div class="plan-desc">Full control, white-label, gradients, unlimited</div><a href="https://selar.co/premium-manual" target="_blank" class="btn">Pay on Selar</a></div>`;
-            }
-            if(currentPlan === 'premium'){
-                html += `<div class="card" style="text-align:center;"><p style="color:var(--success);font-weight:600;"><i class="fa-solid fa-crown"></i> You are on the highest plan. Enjoy all features!</p></div>`;
-            }
-
-            document.getElementById('tab-content').innerHTML = html;
-        } catch(e){
-            document.getElementById('tab-content').innerHTML = '<div class="card"><p style="color:var(--danger);">Error loading plans.</p></div>';
-        }
-    }
-
-    async function renewPlan(){
+    async function renewPlan(plan){
         if(!session) return;
         try{
-            const res = await fetch(API + '/payment/renew?email=' + encodeURIComponent(session.email), {method:'POST'});
+            const res = await fetch(API + '/payment/renew?email=' + encodeURIComponent(session.email) + '&plan=' + plan, {method:'POST'});
             const data = await safeJson(res);
             if(res.ok){
                 alert(data.message);
@@ -1295,6 +1219,54 @@
         }
     }
 
+    async function loadActivate(){
+        try{
+            const shop = await fetchShop();
+            const currentPlan = shop.plan || 'free';
+            const expiresAt = shop.expires_at;
+            let daysLeft = null;
+            let renewDisabled = true;
+            let renewTooltip = '';
+            if(currentPlan !== 'free' && expiresAt){
+                daysLeft = Math.ceil((new Date(expiresAt) - new Date()) / (1000*60*60*24));
+                renewDisabled = daysLeft > 6;
+                renewTooltip = renewDisabled ? `Renew available when ${daysLeft} days or less remain` : '';
+            }
+
+            let html = `<div class="card" style="text-align:center;"><h2>Manage Your Plan</h2><p>Manual payment via Selar (31 days).</p></div>`;
+
+            // Renew button for paid users
+            if(currentPlan !== 'free'){
+                html += `<div class="card" style="text-align:center;">
+                    <h3>Your ${currentPlan.toUpperCase()} plan is active</h3>
+                    <button class="btn btn-outline" onclick="renewPlan('${currentPlan}')" ${renewDisabled ? 'disabled title="' + renewTooltip + '"' : ''} style="${renewDisabled ? 'opacity:0.5;cursor:not-allowed;' : ''} margin-top:12px;">Renew ${currentPlan.toUpperCase()} for another 31 days</button>
+                    ${renewDisabled && daysLeft ? `<p style="font-size:0.85rem;color:var(--text2);margin-top:8px;"><i class="fa-solid fa-clock"></i> Renew when ≤6 days remaining (currently ${daysLeft} days left)</p>` : ''}
+                </div>`;
+            }
+
+            // Always show both plan cards (Pro and Premium)
+            const proCard = `<div class="plan-card ${currentPlan === 'pro' ? 'featured' : ''}" style="${currentPlan === 'pro' ? '' : 'border:2px solid var(--border);'}">
+                <div class="plan-name">Pro ${currentPlan === 'pro' ? '(Current)' : ''}</div>
+                <div class="plan-price">₦1,500 <span>/31 days</span><br><small>$5 USD</small></div>
+                <div class="plan-desc">Brand your hub, remove ads, get analytics</div>
+                ${currentPlan !== 'pro' ? '<a href="https://selar.co/pro-manual" target="_blank" class="btn">Switch to Pro</a>' : '<button class="btn btn-outline" disabled style="opacity:0.5;">Current Plan</button>'}
+            </div>`;
+
+            const premiumCard = `<div class="plan-card ${currentPlan === 'premium' ? 'featured' : ''}" style="${currentPlan === 'premium' ? '' : 'border-top:4px solid #f59e0b;'}">
+                <div class="plan-name">Premium ${currentPlan === 'premium' ? '(Current)' : ''}</div>
+                <div class="plan-price">₦5,000 <span>/31 days</span><br><small>$15 USD</small></div>
+                <div class="plan-desc">Full control, white-label, gradients, unlimited</div>
+                ${currentPlan !== 'premium' ? '<a href="https://selar.co/premium-manual" target="_blank" class="btn">Switch to Premium</a>' : '<button class="btn btn-outline" disabled style="opacity:0.5;">Current Plan</button>'}
+            </div>`;
+
+            html += `<div class="plan-grid">${proCard}${premiumCard}</div>`;
+
+            document.getElementById('tab-content').innerHTML = html;
+        } catch(e){
+            document.getElementById('tab-content').innerHTML = '<div class="card"><p style="color:var(--danger);">Error loading plans.</p></div>';
+        }
+    }
+
     async function loadAnalytics(){
         const shop = await fetchShop();
         const plan = shop.plan || 'free';
@@ -1302,7 +1274,7 @@
         const analytics = json.analytics || {};
         const totalVisits = shop.visit_count || 0;
         if(plan === 'free'){
-            document.getElementById('tab-content').innerHTML = `<div class="card"><h3>Analytics (Free)</h3><p>Total visits: <strong>${totalVisits}</strong></p><p class="sub">Upgrade to Pro for daily visits and referrers, or Premium for full analytics.</p></div>`;
+            document.getElementById('tab-content').innerHTML = `<div class="card"><h3>Analytics (Free)</h3><p>Total visits: <strong>${totalVisits}</strong></p><p class="sub">Upgrade to Pro for daily visits and referrers, or Premium for full analytics.</p><div class="upsell-banner"><p><i class="fa-solid fa-chart-line"></i> See where your traffic comes from!</p><button class="btn btn-sm" onclick="switchTab('activate', document.querySelectorAll('.tab')[3])">Upgrade to Pro</button></div></div>`;
             return;
         }
         let html = `<div class="card"><h3>Analytics (${plan.toUpperCase()})</h3><p>Total visits: <strong>${totalVisits}</strong></p>`;
@@ -1312,6 +1284,18 @@
         if(last14days.length > 0){
             html += `<div class="analytics-legend"><div class="analytics-legend-item"><div class="analytics-legend-dot" style="background:var(--brand);"></div>Daily Visits</div></div>`;
             html += `<canvas id="analyticsChart" class="analytics-canvas"></canvas>`;
+        }
+
+        if(plan === 'premium'){
+            const monthly = {};
+            for(let [date, count] of Object.entries(daily)){
+                const month = date.slice(0,7);
+                monthly[month] = (monthly[month] || 0) + count;
+            }
+            const monthlyData = Object.entries(monthly).sort().slice(-6);
+            if(monthlyData.length){
+                html += `<h4 style="margin-top:20px;">Last 6 Months</h4><div class="analytics-legend"><div class="analytics-legend-item"><div class="analytics-legend-dot" style="background:#f59e0b;"></div>Monthly Visits</div></div><canvas id="monthlyChart" class="analytics-canvas"></canvas>`;
+            }
         }
 
         const referrers = analytics.referrers || {};
@@ -1335,14 +1319,24 @@
         html += `</div>`;
         document.getElementById('tab-content').innerHTML = html;
 
-        // Draw chart
         if(last14days.length > 0){
-            setTimeout(() => drawAnalyticsChart(last14days), 50);
+            setTimeout(() => drawAnalyticsChart('analyticsChart', last14days, '#2563eb'), 50);
+        }
+        if(plan === 'premium'){
+            const monthly = {};
+            for(let [date, count] of Object.entries(daily)){
+                const month = date.slice(0,7);
+                monthly[month] = (monthly[month] || 0) + count;
+            }
+            const monthlyData = Object.entries(monthly).sort().slice(-6);
+            if(monthlyData.length){
+                setTimeout(() => drawAnalyticsChart('monthlyChart', monthlyData, '#f59e0b'), 50);
+            }
         }
     }
 
-    function drawAnalyticsChart(data){
-        const canvas = document.getElementById('analyticsChart');
+    function drawAnalyticsChart(canvasId, data, color){
+        const canvas = document.getElementById(canvasId);
         if(!canvas) return;
         const ctx = canvas.getContext('2d');
         const dpr = window.devicePixelRatio || 1;
@@ -1356,14 +1350,12 @@
         const chartW = w - padding.left - padding.right;
         const chartH = h - padding.top - padding.bottom;
 
-        const labels = data.map(d => d[0].slice(5)); // MM-DD
+        const labels = data.map(d => d[0]);
         const values = data.map(d => d[1]);
         const maxVal = Math.max(...values, 1);
 
-        // Clear
         ctx.clearRect(0,0,w,h);
 
-        // Grid lines
         ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--border').trim() || '#e2e8f0';
         ctx.lineWidth = 1;
         const gridLines = 5;
@@ -1373,41 +1365,33 @@
             ctx.moveTo(padding.left, y);
             ctx.lineTo(padding.left + chartW, y);
             ctx.stroke();
-            // Y-axis labels
             ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--text2').trim() || '#94a3b8';
             ctx.font = '11px Inter, sans-serif';
             ctx.textAlign = 'right';
             ctx.fillText(Math.round(maxVal - (maxVal/gridLines)*i), padding.left - 8, y + 4);
         }
 
-        // Bars
         const barGap = 4;
         const barW = (chartW / values.length) - barGap;
-        const barColor = '#2563eb';
-        const barHoverColor = '#1d4ed8';
-
         values.forEach((val, i) => {
             const x = padding.left + (barW + barGap) * i + barGap/2;
             const barH = (val / maxVal) * chartH;
             const y = padding.top + chartH - barH;
 
-            // Bar
             const grad = ctx.createLinearGradient(0, y, 0, y + barH);
-            grad.addColorStop(0, barColor);
-            grad.addColorStop(1, '#60a5fa');
+            grad.addColorStop(0, color);
+            grad.addColorStop(1, color + 'aa');
             ctx.fillStyle = grad;
             ctx.beginPath();
             ctx.roundRect(x, y, barW, barH, 4);
             ctx.fill();
 
-            // Label
             ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--text2').trim() || '#94a3b8';
             ctx.font = '10px Inter, sans-serif';
             ctx.textAlign = 'center';
             ctx.fillText(labels[i], x + barW/2, h - 10);
         });
 
-        // X-axis line
         ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--border').trim() || '#e2e8f0';
         ctx.beginPath();
         ctx.moveTo(padding.left, padding.top + chartH);
@@ -1420,10 +1404,14 @@
         try{
             const res = await fetch(API + '/shop/referrals?email=' + encodeURIComponent(session.email) + '&password=' + encodeURIComponent(session.password));
             const ref = await res.json();
+            const shop = await fetchShop();
+            const plan = shop.plan || 'free';
+            const upsellHtml = plan === 'free' ? `<div class="upsell-banner"><p>Pro users get higher referral bonuses!</p><button class="btn btn-sm" onclick="switchTab('activate', document.querySelectorAll('.tab')[3])">Upgrade</button></div>` : '';
             document.getElementById('tab-content').innerHTML = `
                 <div class="card" style="background:linear-gradient(135deg,#fef3c7,#fde68a);text-align:center;"><h3><i class="fa-solid fa-gift"></i> Your Referral Code</h3><div style="background:white;padding:12px 28px;border-radius:12px;font-size:1.3rem;font-weight:700;margin:8px 0;">${ref.referral_code || 'N/A'}</div><button class="btn btn-sm" onclick="copyRef('${ref.referral_code || ''}')">Copy Code</button></div>
                 <div class="stats-grid"><div class="stat-card" style="background:linear-gradient(135deg,#10b981,#059669);"><h3>${ref.total_referred || 0}</h3><p>People Referred</p></div></div>
-                <div class="card"><h3>Share Your Link</h3><div style="display:flex;gap:10px;"><input type="text" value="https://myshop.afric.site/?ref=${ref.referral_code || ''}" readonly><button class="btn btn-sm" onclick="copyShareLink(this)">Copy</button></div></div>`;
+                <div class="card"><h3>Share Your Link</h3><div style="display:flex;gap:10px;"><input type="text" value="https://myshop.afric.site/?ref=${ref.referral_code || ''}" readonly><button class="btn btn-sm" onclick="copyShareLink(this)">Copy</button></div></div>
+                ${upsellHtml}`;
         } catch(e){
             document.getElementById('tab-content').innerHTML = '<div class="card"><p style="color:var(--danger);">Error loading referrals.</p></div>';
         }
@@ -1488,4 +1476,4 @@
     if('serviceWorker'in navigator){navigator.serviceWorker.register('/sw.js');}
 </script>
 </body>
-</html>
+    </html>
