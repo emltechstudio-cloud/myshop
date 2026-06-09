@@ -1268,14 +1268,14 @@
                 <div class="plan-name">Pro ${currentPlan === 'pro' ? '(Current)' : ''}</div>
                 <div class="plan-price">₦1,500 <span>/31 days</span><br><small>$5 USD</small></div>
                 <div class="plan-desc">Brand your hub, remove ads, get analytics</div>
-                ${currentPlan !== 'pro' ? '<a href="https://selar.co/pro-manual" target="_blank" class="btn">Switch to Pro</a>' : '<button class="btn btn-outline" disabled style="opacity:0.5;">Current Plan</button>'}
+                ${currentPlan !== 'pro' ? '<a href="https://selar.co/myshop_pro" target="_blank" class="btn">Switch to Pro</a>' : '<button class="btn btn-outline" disabled style="opacity:0.5;">Current Plan</button>'}
             </div>`;
 
             const premiumCard = `<div class="plan-card ${currentPlan === 'premium' ? 'featured' : ''}" style="${currentPlan === 'premium' ? '' : 'border-top:4px solid #f59e0b;'}">
                 <div class="plan-name">Premium ${currentPlan === 'premium' ? '(Current)' : ''}</div>
                 <div class="plan-price">₦5,000 <span>/31 days</span><br><small>$15 USD</small></div>
                 <div class="plan-desc">Full control, white-label, gradients, unlimited</div>
-                ${currentPlan !== 'premium' ? '<a href="https://selar.co/premium-manual" target="_blank" class="btn">Switch to Premium</a>' : '<button class="btn btn-outline" disabled style="opacity:0.5;">Current Plan</button>'}
+                ${currentPlan !== 'premium' ? '<a href="https://selar.co/myshop_premium" target="_blank" class="btn">Switch to Premium</a>' : '<button class="btn btn-outline" disabled style="opacity:0.5;">Current Plan</button>'}
             </div>`;
 
             html += `<div class="plan-grid">${proCard}${premiumCard}</div>`;
