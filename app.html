@@ -223,7 +223,7 @@
         <p style="text-align:center;margin-top:16px;"><a href="#" onclick="showLogin()" style="color:var(--brand);text-decoration:none;font-weight:600;">Back to Sign In</a></p>
     </div>
 
-    <!-- Registration Screen (Simplified) -->
+    <!-- Registration Screen -->
     <div id="register-screen" class="card card-narrow hidden">
         <div style="text-align:center;margin-bottom:20px;">
             <h1>Create Your Hub</h1>
@@ -238,7 +238,7 @@
         </div>
         <div id="reg-msg" class="msg"></div>
 
-        <!-- Step 1: Business Info + Contact (simplified) -->
+        <!-- Step 1: Business Info -->
         <div id="step1" class="reg-step">
             <div class="form-section"><h3><i class="fa-solid fa-briefcase"></i> Business Info</h3>
                 <label>Email *</label><input type="email" id="reg-email" placeholder="you@example.com">
@@ -246,27 +246,18 @@
                     <div><label>Business Name *</label><input type="text" id="reg-name" placeholder="My Store"></div>
                     <div><label>Tagline</label><input type="text" id="reg-tagline" placeholder="What makes you special?"></div>
                 </div>
-                <label>Description</label><textarea id="reg-desc" rows="2" placeholder="Tell customers what you offer..."></textarea>
+                <label>Description</label><textarea id="reg-desc" rows="3" placeholder="Tell customers what you offer..."></textarea>
             </div>
-            <div class="form-section"><h3><i class="fa-solid fa-phone"></i> Contact Details</h3>
+            <div class="form-section"><h3><i class="fa-solid fa-location-dot"></i> Contact Details</h3>
+                <div class="input-group">
+                    <div><label>Phone *</label><input type="tel" id="reg-phone" placeholder="+2348000000000"></div>
+                    <div><label>Location</label><input type="text" id="reg-location" placeholder="City, Country"></div>
+                </div>
                 <div class="input-group">
                     <div><label>Country *</label>
-                        <select id="reg-country">
-                            <option value="NG+234">Nigeria (+234)</option>
-                            <option value="GH+233">Ghana (+233)</option>
-                            <option value="KE+254">Kenya (+254)</option>
-                            <option value="ZA+27">South Africa (+27)</option>
-                            <option value="US+1">United States (+1)</option>
-                            <option value="GB+44">United Kingdom (+44)</option>
-                            <option value="CA+1">Canada (+1)</option>
-                            <option value="AU+61">Australia (+61)</option>
-                            <option value="IN+91">India (+91)</option>
-                            <option value="OTHER">Other</option>
-                        </select>
+                        <select id="reg-country"><option value="NG">Nigeria 🇳🇬</option><option value="INTL">International 🌍</option></select>
                     </div>
-                    <div><label>Phone Number *</label><input type="tel" id="reg-phone" placeholder="e.g., 8123456789"></div>
                 </div>
-                <p class="sub" style="font-size:0.8rem; margin-top:4px;">We'll use your country code automatically.</p>
             </div>
             <button class="btn" onclick="nextStep(2)">Continue <i class="fa-solid fa-arrow-right"></i></button>
         </div>
@@ -367,7 +358,6 @@
     let shopData = null;
     let recoveryQuestions = [];
     let recoveryEmail = '';
-    let currentAnalyticsRange = 'week'; // 'week', '2weeks', 'month'
 
     // Font lists
     const PRO_HEADING_FONTS = [
@@ -481,6 +471,7 @@
         hideAll(); 
         document.getElementById('dashboard').classList.remove('hidden'); 
         loadOverview(); 
+        // Install banner detection
         const isStandalone = window.matchMedia && window.matchMedia('(display-mode: standalone)').matches;
         const banner = document.getElementById('install-banner');
         if (banner) {
@@ -633,25 +624,9 @@
         const name = document.getElementById('reg-name').value.trim();
         const password = document.getElementById('reg-password').value;
         const passwordConfirm = document.getElementById('reg-password-confirm').value;
-        let phone = document.getElementById('reg-phone').value.trim();
-        const countrySelect = document.getElementById('reg-country');
-        const countryValue = countrySelect.value;
-        let countryCode = '';
-        let countryName = '';
-        if (countryValue === 'OTHER') {
-            countryCode = prompt('Enter your country code (e.g., 44 for UK):');
-            if (!countryCode) return;
-            countryName = prompt('Enter your country name:');
-            if (!countryName) return;
-        } else {
-            const parts = countryValue.split('+');
-            countryName = parts[0];
-            countryCode = parts[1];
-        }
-        if (!countryCode) { showMsg('reg-msg','Country code required','error'); return; }
-        phone = phone.replace(/\D/g, '');
-        if (!phone) { showMsg('reg-msg','Phone number is required','error'); return; }
-        const fullPhone = '+' + countryCode + phone;
+        const phone = document.getElementById('reg-phone').value.trim();
+        const location = document.getElementById('reg-location').value.trim();
+        const country = document.getElementById('reg-country').value;
         const desc = document.getElementById('reg-desc').value.trim();
         const tagline = document.getElementById('reg-tagline').value.trim();
         const catalog = document.getElementById('reg-catalog').value.trim();
@@ -666,7 +641,7 @@
             {question:document.getElementById('sec-q2').value.trim(),answer:document.getElementById('sec-a2').value.trim()},
             {question:document.getElementById('sec-q3').value.trim(),answer:document.getElementById('sec-a3').value.trim()}
         ];
-        if(!email||!name||!password||!fullPhone||!secQs[0].question||!secQs[0].answer){ showMsg('reg-msg','Please fill all required fields','error'); return; }
+        if(!email||!name||!password||!phone||!secQs[0].question||!secQs[0].answer){ showMsg('reg-msg','Please fill all required fields','error'); return; }
 
         const allSocials = { ...regSocialLinks };
         for(let [platform, identifier] of Object.entries(regMessagingLinks)){
@@ -676,9 +651,8 @@
                 allSocials[platform] = url;
             }
         }
-        const location = ''; // optional
         const body = {
-            email, password, business_name:name, description:desc, tagline, phone: fullPhone, location, country: countryName,
+            email, password, business_name:name, description:desc, tagline, phone, location, country,
             logo_url: uploadedLogoUrl || '', catalog_url: catalog, whatsapp_catalog_url: waCatalog, referred_by: ref,
             security_questions: secQs,
             socials: allSocials
@@ -1249,162 +1223,140 @@
         }catch(e){ showMsg('edit-msg', e.message, 'error'); }
     }
 
-    // Activate tab – fetches payment links from backend
-    async function loadActivate() {
-        try {
+    async function renewPlan(plan){
+        if(!session) return;
+        try{
+            const res = await fetch(API + '/payment/renew?email=' + encodeURIComponent(session.email) + '&plan=' + plan, {method:'POST'});
+            const data = await safeJson(res);
+            if(res.ok){
+                alert(data.message);
+                shopData = null;
+                await loadActivate();
+            } else {
+                alert(data.detail || 'Renewal failed');
+            }
+        } catch(e){
+            alert('Error: ' + e.message);
+        }
+    }
+
+    async function loadActivate(){
+        try{
             const shop = await fetchShop();
             const currentPlan = shop.plan || 'free';
             const expiresAt = shop.expires_at;
             let daysLeft = null;
             let renewDisabled = true;
-            if (currentPlan !== 'free' && expiresAt) {
-                daysLeft = Math.ceil((new Date(expiresAt) - new Date()) / (1000 * 60 * 60 * 24));
+            let renewTooltip = '';
+            if(currentPlan !== 'free' && expiresAt){
+                daysLeft = Math.ceil((new Date(expiresAt) - new Date()) / (1000*60*60*24));
                 renewDisabled = daysLeft > 6;
+                renewTooltip = renewDisabled ? `Renew available when ${daysLeft} days or less remain` : '';
             }
-
-            // Fetch payment links from backend
-            let proLink = '#';
-            let premiumLink = '#';
-            try {
-                const res = await fetch(API + '/payment/plans');
-                const plansData = await res.json();
-                if (plansData.success && plansData.plans) {
-                    proLink = plansData.plans.pro.payment_link || '#';
-                    premiumLink = plansData.plans.premium.payment_link || '#';
-                }
-            } catch(e) { console.error(e); }
 
             let html = `<div class="card" style="text-align:center;"><h2>Manage Your Plan</h2><p>Manual payment via Selar (31 days).</p></div>`;
 
-            if (currentPlan !== 'free') {
+            if(currentPlan !== 'free'){
                 html += `<div class="card" style="text-align:center;">
                     <h3>Your ${currentPlan.toUpperCase()} plan is active</h3>
-                    <a href="${currentPlan === 'pro' ? proLink : premiumLink}" target="_blank" class="btn btn-outline" style="margin-top:12px;">Renew ${currentPlan.toUpperCase()} for another 31 days</a>
+                    <button class="btn btn-outline" onclick="renewPlan('${currentPlan}')" ${renewDisabled ? 'disabled title="' + renewTooltip + '"' : ''} style="${renewDisabled ? 'opacity:0.5;cursor:not-allowed;' : ''} margin-top:12px;">Renew ${currentPlan.toUpperCase()} for another 31 days</button>
                     ${renewDisabled && daysLeft ? `<p style="font-size:0.85rem;color:var(--text2);margin-top:8px;"><i class="fa-solid fa-clock"></i> Renew when ≤6 days remaining (currently ${daysLeft} days left)</p>` : ''}
                 </div>`;
             }
 
-            const proCard = `<div class="plan-card ${currentPlan === 'pro' ? 'featured' : ''}">
+            const proCard = `<div class="plan-card ${currentPlan === 'pro' ? 'featured' : ''}" style="${currentPlan === 'pro' ? '' : 'border:2px solid var(--border);'}">
                 <div class="plan-name">Pro ${currentPlan === 'pro' ? '(Current)' : ''}</div>
                 <div class="plan-price">₦1,500 <span>/31 days</span><br><small>$5 USD</small></div>
                 <div class="plan-desc">Brand your hub, remove ads, get analytics</div>
-                ${currentPlan !== 'pro' ? `<a href="${proLink}" target="_blank" class="btn">Switch to Pro</a>` : '<button class="btn btn-outline" disabled>Current Plan</button>'}
+                ${currentPlan !== 'pro' ? '<a href="https://selar.co/pro-manual" target="_blank" class="btn">Switch to Pro</a>' : '<button class="btn btn-outline" disabled style="opacity:0.5;">Current Plan</button>'}
             </div>`;
 
-            const premiumCard = `<div class="plan-card ${currentPlan === 'premium' ? 'featured' : ''}">
+            const premiumCard = `<div class="plan-card ${currentPlan === 'premium' ? 'featured' : ''}" style="${currentPlan === 'premium' ? '' : 'border-top:4px solid #f59e0b;'}">
                 <div class="plan-name">Premium ${currentPlan === 'premium' ? '(Current)' : ''}</div>
-                <div class="plan-price">₦3,500 <span>/31 days</span><br><small>$10 USD</small></div>
+                <div class="plan-price">₦5,000 <span>/31 days</span><br><small>$15 USD</small></div>
                 <div class="plan-desc">Full control, white-label, gradients, unlimited</div>
-                ${currentPlan !== 'premium' ? `<a href="${premiumLink}" target="_blank" class="btn">Switch to Premium</a>` : '<button class="btn btn-outline" disabled>Current Plan</button>'}
+                ${currentPlan !== 'premium' ? '<a href="https://selar.co/premium-manual" target="_blank" class="btn">Switch to Premium</a>' : '<button class="btn btn-outline" disabled style="opacity:0.5;">Current Plan</button>'}
             </div>`;
 
             html += `<div class="plan-grid">${proCard}${premiumCard}</div>`;
+
             document.getElementById('tab-content').innerHTML = html;
-        } catch(e) {
+        } catch(e){
             document.getElementById('tab-content').innerHTML = '<div class="card"><p style="color:var(--danger);">Error loading plans.</p></div>';
         }
     }
 
-    // Analytics: line chart with range selector and 1-year limit
-    async function loadAnalytics() {
+    async function loadAnalytics(){
         const shop = await fetchShop();
         const plan = shop.plan || 'free';
         const json = shop.shop_json || {};
         const analytics = json.analytics || {};
         const totalVisits = shop.visit_count || 0;
-
-        if (plan === 'free') {
+        if(plan === 'free'){
             document.getElementById('tab-content').innerHTML = `<div class="card"><h3>Analytics (Free)</h3><p>Total visits: <strong>${totalVisits}</strong></p><p class="sub">Upgrade to Pro for daily visits and referrers, or Premium for full analytics.</p><div class="upsell-banner"><p><i class="fa-solid fa-chart-line"></i> See where your traffic comes from!</p><button class="btn btn-sm" onclick="switchTab('activate', document.querySelectorAll('.tab')[3])">Upgrade to Pro</button></div></div>`;
             return;
         }
+        let html = `<div class="card"><h3>Analytics (${plan.toUpperCase()})</h3><p>Total visits: <strong>${totalVisits}</strong></p>`;
 
         const daily = analytics.daily_visits || {};
-        const allDates = Object.keys(daily).sort();
-        const oneYearAgo = new Date();
-        oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
-        const filtered = allDates.filter(date => new Date(date) >= oneYearAgo);
-
-        let rangeDays = 7;
-        if (currentAnalyticsRange === '2weeks') rangeDays = 14;
-        else if (currentAnalyticsRange === 'month') rangeDays = 30;
-        const lastNDates = filtered.slice(-rangeDays);
-        const dataPoints = lastNDates.map(date => [date, daily[date]]);
-
-        const rangeSelector = `
-            <div style="display:flex; gap:10px; margin-bottom:20px; justify-content:center; flex-wrap:wrap;">
-                <button class="btn btn-sm ${currentAnalyticsRange === 'week' ? 'btn' : 'btn-outline'}" onclick="setAnalyticsRange('week')">Last 7 days</button>
-                <button class="btn btn-sm ${currentAnalyticsRange === '2weeks' ? 'btn' : 'btn-outline'}" onclick="setAnalyticsRange('2weeks')">Last 14 days</button>
-                <button class="btn btn-sm ${currentAnalyticsRange === 'month' ? 'btn' : 'btn-outline'}" onclick="setAnalyticsRange('month')">Last 30 days</button>
-            </div>
-        `;
-
-        let html = `<div class="card"><h3>Analytics (${plan.toUpperCase()})</h3><p>Total visits: <strong>${totalVisits}</strong></p>${rangeSelector}`;
-
-        if (dataPoints.length > 0) {
+        const last14days = Object.entries(daily).sort((a,b)=>a[0].localeCompare(b[0])).slice(-14);
+        if(last14days.length > 0){
+            html += `<div class="analytics-legend"><div class="analytics-legend-item"><div class="analytics-legend-dot" style="background:var(--brand);"></div>Daily Visits</div></div>`;
             html += `<canvas id="analyticsChart" class="analytics-canvas"></canvas>`;
         }
 
-        if (plan === 'premium') {
+        if(plan === 'premium'){
             const monthly = {};
-            for (let [date, count] of Object.entries(daily)) {
-                if (new Date(date) >= oneYearAgo) {
-                    const month = date.slice(0, 7);
-                    monthly[month] = (monthly[month] || 0) + count;
-                }
+            for(let [date, count] of Object.entries(daily)){
+                const month = date.slice(0,7);
+                monthly[month] = (monthly[month] || 0) + count;
             }
             const monthlyData = Object.entries(monthly).sort().slice(-6);
-            if (monthlyData.length) {
-                html += `<h4 style="margin-top:20px;">Last 6 Months</h4><canvas id="monthlyChart" class="analytics-canvas"></canvas>`;
+            if(monthlyData.length){
+                html += `<h4 style="margin-top:20px;">Last 6 Months</h4><div class="analytics-legend"><div class="analytics-legend-item"><div class="analytics-legend-dot" style="background:#f59e0b;"></div>Monthly Visits</div></div><canvas id="monthlyChart" class="analytics-canvas"></canvas>`;
             }
         }
 
         const referrers = analytics.referrers || {};
-        if (Object.keys(referrers).length) {
+        if(Object.keys(referrers).length){
             html += `<h4 style="margin-top:20px;margin-bottom:12px;">Top Referrers</h4>`;
             const maxRef = Math.max(...Object.values(referrers));
-            Object.entries(referrers).sort((a,b)=>b[1]-a[1]).slice(0,5).forEach(([ref,count])=>{
-                const pct = Math.round((count/maxRef)*100);
-                html += `<div class="referrer-card"><div style="display:flex;justify-content:space-between;"><span>${ref}</span><span>${count}</span></div><div class="referrer-bar-bg"><div class="referrer-bar-fill" style="width:${pct}%;"></div></div></div>`;
+            Object.entries(referrers).sort((a,b)=>b[1]-a[1]).slice(0,5).forEach(([ref, count]) => {
+                const pct = Math.round((count / maxRef) * 100);
+                html += `<div class="referrer-card"><div style="display:flex;justify-content:space-between;font-size:0.9rem;font-weight:600;"><span>${ref}</span><span>${count}</span></div><div class="referrer-bar-bg"><div class="referrer-bar-fill" style="width:${pct}%;"></div></div></div>`;
             });
         }
 
-        if (plan === 'premium') {
+        if(plan === 'premium'){
             const devices = analytics.devices || {};
-            html += `<h4 style="margin-top:20px;">Devices</h4><div class="stats-grid">`;
-            html += `<div class="stat-card" style="background:linear-gradient(135deg,#3b82f6,#1d4ed8);"><h3>${devices.mobile||0}</h3><p>Mobile</p></div>`;
-            html += `<div class="stat-card" style="background:linear-gradient(135deg,#6366f1,#4338ca);"><h3>${devices.desktop||0}</h3><p>Desktop</p></div>`;
-            html += `<div class="stat-card" style="background:linear-gradient(135deg,#8b5cf6,#6d28d9);"><h3>${devices.tablet||0}</h3><p>Tablet</p></div>`;
+            html += `<h4 style="margin-top:20px;margin-bottom:12px;">Devices</h4><div class="stats-grid">`;
+            html += `<div class="stat-card" style="background:linear-gradient(135deg,#3b82f6,#1d4ed8);"><h3>${devices.mobile || 0}</h3><p>Mobile</p></div>`;
+            html += `<div class="stat-card" style="background:linear-gradient(135deg,#6366f1,#4338ca);"><h3>${devices.desktop || 0}</h3><p>Desktop</p></div>`;
+            html += `<div class="stat-card" style="background:linear-gradient(135deg,#8b5cf6,#6d28d9);"><h3>${devices.tablet || 0}</h3><p>Tablet</p></div>`;
             html += `</div>`;
         }
         html += `</div>`;
         document.getElementById('tab-content').innerHTML = html;
 
-        if (dataPoints.length > 0) {
-            setTimeout(() => drawLineChart('analyticsChart', dataPoints, '#2563eb'), 50);
+        if(last14days.length > 0){
+            setTimeout(() => drawAnalyticsChart('analyticsChart', last14days, '#2563eb'), 50);
         }
-        if (plan === 'premium') {
+        if(plan === 'premium'){
             const monthly = {};
-            for (let [date, count] of Object.entries(daily)) {
-                if (new Date(date) >= oneYearAgo) {
-                    const month = date.slice(0,7);
-                    monthly[month] = (monthly[month]||0) + count;
-                }
+            for(let [date, count] of Object.entries(daily)){
+                const month = date.slice(0,7);
+                monthly[month] = (monthly[month] || 0) + count;
             }
             const monthlyData = Object.entries(monthly).sort().slice(-6);
-            if (monthlyData.length) {
-                setTimeout(() => drawLineChart('monthlyChart', monthlyData, '#f59e0b'), 50);
+            if(monthlyData.length){
+                setTimeout(() => drawAnalyticsChart('monthlyChart', monthlyData, '#f59e0b'), 50);
             }
         }
     }
 
-    function setAnalyticsRange(range) {
-        currentAnalyticsRange = range;
-        loadAnalytics();
-    }
-
-    function drawLineChart(canvasId, data, color) {
+    function drawAnalyticsChart(canvasId, data, color){
         const canvas = document.getElementById(canvasId);
-        if (!canvas) return;
+        if(!canvas) return;
         const ctx = canvas.getContext('2d');
         const dpr = window.devicePixelRatio || 1;
         const rect = canvas.getBoundingClientRect();
@@ -1413,7 +1365,7 @@
         ctx.scale(dpr, dpr);
         const w = rect.width;
         const h = rect.height;
-        const padding = { top: 20, right: 20, bottom: 50, left: 40 };
+        const padding = {top:20,right:20,bottom:40,left:40};
         const chartW = w - padding.left - padding.right;
         const chartH = h - padding.top - padding.bottom;
 
@@ -1421,13 +1373,12 @@
         const values = data.map(d => d[1]);
         const maxVal = Math.max(...values, 1);
 
-        ctx.clearRect(0, 0, w, h);
+        ctx.clearRect(0,0,w,h);
 
-        // Grid lines & Y axis labels
         ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--border').trim() || '#e2e8f0';
         ctx.lineWidth = 1;
         const gridLines = 5;
-        for (let i = 0; i <= gridLines; i++) {
+        for(let i=0; i<=gridLines; i++){
             const y = padding.top + (chartH / gridLines) * i;
             ctx.beginPath();
             ctx.moveTo(padding.left, y);
@@ -1436,66 +1387,35 @@
             ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--text2').trim() || '#94a3b8';
             ctx.font = '11px Inter, sans-serif';
             ctx.textAlign = 'right';
-            ctx.fillText(Math.round(maxVal - (maxVal / gridLines) * i), padding.left - 8, y + 4);
+            ctx.fillText(Math.round(maxVal - (maxVal/gridLines)*i), padding.left - 8, y + 4);
         }
 
-        // X axis line
+        const barGap = 4;
+        const barW = (chartW / values.length) - barGap;
+        values.forEach((val, i) => {
+            const x = padding.left + (barW + barGap) * i + barGap/2;
+            const barH = (val / maxVal) * chartH;
+            const y = padding.top + chartH - barH;
+
+            const grad = ctx.createLinearGradient(0, y, 0, y + barH);
+            grad.addColorStop(0, color);
+            grad.addColorStop(1, color + 'aa');
+            ctx.fillStyle = grad;
+            ctx.beginPath();
+            ctx.roundRect(x, y, barW, barH, 4);
+            ctx.fill();
+
+            ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--text2').trim() || '#94a3b8';
+            ctx.font = '10px Inter, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText(labels[i], x + barW/2, h - 10);
+        });
+
+        ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--border').trim() || '#e2e8f0';
         ctx.beginPath();
         ctx.moveTo(padding.left, padding.top + chartH);
         ctx.lineTo(padding.left + chartW, padding.top + chartH);
         ctx.stroke();
-
-        // Draw line + points
-        if (values.length < 2) return;
-
-        const stepX = chartW / (values.length - 1);
-        const points = values.map((val, i) => ({
-            x: padding.left + i * stepX,
-            y: padding.top + chartH - (val / maxVal) * chartH
-        }));
-
-        ctx.beginPath();
-        ctx.moveTo(points[0].x, points[0].y);
-        for (let i = 1; i < points.length; i++) {
-            ctx.lineTo(points[i].x, points[i].y);
-        }
-        ctx.strokeStyle = color;
-        ctx.lineWidth = 2;
-        ctx.stroke();
-
-        // Draw points
-        ctx.fillStyle = color;
-        for (let p of points) {
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, 3, 0, 2 * Math.PI);
-            ctx.fill();
-            ctx.fillStyle = 'white';
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, 1.5, 0, 2 * Math.PI);
-            ctx.fill();
-            ctx.fillStyle = color;
-        }
-
-        // X axis labels (rotated, every few days to avoid overlap)
-        const maxLabels = Math.min(labels.length, 12);
-        const stepLabel = Math.ceil(labels.length / maxLabels);
-        ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--text2').trim() || '#94a3b8';
-        ctx.font = '10px Inter, sans-serif';
-        ctx.textAlign = 'center';
-        for (let i = 0; i < labels.length; i += stepLabel) {
-            const x = padding.left + i * stepX;
-            let label = labels[i];
-            // Format date as MM/DD
-            if (label.includes('-')) {
-                const parts = label.split('-');
-                label = parts[1] + '/' + parts[2];
-            }
-            ctx.save();
-            ctx.translate(x, padding.top + chartH + 12);
-            ctx.rotate(-0.3);
-            ctx.fillText(label, 0, 0);
-            ctx.restore();
-        }
     }
 
     async function loadReferrals(){
@@ -1503,6 +1423,7 @@
         try{
             const res = await fetch(API + '/shop/referrals?email=' + encodeURIComponent(session.email) + '&password=' + encodeURIComponent(session.password));
             const ref = await res.json();
+            // No upsell banner – just a coming soon note
             document.getElementById('tab-content').innerHTML = `
                 <div class="card" style="background:linear-gradient(135deg,#fef3c7,#fde68a);text-align:center;"><h3><i class="fa-solid fa-gift"></i> Your Referral Code</h3><div style="background:white;padding:12px 28px;border-radius:12px;font-size:1.3rem;font-weight:700;margin:8px 0;">${ref.referral_code || 'N/A'}</div><button class="btn btn-sm" onclick="copyRef('${ref.referral_code || ''}')">Copy Code</button></div>
                 <div class="stats-grid"><div class="stat-card" style="background:linear-gradient(135deg,#10b981,#059669);"><h3>${ref.total_referred || 0}</h3><p>People Referred</p></div></div>
@@ -1572,4 +1493,4 @@
     if('serviceWorker'in navigator){navigator.serviceWorker.register('/sw.js');}
 </script>
 </body>
-</html>
+    </html> 
