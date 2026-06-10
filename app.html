@@ -223,7 +223,7 @@
         <p style="text-align:center;margin-top:16px;"><a href="#" onclick="showLogin()" style="color:var(--brand);text-decoration:none;font-weight:600;">Back to Sign In</a></p>
     </div>
 
-    <!-- Registration Screen -->
+    <!-- Registration Screen (Full Countries) -->
     <div id="register-screen" class="card card-narrow hidden">
         <div style="text-align:center;margin-bottom:20px;">
             <h1>Create Your Hub</h1>
@@ -238,7 +238,7 @@
         </div>
         <div id="reg-msg" class="msg"></div>
 
-        <!-- Step 1: Business Info -->
+        <!-- Step 1: Business Info + Contact with full country list -->
         <div id="step1" class="reg-step">
             <div class="form-section"><h3><i class="fa-solid fa-briefcase"></i> Business Info</h3>
                 <label>Email *</label><input type="email" id="reg-email" placeholder="you@example.com">
@@ -248,21 +248,86 @@
                 </div>
                 <label>Description</label><textarea id="reg-desc" rows="3" placeholder="Tell customers what you offer..."></textarea>
             </div>
-            <div class="form-section"><h3><i class="fa-solid fa-location-dot"></i> Contact Details</h3>
-                <div class="input-group">
-                    <div><label>Phone *</label><input type="tel" id="reg-phone" placeholder="+2348000000000"></div>
-                    <div><label>Location</label><input type="text" id="reg-location" placeholder="City, Country"></div>
-                </div>
+            <div class="form-section"><h3><i class="fa-solid fa-phone"></i> Contact Details</h3>
                 <div class="input-group">
                     <div><label>Country *</label>
-                        <select id="reg-country"><option value="NG">Nigeria 🇳🇬</option><option value="INTL">International 🌍</option></select>
+                        <select id="reg-country">
+                            <option value="">Select Country</option>
+                            <option value="AF">Afghanistan (+93)</option><option value="AL">Albania (+355)</option><option value="DZ">Algeria (+213)</option>
+                            <option value="AD">Andorra (+376)</option><option value="AO">Angola (+244)</option><option value="AG">Antigua (+1)</option>
+                            <option value="AR">Argentina (+54)</option><option value="AM">Armenia (+374)</option><option value="AU">Australia (+61)</option>
+                            <option value="AT">Austria (+43)</option><option value="AZ">Azerbaijan (+994)</option><option value="BS">Bahamas (+1)</option>
+                            <option value="BH">Bahrain (+973)</option><option value="BD">Bangladesh (+880)</option><option value="BB">Barbados (+1)</option>
+                            <option value="BY">Belarus (+375)</option><option value="BE">Belgium (+32)</option><option value="BZ">Belize (+501)</option>
+                            <option value="BJ">Benin (+229)</option><option value="BT">Bhutan (+975)</option><option value="BO">Bolivia (+591)</option>
+                            <option value="BA">Bosnia (+387)</option><option value="BW">Botswana (+267)</option><option value="BR">Brazil (+55)</option>
+                            <option value="BN">Brunei (+673)</option><option value="BG">Bulgaria (+359)</option><option value="BF">Burkina (+226)</option>
+                            <option value="BI">Burundi (+257)</option><option value="KH">Cambodia (+855)</option><option value="CM">Cameroon (+237)</option>
+                            <option value="CA">Canada (+1)</option><option value="CV">Cape Verde (+238)</option><option value="CF">CAR (+236)</option>
+                            <option value="TD">Chad (+235)</option><option value="CL">Chile (+56)</option><option value="CN">China (+86)</option>
+                            <option value="CO">Colombia (+57)</option><option value="KM">Comoros (+269)</option><option value="CG">Congo (+242)</option>
+                            <option value="CR">Costa Rica (+506)</option><option value="HR">Croatia (+385)</option><option value="CU">Cuba (+53)</option>
+                            <option value="CY">Cyprus (+357)</option><option value="CZ">Czech (+420)</option><option value="DK">Denmark (+45)</option>
+                            <option value="DJ">Djibouti (+253)</option><option value="DM">Dominica (+1)</option><option value="DO">Dominican (+1)</option>
+                            <option value="EC">Ecuador (+593)</option><option value="EG">Egypt (+20)</option><option value="SV">El Salvador (+503)</option>
+                            <option value="GQ">Equatorial (+240)</option><option value="ER">Eritrea (+291)</option><option value="EE">Estonia (+372)</option>
+                            <option value="SZ">Eswatini (+268)</option><option value="ET">Ethiopia (+251)</option><option value="FJ">Fiji (+679)</option>
+                            <option value="FI">Finland (+358)</option><option value="FR">France (+33)</option><option value="GA">Gabon (+241)</option>
+                            <option value="GM">Gambia (+220)</option><option value="GE">Georgia (+995)</option><option value="DE">Germany (+49)</option>
+                            <option value="GH">Ghana (+233)</option><option value="GR">Greece (+30)</option><option value="GD">Grenada (+1)</option>
+                            <option value="GT">Guatemala (+502)</option><option value="GN">Guinea (+224)</option><option value="GW">Guinea-Bissau (+245)</option>
+                            <option value="GY">Guyana (+592)</option><option value="HT">Haiti (+509)</option><option value="HN">Honduras (+504)</option>
+                            <option value="HU">Hungary (+36)</option><option value="IS">Iceland (+354)</option><option value="IN">India (+91)</option>
+                            <option value="ID">Indonesia (+62)</option><option value="IR">Iran (+98)</option><option value="IQ">Iraq (+964)</option>
+                            <option value="IE">Ireland (+353)</option><option value="IL">Israel (+972)</option><option value="IT">Italy (+39)</option>
+                            <option value="JM">Jamaica (+1)</option><option value="JP">Japan (+81)</option><option value="JO">Jordan (+962)</option>
+                            <option value="KZ">Kazakhstan (+7)</option><option value="KE">Kenya (+254)</option><option value="KI">Kiribati (+686)</option>
+                            <option value="KP">Korea North (+850)</option><option value="KR">Korea South (+82)</option><option value="KW">Kuwait (+965)</option>
+                            <option value="KG">Kyrgyzstan (+996)</option><option value="LA">Laos (+856)</option><option value="LV">Latvia (+371)</option>
+                            <option value="LB">Lebanon (+961)</option><option value="LS">Lesotho (+266)</option><option value="LR">Liberia (+231)</option>
+                            <option value="LY">Libya (+218)</option><option value="LI">Liechtenstein (+423)</option><option value="LT">Lithuania (+370)</option>
+                            <option value="LU">Luxembourg (+352)</option><option value="MG">Madagascar (+261)</option><option value="MW">Malawi (+265)</option>
+                            <option value="MY">Malaysia (+60)</option><option value="MV">Maldives (+960)</option><option value="ML">Mali (+223)</option>
+                            <option value="MT">Malta (+356)</option><option value="MH">Marshall (+692)</option><option value="MR">Mauritania (+222)</option>
+                            <option value="MU">Mauritius (+230)</option><option value="MX">Mexico (+52)</option><option value="FM">Micronesia (+691)</option>
+                            <option value="MD">Moldova (+373)</option><option value="MC">Monaco (+377)</option><option value="MN">Mongolia (+976)</option>
+                            <option value="ME">Montenegro (+382)</option><option value="MA">Morocco (+212)</option><option value="MZ">Mozambique (+258)</option>
+                            <option value="MM">Myanmar (+95)</option><option value="NA">Namibia (+264)</option><option value="NR">Nauru (+674)</option>
+                            <option value="NP">Nepal (+977)</option><option value="NL">Netherlands (+31)</option><option value="NZ">New Zealand (+64)</option>
+                            <option value="NI">Nicaragua (+505)</option><option value="NE">Niger (+227)</option><option value="NG">Nigeria (+234)</option>
+                            <option value="MK">North Macedonia (+389)</option><option value="NO">Norway (+47)</option><option value="OM">Oman (+968)</option>
+                            <option value="PK">Pakistan (+92)</option><option value="PW">Palau (+680)</option><option value="PA">Panama (+507)</option>
+                            <option value="PG">Papua New Guinea (+675)</option><option value="PY">Paraguay (+595)</option><option value="PE">Peru (+51)</option>
+                            <option value="PH">Philippines (+63)</option><option value="PL">Poland (+48)</option><option value="PT">Portugal (+351)</option>
+                            <option value="QA">Qatar (+974)</option><option value="RO">Romania (+40)</option><option value="RU">Russia (+7)</option>
+                            <option value="RW">Rwanda (+250)</option><option value="KN">St Kitts (+1)</option><option value="LC">St Lucia (+1)</option>
+                            <option value="VC">St Vincent (+1)</option><option value="WS">Samoa (+685)</option><option value="SM">San Marino (+378)</option>
+                            <option value="ST">Sao Tome (+239)</option><option value="SA">Saudi Arabia (+966)</option><option value="SN">Senegal (+221)</option>
+                            <option value="RS">Serbia (+381)</option><option value="SC">Seychelles (+248)</option><option value="SL">Sierra Leone (+232)</option>
+                            <option value="SG">Singapore (+65)</option><option value="SK">Slovakia (+421)</option><option value="SI">Slovenia (+386)</option>
+                            <option value="SB">Solomon Islands (+677)</option><option value="SO">Somalia (+252)</option><option value="ZA">South Africa (+27)</option>
+                            <option value="SS">South Sudan (+211)</option><option value="ES">Spain (+34)</option><option value="LK">Sri Lanka (+94)</option>
+                            <option value="SD">Sudan (+249)</option><option value="SR">Suriname (+597)</option><option value="SE">Sweden (+46)</option>
+                            <option value="CH">Switzerland (+41)</option><option value="SY">Syria (+963)</option><option value="TW">Taiwan (+886)</option>
+                            <option value="TJ">Tajikistan (+992)</option><option value="TZ">Tanzania (+255)</option><option value="TH">Thailand (+66)</option>
+                            <option value="TL">Timor-Leste (+670)</option><option value="TG">Togo (+228)</option><option value="TO">Tonga (+676)</option>
+                            <option value="TT">Trinidad (+1)</option><option value="TN">Tunisia (+216)</option><option value="TR">Turkey (+90)</option>
+                            <option value="TM">Turkmenistan (+993)</option><option value="TV">Tuvalu (+688)</option><option value="UG">Uganda (+256)</option>
+                            <option value="UA">Ukraine (+380)</option><option value="AE">UAE (+971)</option><option value="GB">United Kingdom (+44)</option>
+                            <option value="US">United States (+1)</option><option value="UY">Uruguay (+598)</option><option value="UZ">Uzbekistan (+998)</option>
+                            <option value="VU">Vanuatu (+678)</option><option value="VA">Vatican (+379)</option><option value="VE">Venezuela (+58)</option>
+                            <option value="VN">Vietnam (+84)</option><option value="YE">Yemen (+967)</option><option value="ZM">Zambia (+260)</option>
+                            <option value="ZW">Zimbabwe (+263)</option>
+                        </select>
                     </div>
+                    <div><label>Phone Number *</label><input type="tel" id="reg-phone" placeholder="8123456789"></div>
                 </div>
+                <p class="sub" style="font-size:0.8rem; margin-top:4px;">We'll use your country code automatically.</p>
             </div>
             <button class="btn" onclick="nextStep(2)">Continue <i class="fa-solid fa-arrow-right"></i></button>
         </div>
 
-        <!-- Step 2: Logo + Catalog -->
+        <!-- Step 2: Logo + Catalog (unchanged) -->
         <div id="step2" class="hidden reg-step">
             <div class="form-section"><h3><i class="fa-solid fa-image"></i> Your Logo</h3>
                 <div class="logo-upload-area" id="logo-upload-area" onclick="document.getElementById('logo-file-input').click()">
@@ -282,7 +347,7 @@
             <div class="btn-group"><button class="btn btn-outline" onclick="prevStep(1)">Back</button><button class="btn" onclick="nextStep(3)">Continue</button></div>
         </div>
 
-        <!-- Step 3: Social & Messaging -->
+        <!-- Step 3: Social & Messaging (unchanged) -->
         <div id="step3" class="hidden reg-step">
             <div class="form-section"><h3><i class="fa-solid fa-share-nodes"></i> Social & Messaging</h3>
                 <p class="sub">Add your social profiles and messaging apps (up to 5 for Free plan). You can add more later, but Free plan limits to 5 total.</p>
@@ -292,7 +357,7 @@
             <div class="btn-group"><button class="btn btn-outline" onclick="prevStep(2)">Back</button><button class="btn" onclick="nextStep(4)">Continue</button></div>
         </div>
 
-        <!-- Step 4: Password & Security -->
+        <!-- Step 4: Password & Security (unchanged) -->
         <div id="step4" class="hidden reg-step">
             <div class="form-section"><h3><i class="fa-solid fa-lock"></i> Create Password</h3>
                 <div class="password-wrap"><input type="password" id="reg-password" placeholder="Min 6 characters"><button type="button" class="password-toggle" onclick="togglePassword('reg-password',this)"><i class="fa-solid fa-eye"></i></button></div>
@@ -336,7 +401,7 @@
             </div>
             <div id="tab-content"></div>
         </div>
-        <div class="watermark">Powered by <a href="/" target="_blank">MyShop</a> — EML Tech Studio</div>
+        <div class="watermark">Powered by <a href="/" target="_blank">MyShop</a> — EML Tech Studio &nbsp;|&nbsp; <a href="mailto:emltechstudio@gmail.com" style="color:var(--brand);">Contact Support</a></div>
     </div>
 </div>
 
@@ -471,7 +536,6 @@
         hideAll(); 
         document.getElementById('dashboard').classList.remove('hidden'); 
         loadOverview(); 
-        // Install banner detection
         const isStandalone = window.matchMedia && window.matchMedia('(display-mode: standalone)').matches;
         const banner = document.getElementById('install-banner');
         if (banner) {
@@ -619,19 +683,28 @@
         };
     }
 
-    async function register(){
+    async function register() {
         const email = document.getElementById('reg-email').value.trim();
         const name = document.getElementById('reg-name').value.trim();
         const password = document.getElementById('reg-password').value;
         const passwordConfirm = document.getElementById('reg-password-confirm').value;
-        const phone = document.getElementById('reg-phone').value.trim();
-        const location = document.getElementById('reg-location').value.trim();
-        const country = document.getElementById('reg-country').value;
+        let phone = document.getElementById('reg-phone').value.trim().replace(/\D/g, '');
+        const countrySelect = document.getElementById('reg-country');
+        const selectedOption = countrySelect.options[countrySelect.selectedIndex];
+        const countryCodeMatch = selectedOption?.text.match(/\(([^)]+)\)/);
+        const countryCode = countryCodeMatch ? countryCodeMatch[1].replace('+', '') : '';
+        if (!countryCode) {
+            showMsg('reg-msg','Please select a valid country','error');
+            return;
+        }
+        const fullPhone = '+' + countryCode + phone;
         const desc = document.getElementById('reg-desc').value.trim();
         const tagline = document.getElementById('reg-tagline').value.trim();
         const catalog = document.getElementById('reg-catalog').value.trim();
         const waCatalog = document.getElementById('reg-wa-catalog').value.trim();
         const ref = document.getElementById('reg-ref').value.trim();
+        const location = '';
+        const countryName = selectedOption.text.split('(')[0].trim();
 
         if(password !== passwordConfirm){ showMsg('reg-msg','Passwords do not match','error'); return; }
         if(password.length < 6){ showMsg('reg-msg','Password must be at least 6 characters','error'); return; }
@@ -641,7 +714,7 @@
             {question:document.getElementById('sec-q2').value.trim(),answer:document.getElementById('sec-a2').value.trim()},
             {question:document.getElementById('sec-q3').value.trim(),answer:document.getElementById('sec-a3').value.trim()}
         ];
-        if(!email||!name||!password||!phone||!secQs[0].question||!secQs[0].answer){ showMsg('reg-msg','Please fill all required fields','error'); return; }
+        if(!email||!name||!password||!fullPhone||!secQs[0].question||!secQs[0].answer){ showMsg('reg-msg','Please fill all required fields','error'); return; }
 
         const allSocials = { ...regSocialLinks };
         for(let [platform, identifier] of Object.entries(regMessagingLinks)){
@@ -652,7 +725,7 @@
             }
         }
         const body = {
-            email, password, business_name:name, description:desc, tagline, phone, location, country,
+            email, password, business_name:name, description:desc, tagline, phone: fullPhone, location, country: countryName,
             logo_url: uploadedLogoUrl || '', catalog_url: catalog, whatsapp_catalog_url: waCatalog, referred_by: ref,
             security_questions: secQs,
             socials: allSocials
@@ -791,6 +864,10 @@
                     <button class="btn btn-sm" onclick="switchTab('edit', document.querySelectorAll('.tab')[1])">Edit Shop</button>
                     <button class="btn btn-outline btn-sm" onclick="switchTab('preview', document.querySelectorAll('.tab')[2])">Preview</button>
                     <button class="btn btn-outline btn-sm" onclick="switchTab('activate', document.querySelectorAll('.tab')[3])">${plan === 'free' ? 'Upgrade Plan' : 'Manage Plan'}</button>
+                    ${shop.status === 'active' ?
+                        `<button class="btn btn-outline btn-sm" style="background:#fee2e2;color:#991b1b;border-color:#dc2626;" onclick="toggleShopDeactivation('deactivate')">Deactivate Shop</button>` :
+                        `<button class="btn btn-outline btn-sm" style="background:#d1fae5;color:#065f46;border-color:#10b981;" onclick="toggleShopDeactivation('reactivate')">Reactivate Shop</button>`
+                    }
                 </div>
             </div>
         `;
@@ -805,6 +882,29 @@
         const btn = el.nextElementSibling;
         btn.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
         setTimeout(()=>btn.innerHTML='<i class="fa-regular fa-copy"></i> Copy', 2000);
+    }
+
+    async function toggleShopDeactivation(action) {
+        if (!session) return;
+        const confirmMsg = action === 'deactivate' 
+            ? 'Are you sure? Deactivating your shop will make it invisible to the public. You can reactivate anytime.'
+            : 'Reactivate your shop to make it live again.';
+        if (!confirm(confirmMsg)) return;
+        try {
+            const endpoint = action === 'deactivate' ? '/shop/' + session.slug + '/deactivate' : '/shop/' + session.slug + '/reactivate';
+            const url = API + endpoint + `?email=${encodeURIComponent(session.email)}&password=${encodeURIComponent(session.password)}`;
+            const res = await fetch(url, { method: 'POST' });
+            const data = await res.json();
+            if (res.ok) {
+                alert(data.message);
+                shopData = null;
+                await loadOverview();
+            } else {
+                alert(data.detail || 'Operation failed');
+            }
+        } catch (e) {
+            alert('Error: ' + e.message);
+        }
     }
 
     async function loadPreview(){
@@ -1223,69 +1323,102 @@
         }catch(e){ showMsg('edit-msg', e.message, 'error'); }
     }
 
-    async function renewPlan(plan){
-        if(!session) return;
-        try{
-            const res = await fetch(API + '/payment/renew?email=' + encodeURIComponent(session.email) + '&plan=' + plan, {method:'POST'});
-            const data = await safeJson(res);
-            if(res.ok){
-                alert(data.message);
-                shopData = null;
-                await loadActivate();
-            } else {
-                alert(data.detail || 'Renewal failed');
-            }
-        } catch(e){
-            alert('Error: ' + e.message);
-        }
-    }
+    // Payment intents and activate tab
+    let _paymentLinks = {};
 
-    async function loadActivate(){
-        try{
+    async function loadActivate() {
+        try {
             const shop = await fetchShop();
             const currentPlan = shop.plan || 'free';
             const expiresAt = shop.expires_at;
             let daysLeft = null;
             let renewDisabled = true;
-            let renewTooltip = '';
-            if(currentPlan !== 'free' && expiresAt){
+            if (currentPlan !== 'free' && expiresAt) {
                 daysLeft = Math.ceil((new Date(expiresAt) - new Date()) / (1000*60*60*24));
                 renewDisabled = daysLeft > 6;
-                renewTooltip = renewDisabled ? `Renew available when ${daysLeft} days or less remain` : '';
             }
+
+            let proLink = '#', premiumLink = '#';
+            try {
+                const res = await fetch(API + '/payment/plans');
+                const plansData = await res.json();
+                if (plansData.success && plansData.plans) {
+                    proLink = plansData.plans.pro.payment_link;
+                    premiumLink = plansData.plans.premium.payment_link;
+                }
+            } catch(e) { console.error(e); }
+
+            _paymentLinks = { pro: proLink, premium: premiumLink };
 
             let html = `<div class="card" style="text-align:center;"><h2>Manage Your Plan</h2><p>Manual payment via Selar (31 days).</p></div>`;
 
-            if(currentPlan !== 'free'){
+            if (currentPlan !== 'free') {
                 html += `<div class="card" style="text-align:center;">
                     <h3>Your ${currentPlan.toUpperCase()} plan is active</h3>
-                    <button class="btn btn-outline" onclick="renewPlan('${currentPlan}')" ${renewDisabled ? 'disabled title="' + renewTooltip + '"' : ''} style="${renewDisabled ? 'opacity:0.5;cursor:not-allowed;' : ''} margin-top:12px;">Renew ${currentPlan.toUpperCase()} for another 31 days</button>
+                    <button class="btn btn-outline" onclick="initiatePayment('${currentPlan}')" ${renewDisabled ? 'disabled title="Renew when ≤6 days remaining"' : ''} style="${renewDisabled ? 'opacity:0.5;cursor:not-allowed;' : ''} margin-top:12px;">Renew ${currentPlan.toUpperCase()} for another 31 days</button>
                     ${renewDisabled && daysLeft ? `<p style="font-size:0.85rem;color:var(--text2);margin-top:8px;"><i class="fa-solid fa-clock"></i> Renew when ≤6 days remaining (currently ${daysLeft} days left)</p>` : ''}
                 </div>`;
             }
 
-            const proCard = `<div class="plan-card ${currentPlan === 'pro' ? 'featured' : ''}" style="${currentPlan === 'pro' ? '' : 'border:2px solid var(--border);'}">
+            const proCard = `<div class="plan-card ${currentPlan === 'pro' ? 'featured' : ''}">
                 <div class="plan-name">Pro ${currentPlan === 'pro' ? '(Current)' : ''}</div>
                 <div class="plan-price">₦1,500 <span>/31 days</span><br><small>$5 USD</small></div>
                 <div class="plan-desc">Brand your hub, remove ads, get analytics</div>
-                ${currentPlan !== 'pro' ? '<a href="https://selar.co/myshop_pro" target="_blank" class="btn">Switch to Pro</a>' : '<button class="btn btn-outline" disabled style="opacity:0.5;">Current Plan</button>'}
+                ${currentPlan !== 'pro' ? `<button class="btn" onclick="initiatePayment('pro')">Switch to Pro</button>` : '<button class="btn btn-outline" disabled>Current Plan</button>'}
             </div>`;
 
-            const premiumCard = `<div class="plan-card ${currentPlan === 'premium' ? 'featured' : ''}" style="${currentPlan === 'premium' ? '' : 'border-top:4px solid #f59e0b;'}">
+            const premiumCard = `<div class="plan-card ${currentPlan === 'premium' ? 'featured' : ''}">
                 <div class="plan-name">Premium ${currentPlan === 'premium' ? '(Current)' : ''}</div>
-                <div class="plan-price">₦5,000 <span>/31 days</span><br><small>$15 USD</small></div>
+                <div class="plan-price">₦3,500 <span>/31 days</span><br><small>$10 USD</small></div>
                 <div class="plan-desc">Full control, white-label, gradients, unlimited</div>
-                ${currentPlan !== 'premium' ? '<a href="https://selar.co/myshop_premium" target="_blank" class="btn">Switch to Premium</a>' : '<button class="btn btn-outline" disabled style="opacity:0.5;">Current Plan</button>'}
+                ${currentPlan !== 'premium' ? `<button class="btn" onclick="initiatePayment('premium')">Switch to Premium</button>` : '<button class="btn btn-outline" disabled>Current Plan</button>'}
             </div>`;
 
             html += `<div class="plan-grid">${proCard}${premiumCard}</div>`;
-
             document.getElementById('tab-content').innerHTML = html;
-        } catch(e){
+        } catch(e) {
             document.getElementById('tab-content').innerHTML = '<div class="card"><p style="color:var(--danger);">Error loading plans.</p></div>';
         }
     }
 
+    async function initiatePayment(plan) {
+        if (!session) {
+            alert('Please log in again.');
+            return;
+        }
+        const btns = document.querySelectorAll('.plan-card .btn, .card .btn-outline');
+        btns.forEach(btn => btn.disabled = true);
+        try {
+            const res = await fetch(API + '/payment/create-intent?plan=' + plan, {
+                method: 'POST',
+                headers: {
+                    'email': session.email,
+                    'password': session.password
+                }
+            });
+            if (!res.ok) {
+                const errData = await res.json();
+                throw new Error(errData.detail || 'Failed to create payment intent');
+            }
+            const data = await res.json();
+            if (data.success) {
+                const link = _paymentLinks[plan];
+                if (link && link !== '#') {
+                    window.location.href = link;
+                } else {
+                    alert('Payment link not available. Please try again later.');
+                }
+            } else {
+                alert(data.message || 'Failed to initiate payment');
+            }
+        } catch (e) {
+            alert('Error: ' + e.message);
+        } finally {
+            btns.forEach(btn => btn.disabled = false);
+        }
+    }
+
+    // Analytics with fixed chart labels
     async function loadAnalytics(){
         const shop = await fetchShop();
         const plan = shop.plan || 'free';
@@ -1365,7 +1498,7 @@
         ctx.scale(dpr, dpr);
         const w = rect.width;
         const h = rect.height;
-        const padding = {top:20,right:20,bottom:40,left:40};
+        const padding = {top:20,right:20,bottom:50,left:40};
         const chartW = w - padding.left - padding.right;
         const chartH = h - padding.top - padding.bottom;
 
@@ -1396,7 +1529,6 @@
             const x = padding.left + (barW + barGap) * i + barGap/2;
             const barH = (val / maxVal) * chartH;
             const y = padding.top + chartH - barH;
-
             const grad = ctx.createLinearGradient(0, y, 0, y + barH);
             grad.addColorStop(0, color);
             grad.addColorStop(1, color + 'aa');
@@ -1404,18 +1536,26 @@
             ctx.beginPath();
             ctx.roundRect(x, y, barW, barH, 4);
             ctx.fill();
-
-            ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--text2').trim() || '#94a3b8';
-            ctx.font = '10px Inter, sans-serif';
-            ctx.textAlign = 'center';
-            ctx.fillText(labels[i], x + barW/2, h - 10);
         });
 
-        ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--border').trim() || '#e2e8f0';
-        ctx.beginPath();
-        ctx.moveTo(padding.left, padding.top + chartH);
-        ctx.lineTo(padding.left + chartW, padding.top + chartH);
-        ctx.stroke();
+        ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--text2').trim() || '#94a3b8';
+        ctx.font = '10px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        const maxLabels = Math.min(labels.length, 8);
+        const step = Math.ceil(labels.length / maxLabels);
+        for (let i = 0; i < labels.length; i += step) {
+            const x = padding.left + (barW + barGap) * i + barW/2;
+            let label = labels[i];
+            if (label.includes('-')) {
+                const parts = label.split('-');
+                label = parts[1] + '/' + parts[2];
+            }
+            ctx.save();
+            ctx.translate(x, padding.top + chartH + 12);
+            ctx.rotate(-0.4);
+            ctx.fillText(label, 0, 0);
+            ctx.restore();
+        }
     }
 
     async function loadReferrals(){
@@ -1423,7 +1563,6 @@
         try{
             const res = await fetch(API + '/shop/referrals?email=' + encodeURIComponent(session.email) + '&password=' + encodeURIComponent(session.password));
             const ref = await res.json();
-            // No upsell banner – just a coming soon note
             document.getElementById('tab-content').innerHTML = `
                 <div class="card" style="background:linear-gradient(135deg,#fef3c7,#fde68a);text-align:center;"><h3><i class="fa-solid fa-gift"></i> Your Referral Code</h3><div style="background:white;padding:12px 28px;border-radius:12px;font-size:1.3rem;font-weight:700;margin:8px 0;">${ref.referral_code || 'N/A'}</div><button class="btn btn-sm" onclick="copyRef('${ref.referral_code || ''}')">Copy Code</button></div>
                 <div class="stats-grid"><div class="stat-card" style="background:linear-gradient(135deg,#10b981,#059669);"><h3>${ref.total_referred || 0}</h3><p>People Referred</p></div></div>
@@ -1493,4 +1632,4 @@
     if('serviceWorker'in navigator){navigator.serviceWorker.register('/sw.js');}
 </script>
 </body>
-    </html> 
+</html>
