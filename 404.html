@@ -653,7 +653,7 @@
         const qSlug = urlParams.get('slug');
         if (qSlug) return qSlug;
         const parts = window.location.pathname.split('/').filter(Boolean);
-        const reserved = ['index.html','app.html','shop.html','install.html','404.html','admin'];
+        const reserved = ['index.html','app.html','shop.html','install.html','404.html','admin','suadmin'];
         if (parts.length && !reserved.includes(parts[0])) return parts[0];
         return '';
     }
