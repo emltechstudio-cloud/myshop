@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Admin Setup</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            padding: 20px;
+        }
+        .card {
+            background: white;
+            max-width: 500px;
+            width: 100%;
+            padding: 2rem;
+            border-radius: 32px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+        h1 {
+            margin: 0 0 0.5rem;
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        p.sub {
+            color: #4a5568;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+        label {
+            display: block;
+            margin: 1rem 0 0.3rem;
+            font-weight: 600;
+            color: #2d3748;
+        }
+        input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            font-size: 1rem;
+            transition: all 0.2s;
+            box-sizing: border-box;
+        }
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102,126,234,0.2);
+        }
+        button {
+            width: 100%;
+            margin-top: 1.8rem;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            border-radius: 40px;
+            font-size: 1rem;
+            font-weight: 700;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        .message {
+            margin-top: 1.5rem;
+            padding: 12px;
+            border-radius: 16px;
+            display: none;
+            font-size: 0.9rem;
+        }
+        .success {
+            background: #c6f6d5;
+            color: #22543d;
+            border: 1px solid #9ae6b4;
+        }
+        .error {
+            background: #fed7d7;
+            color: #742a2a;
+            border: 1px solid #feb2b2;
+        }
+        .info {
+            background: #e2e8f0;
+            color: #2d3748;
+            border: 1px solid #cbd5e0;
+        }
+        hr {
+            margin: 1.5rem 0;
+            border: none;
+            border-top: 1px solid #edf2f7;
+        }
+        .note {
+            font-size: 0.8rem;
+            color: #718096;
+            text-align: center;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h1>Super Admin Setup</h1>
+    <p class="sub">Create the first super admin account for your MyShop admin panel.</p>
+    
+    <label>Email *</label>
+    <input type="email" id="email" placeholder="admin@example.com" autocomplete="off">
+    
+    <label>Password *</label>
+    <input type="password" id="password" placeholder="choose a strong password">
+    
+    <label>Master Admin Key *</label>
+    <input type="password" id="adminKey" placeholder="the ADMIN_KEY from your Hugging Face secrets">
+    <p class="note" style="margin-top:5px;">This key is stored in your backend environment variables.</p>
+    
+    <button id="setupBtn">Create Super Admin</button>
+    
+    <div id="msg" class="message"></div>
+    <hr>
+    <div class="note">
+        ⚡ After successful creation, you can delete this page.<br>
+        Then use the <strong>regular admin login</strong> with email + password only.
+    </div>
+</div>
+
+<script>
+    // ⚠️ Change this to your actual backend URL
+    const API_BASE = 'https://emltechstudio-myshop-api.hf.space/admin';  // <-- UPDATE HERE
+    
+    document.getElementById('setupBtn').addEventListener('click', async () => {
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+        const adminKey = document.getElementById('adminKey').value;
+        
+        if (!email || !password || !adminKey) {
+            showMessage('Please fill in all fields', 'error');
+            return;
+        }
+        
+        const btn = document.getElementById('setupBtn');
+        btn.disabled = true;
+        btn.textContent = 'Creating...';
+        
+        try {
+            const response = await fetch(`${API_BASE}/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password, admin_key: adminKey })
+            });
+            
+            let data;
+            const contentType = response.headers.get('content-type');
+            if (contentType && contentType.includes('application/json')) {
+                data = await response.json();
+            } else {
+                const text = await response.text();
+                throw new Error(`Server returned HTML (${response.status}). Ensure the backend is running and the admin router is mounted.`);
+            }
+            
+            if (!response.ok) {
+                throw new Error(data.detail || `HTTP ${response.status}`);
+            }
+            
+            if (data.token) {
+                showMessage(`✅ Super admin created successfully!\n\nYou can now log in with email + password.\n\nRole: ${data.role}\nEmail: ${data.email}`, 'success');
+                document.getElementById('email').value = '';
+                document.getElementById('password').value = '';
+                document.getElementById('adminKey').value = '';
+            } else {
+                showMessage('Unexpected response from server (no token).', 'error');
+            }
+        } catch (err) {
+            console.error(err);
+            showMessage(`❌ Error: ${err.message}`, 'error');
+        } finally {
+            btn.disabled = false;
+            btn.textContent = 'Create Super Admin';
+        }
+    });
+    
+    function showMessage(msg, type) {
+        const div = document.getElementById('msg');
+        div.textContent = msg;
+        div.className = `message ${type}`;
+        div.style.display = 'block';
+        setTimeout(() => {
+            if (div.style.display === 'block') {
+                div.style.opacity = '0';
+                setTimeout(() => {
+                    div.style.display = 'none';
+                    div.style.opacity = '';
+                }, 500);
+            }
+        }, 6000);
+    }
+</script>
+</body>
+</html> 
