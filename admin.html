@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyShop Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .loader { border-top-color: #3498db; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .card-hover:hover { transform: translateY(-2px); transition: all 0.2s; }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans">
+    <!-- Login Screen -->
+    <div id="loginScreen" class="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 to-indigo-600">
+        <div class="bg-white p-8 rounded-lg shadow-xl w-full max-w-md">
+            <div class="text-center mb-6">
+                <i class="fas fa-store text-4xl text-blue-600"></i>
+                <h2 class="text-2xl font-bold mt-2">Admin Login</h2>
+                <p class="text-gray-500">Sign in to manage MyShop</p>
+            </div>
+            <div id="loginError" class="bg-red-100 text-red-700 p-2 rounded mb-4 hidden"></div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Email</label>
+                <input type="email" id="loginEmail" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Password</label>
+                <input type="password" id="loginPassword" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div id="masterKeyDiv" class="mb-4 hidden">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Master Admin Key (only for first login)</label>
+                <input type="password" id="masterKey" class="w-full px-3 py-2 border rounded-lg">
+                <p class="text-xs text-gray-500 mt-1">Use this only if no super admin exists yet.</p>
+            </div>
+            <button onclick="login()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition">Sign In</button>
+            <div class="mt-4 text-center text-sm">
+                <a href="#" onclick="showRegister()" class="text-blue-600 hover:underline">Don't have an account? Register with staff key</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Staff Registration Screen -->
+    <div id="registerScreen" class="min-h-screen flex items-center justify-center bg-gray-100 hidden">
+        <div class="bg-white p-8 rounded-lg shadow-xl w-full max-w-md">
+            <div class="text-center mb-6">
+                <i class="fas fa-user-plus text-3xl text-blue-600"></i>
+                <h2 class="text-2xl font-bold mt-2">Staff Registration</h2>
+                <p class="text-gray-500">Use a staff key provided by super admin</p>
+            </div>
+            <div id="registerError" class="bg-red-100 text-red-700 p-2 rounded mb-4 hidden"></div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Staff Key</label>
+                <input type="text" id="staffKey" class="w-full px-3 py-2 border rounded-lg">
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Email</label>
+                <input type="email" id="regEmail" class="w-full px-3 py-2 border rounded-lg">
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Password</label>
+                <input type="password" id="regPassword" class="w-full px-3 py-2 border rounded-lg">
+            </div>
+            <button onclick="register()" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg transition">Register</button>
+            <div class="mt-4 text-center"><a href="#" onclick="showLogin()" class="text-blue-600">← Back to Login</a></div>
+        </div>
+    </div>
+
+    <!-- Main Dashboard -->
+    <div id="dashboard" class="hidden">
+        <!-- Top Navigation -->
+        <nav class="bg-white shadow-md p-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-store text-2xl text-blue-600"></i>
+                <span class="text-xl font-bold text-gray-800">MyShop Admin</span>
+                <span id="userRoleBadge" class="ml-2 px-2 py-1 bg-gray-200 text-xs rounded-full"></span>
+            </div>
+            <div class="flex items-center space-x-4">
+                <span id="userEmail" class="text-gray-600"></span>
+                <button onclick="logout()" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm"><i class="fas fa-sign-out-alt"></i> Logout</button>
+            </div>
+        </nav>
+
+        <div class="flex">
+            <!-- Sidebar -->
+            <div class="w-64 bg-white shadow-md h-screen sticky top-0">
+                <div class="p-4">
+                    <ul class="space-y-2">
+                        <li><button onclick="loadDashboard()" class="w-full text-left px-4 py-2 rounded hover:bg-blue-50 flex items-center space-x-2"><i class="fas fa-chart-line"></i><span>Dashboard</span></button></li>
+                        <li><button onclick="loadShops()" class="w-full text-left px-4 py-2 rounded hover:bg-blue-50 flex items-center space-x-2"><i class="fas fa-store"></i><span>All Shops</span></button></li>
+                        <li id="adminMenuItem" class="hidden"><button onclick="loadAdmins()" class="w-full text-left px-4 py-2 rounded hover:bg-blue-50 flex items-center space-x-2"><i class="fas fa-users-cog"></i><span>Admin Management</span></button></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="flex-1 p-6">
+                <div id="mainContent"><div class="text-center py-10">Select a section from the sidebar</div></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let token = localStorage.getItem('adminToken');
+        let currentRole = '';
+
+        async function apiCall(url, options = {}) {
+            const headers = {
+                'Content-Type': 'application/json',
+                ...(token && { 'Authorization': `Bearer ${token}` }),
+                ...options.headers
+            };
+            const res = await fetch(url, { ...options, headers });
+            if (res.status === 403 || res.status === 401) {
+                localStorage.removeItem('adminToken');
+                token = null;
+                showLogin();
+                throw new Error('Session expired');
+            }
+            if (!res.ok) {
+                const err = await res.json();
+                throw new Error(err.detail || 'Request failed');
+            }
+            return res.json();
+        }
+
+        async function login() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const masterKey = document.getElementById('masterKey').value;
+            const body = { email, password };
+            if (masterKey) body.admin_key = masterKey;
+            try {
+                const data = await apiCall('/admin/login', { method: 'POST', body: JSON.stringify(body) });
+                if (data.token) {
+                    token = data.token;
+                    currentRole = data.role;
+                    localStorage.setItem('adminToken', token);
+                    localStorage.setItem('adminRole', currentRole);
+                    localStorage.setItem('adminEmail', data.email);
+                    showDashboard();
+                } else {
+                    showError('loginError', data.detail || 'Login failed');
+                }
+            } catch (e) {
+                showError('loginError', e.message);
+            }
+        }
+
+        async function register() {
+            const key = document.getElementById('staffKey').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+            try {
+                await apiCall('/admin/register', { method: 'POST', body: JSON.stringify({ key, email, password }) });
+                alert('Registration successful! Please login.');
+                showLogin();
+            } catch (e) {
+                showError('registerError', e.message);
+            }
+        }
+
+        function showLogin() {
+            document.getElementById('loginScreen').classList.remove('hidden');
+            document.getElementById('registerScreen').classList.add('hidden');
+            document.getElementById('dashboard').classList.add('hidden');
+            document.getElementById('loginEmail').value = '';
+            document.getElementById('loginPassword').value = '';
+            document.getElementById('masterKey').value = '';
+        }
+
+        function showRegister() {
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('registerScreen').classList.remove('hidden');
+            document.getElementById('dashboard').classList.add('hidden');
+        }
+
+        function showDashboard() {
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('registerScreen').classList.add('hidden');
+            document.getElementById('dashboard').classList.remove('hidden');
+            document.getElementById('userEmail').innerText = localStorage.getItem('adminEmail') || 'Admin';
+            currentRole = localStorage.getItem('adminRole') || 'viewer';
+            document.getElementById('userRoleBadge').innerText = currentRole.toUpperCase();
+            if (currentRole === 'super') {
+                document.getElementById('adminMenuItem').classList.remove('hidden');
+            } else {
+                document.getElementById('adminMenuItem').classList.add('hidden');
+            }
+            loadDashboard();
+        }
+
+        function logout() {
+            localStorage.removeItem('adminToken');
+            localStorage.removeItem('adminRole');
+            localStorage.removeItem('adminEmail');
+            token = null;
+            showLogin();
+        }
+
+        function showError(containerId, message) {
+            const el = document.getElementById(containerId);
+            el.innerText = message;
+            el.classList.remove('hidden');
+            setTimeout(() => el.classList.add('hidden'), 5000);
+        }
+
+        // Dashboard
+        async function loadDashboard() {
+            document.getElementById('mainContent').innerHTML = '<div class="text-center py-10"><div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 mx-auto"></div><p>Loading analytics...</p></div>';
+            try {
+                const data = await apiCall('/admin/analytics');
+                renderAnalytics(data);
+            } catch (e) {
+                document.getElementById('mainContent').innerHTML = `<div class="bg-red-100 p-4 rounded">Error: ${e.message}</div>`;
+            }
+        }
+
+        function renderAnalytics(data) {
+            let html = `
+                <h1 class="text-2xl font-bold mb-6">Dashboard Overview</h1>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                    <div class="bg-white p-4 rounded shadow"><div class="text-3xl font-bold">${data.total_shops}</div><div class="text-gray-500">Total Shops</div></div>
+                    <div class="bg-white p-4 rounded shadow"><div class="text-3xl font-bold">${data.plan_breakdown.pro + data.plan_breakdown.premium}</div><div class="text-gray-500">Paid Shops</div></div>
+                    <div class="bg-white p-4 rounded shadow"><div class="text-3xl font-bold">₦${data.estimated_monthly_revenue_ngn.toLocaleString()}</div><div class="text-gray-500">Est. Revenue</div></div>
+                    <div class="bg-white p-4 rounded shadow"><div class="text-3xl font-bold">${data.referral_stats.total_referred}</div><div class="text-gray-500">Referred Users</div></div>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <div class="bg-white p-4 rounded shadow"><h3 class="font-bold mb-2">Plan Breakdown</h3><canvas id="planChart" height="200"></canvas></div>
+                    <div class="bg-white p-4 rounded shadow"><h3 class="font-bold mb-2">Status Breakdown</h3><canvas id="statusChart" height="200"></canvas></div>
+                </div>
+                <div class="bg-white p-4 rounded shadow mb-6">
+                    <h3 class="font-bold mb-2">Top Shops by Visits</h3>
+                    <div class="overflow-x-auto"><table class="min-w-full"><thead><tr><th>Slug</th><th>Visits</th><th>Plan</th></tr></thead><tbody>
+                        ${data.top_shops_by_visits.map(s => `<tr><td>${s.slug}</td><td>${s.visits}</td><td>${s.plan}</td></tr>`).join('')}
+                    </tbody></table></div>
+                </div>
+            `;
+            document.getElementById('mainContent').innerHTML = html;
+            new Chart(document.getElementById('planChart'), {
+                type: 'doughnut',
+                data: { labels: ['Free', 'Pro', 'Premium'], datasets: [{ data: [data.plan_breakdown.free, data.plan_breakdown.pro, data.plan_breakdown.premium], backgroundColor: ['#9ca3af', '#3b82f6', '#f59e0b'] }] }
+            });
+            new Chart(document.getElementById('statusChart'), {
+                type: 'doughnut',
+                data: { labels: ['Active', 'Pending', 'Expired', 'Flagged'], datasets: [{ data: [data.status_breakdown.active, data.status_breakdown.pending, data.status_breakdown.expired, data.status_breakdown.flagged], backgroundColor: ['#10b981', '#fbbf24', '#ef4444', '#8b5cf6'] }] }
+            });
+        }
+
+        // Shops listing with filters
+        let currentShopPage = 1;
+        let currentShopFilters = { search: '', plan: '', status: '' };
+
+        async function loadShops(page = 1) {
+            currentShopPage = page;
+            document.getElementById('mainContent').innerHTML = '<div class="text-center py-10"><div class="loader mx-auto"></div><p>Loading shops...</p></div>';
+            try {
+                const params = new URLSearchParams({ page, limit: 20, ...currentShopFilters });
+                const data = await apiCall(`/admin/shops?${params}`);
+                renderShops(data);
+            } catch (e) {
+                document.getElementById('mainContent').innerHTML = `<div class="bg-red-100 p-4 rounded">Error: ${e.message}</div>`;
+            }
+        }
+
+        function renderShops(data) {
+            let html = `
+                <div class="flex justify-between items-center mb-4">
+                    <h1 class="text-2xl font-bold">All Shops</h1>
+                    <div class="flex space-x-2">
+                        <input type="text" id="shopSearch" placeholder="Search email/slug" class="border rounded px-3 py-1" value="${currentShopFilters.search}">
+                        <select id="planFilter" class="border rounded px-3 py-1">
+                            <option value="">All Plans</option><option value="free">Free</option><option value="pro">Pro</option><option value="premium">Premium</option>
+                        </select>
+                        <select id="statusFilter" class="border rounded px-3 py-1">
+                            <option value="">All Status</option><option value="active">Active</option><option value="pending">Pending</option><option value="expired">Expired</option><option value="flagged">Flagged</option>
+                        </select>
+                        <button onclick="applyFilters()" class="bg-blue-500 text-white px-4 py-1 rounded">Filter</button>
+                    </div>
+                </div>
+                <div class="overflow-x-auto bg-white rounded shadow">
+                    <table class="min-w-full">
+                        <thead class="bg-gray-50"><tr><th class="p-3 text-left">Business</th><th>Email</th><th>Slug</th><th>Plan</th><th>Status</th><th>Visits</th><th>Expires</th><th>Actions</th></tr></thead>
+                        <tbody>
+                            ${data.shops.map(shop => `
+                                <tr class="border-t">
+                                    <td class="p-3">${shop.business_name}</td>
+                                    <td>${shop.email}</td>
+                                    <td>${shop.slug}</td>
+                                    <td><span class="px-2 py-1 rounded text-xs ${shop.plan === 'free' ? 'bg-gray-200' : shop.plan === 'pro' ? 'bg-blue-100 text-blue-800' : 'bg-yellow-100 text-yellow-800'}">${shop.plan}</span></td>
+                                    <td><span class="px-2 py-1 rounded text-xs ${shop.status === 'active' ? 'bg-green-100 text-green-800' : shop.status === 'expired' ? 'bg-red-100 text-red-800' : shop.status === 'flagged' ? 'bg-purple-100 text-purple-800' : 'bg-gray-100'}">${shop.status}</span></td>
+                                    <td>${shop.visit_count}</td>
+                                    <td>${shop.expires_at ? shop.expires_at.slice(0,10) : '-'}</td>
+                                    <td class="flex space-x-1">
+                                        <button onclick="viewShop('${shop.slug}')" class="text-blue-600 hover:underline text-sm">View</button>
+                                        ${currentRole !== 'viewer' ? `
+                                            <select onchange="upgradeShop('${shop.slug}', this.value)" class="text-xs border rounded p-1">
+                                                <option value="">Upgrade</option>
+                                                <option value="free">Free</option>
+                                                <option value="pro">Pro</option>
+                                                <option value="premium">Premium</option>
+                                            </select>
+                                            <select onchange="setShopStatus('${shop.slug}', this.value)" class="text-xs border rounded p-1">
+                                                <option value="">Status</option>
+                                                <option value="active">Active</option>
+                                                <option value="expired">Expired</option>
+                                                <option value="flagged">Flagged</option>
+                                            </select>
+                                            <button onclick="resetPassword('${shop.slug}')" class="text-yellow-600 hover:underline text-sm">Reset Pass</button>
+                                        ` : ''}
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="mt-4 flex justify-between items-center">
+                    <button onclick="loadShops(${data.page - 1})" class="px-3 py-1 bg-gray-300 rounded ${data.page <= 1 ? 'opacity-50 cursor-not-allowed' : ''}" ${data.page <= 1 ? 'disabled' : ''}>Previous</button>
+                    <span>Page ${data.page} of ${Math.ceil(data.total / data.limit)}</span>
+                    <button onclick="loadShops(${data.page + 1})" class="px-3 py-1 bg-gray-300 rounded ${data.page * data.limit >= data.total ? 'opacity-50 cursor-not-allowed' : ''}" ${data.page * data.limit >= data.total ? 'disabled' : ''}>Next</button>
+                </div>
+            `;
+            document.getElementById('mainContent').innerHTML = html;
+            // Preselect filter values in dropdowns
+            if (currentShopFilters.plan) document.getElementById('planFilter').value = currentShopFilters.plan;
+            if (currentShopFilters.status) document.getElementById('statusFilter').value = currentShopFilters.status;
+        }
+
+        function applyFilters() {
+            currentShopFilters = {
+                search: document.getElementById('shopSearch').value,
+                plan: document.getElementById('planFilter').value,
+                status: document.getElementById('statusFilter').value
+            };
+            loadShops(1);
+        }
+
+        async function viewShop(slug) {
+            try {
+                const shop = await apiCall(`/admin/shop/${slug}`);
+                alert(JSON.stringify(shop, null, 2));
+            } catch (e) {
+                alert('Error: ' + e.message);
+            }
+        }
+
+        async function upgradeShop(slug, plan) {
+            if (!plan) return;
+            if (!confirm(`Upgrade ${slug} to ${plan.toUpperCase()}?`)) return;
+            try {
+                await apiCall(`/admin/shop/${slug}/upgrade?plan=${plan}&days=31`, { method: 'POST' });
+                alert('Upgrade successful');
+                loadShops(currentShopPage);
+            } catch (e) {
+                alert('Error: ' + e.message);
+            }
+        }
+
+        async function setShopStatus(slug, status) {
+            if (!status) return;
+            if (!confirm(`Set ${slug} status to ${status}?`)) return;
+            try {
+                await apiCall(`/admin/shop/${slug}/status?status=${status}`, { method: 'POST' });
+                alert('Status updated');
+                loadShops(currentShopPage);
+            } catch (e) {
+                alert('Error: ' + e.message);
+            }
+        }
+
+        async function resetPassword(slug) {
+            if (!confirm(`Send password reset link for ${slug}?`)) return;
+            try {
+                const data = await apiCall(`/admin/shop/${slug}/reset-password`, { method: 'POST' });
+                alert(`Reset link (copy and send): ${data.reset_link}`);
+            } catch (e) {
+                alert('Error: ' + e.message);
+            }
+        }
+
+        // Admin Management (super only)
+        async function loadAdmins() {
+            if (currentRole !== 'super') return;
+            document.getElementById('mainContent').innerHTML = '<div class="text-center py-10"><div class="loader mx-auto"></div><p>Loading admins...</p></div>';
+            try {
+                const data = await apiCall('/admin/admins');
+                renderAdmins(data.admins);
+            } catch (e) {
+                document.getElementById('mainContent').innerHTML = `<div class="bg-red-100 p-4 rounded">Error: ${e.message}</div>`;
+            }
+        }
+
+        function renderAdmins(admins) {
+            let html = `
+                <div class="flex justify-between items-center mb-4">
+                    <h1 class="text-2xl font-bold">Admin Management</h1>
+                    <button onclick="showCreateAdminForm()" class="bg-green-500 text-white px-4 py-2 rounded">+ New Admin</button>
+                </div>
+                <div class="mb-6 bg-white p-4 rounded shadow">
+                    <h3 class="font-bold mb-2">Generate Staff Key</h3>
+                    <select id="staffKeyRole" class="border rounded px-3 py-1"><option value="viewer">Viewer</option><option value="editor">Editor</option></select>
+                    <button onclick="generateStaffKey()" class="bg-blue-500 text-white px-4 py-1 rounded ml-2">Generate</button>
+                    <div id="generatedKey" class="mt-2 text-sm text-green-600"></div>
+                </div>
+                <div class="overflow-x-auto bg-white rounded shadow">
+                    <table class="min-w-full">
+                        <thead class="bg-gray-50"><tr><th class="p-3">Email</th><th>Role</th><th>Created At</th><th>Created By</th><th>Actions</th></tr></thead>
+                        <tbody>
+                            ${admins.map(admin => `
+                                <tr class="border-t">
+                                    <td class="p-3">${admin.email}</td>
+                                    <td>${admin.role}</td>
+                                    <td>${admin.created_at ? admin.created_at.slice(0,10) : '-'}</td>
+                                    <td>${admin.created_by || 'system'}</td>
+                                    <td>
+                                        ${admin.role !== 'super' ? `<button onclick="deleteAdmin('${admin.email}')" class="text-red-600 hover:underline text-sm">Delete</button>` : '<span class="text-gray-400">Super</span>'}
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+            document.getElementById('mainContent').innerHTML = html;
+        }
+
+        function showCreateAdminForm() {
+            const email = prompt('Enter admin email:');
+            if (!email) return;
+            const password = prompt('Enter password:');
+            if (!password) return;
+            const role = prompt('Role (viewer/editor/admin):', 'viewer');
+            if (!['viewer','editor','admin'].includes(role)) {
+                alert('Invalid role');
+                return;
+            }
+            createAdmin(email, password, role);
+        }
+
+        async function createAdmin(email, password, role) {
+            try {
+                await apiCall('/admin/admins', {
+                    method: 'POST',
+                    body: JSON.stringify({ email, password, role })
+                });
+                alert('Admin created');
+                loadAdmins();
+            } catch (e) {
+                alert('Error: ' + e.message);
+            }
+        }
+
+        async function deleteAdmin(email) {
+            if (!confirm(`Delete admin ${email}?`)) return;
+            try {
+                await apiCall(`/admin/admins/${encodeURIComponent(email)}`, { method: 'DELETE' });
+                alert('Admin deleted');
+                loadAdmins();
+            } catch (e) {
+                alert('Error: ' + e.message);
+            }
+        }
+
+        async function generateStaffKey() {
+            const role = document.getElementById('staffKeyRole').value;
+            try {
+                const data = await apiCall('/admin/staff-keys', {
+                    method: 'POST',
+                    body: JSON.stringify({ role })
+                });
+                document.getElementById('generatedKey').innerHTML = `New key: <code class="bg-gray-100 p-1">${data.key}</code> (role: ${data.role})`;
+            } catch (e) {
+                alert('Error: ' + e.message);
+            }
+        }
+
+        // Initialization
+        window.onload = () => {
+            if (token) {
+                showDashboard();
+            } else {
+                showLogin();
+                // Show master key field if no super admin exists (optional)
+                fetch('/admin/admins').catch(() => {
+                    document.getElementById('masterKeyDiv').classList.remove('hidden');
+                });
+            }
+        };
+    </script>
+</body>
+</html>
