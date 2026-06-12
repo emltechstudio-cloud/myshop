@@ -800,7 +800,12 @@
         if(!session) return {};
         if(shopData) return shopData;
         try {
-            const res = await fetch(API + '/shop/preview/' + session.slug + '?email=' + encodeURIComponent(session.email));
+            const res = await fetch(API + '/shop/preview/' + session.slug, {
+                headers: {
+                    'email': session.email,
+                    'password': session.password
+                }
+            });
             if(!res.ok) {
                 const err = await safeJson(res);
                 throw new Error(err.detail || 'Failed to fetch shop data');
@@ -892,8 +897,13 @@
         if (!confirm(confirmMsg)) return;
         try {
             const endpoint = action === 'deactivate' ? '/shop/' + session.slug + '/deactivate' : '/shop/' + session.slug + '/reactivate';
-            const url = API + endpoint + `?email=${encodeURIComponent(session.email)}&password=${encodeURIComponent(session.password)}`;
-            const res = await fetch(url, { method: 'POST' });
+            const res = await fetch(API + endpoint, {
+                method: 'POST',
+                headers: {
+                    'email': session.email,
+                    'password': session.password
+                }
+            });
             const data = await res.json();
             if (res.ok) {
                 alert(data.message);
@@ -1561,7 +1571,12 @@
     async function loadReferrals(){
         if(!session) return;
         try{
-            const res = await fetch(API + '/shop/referrals?email=' + encodeURIComponent(session.email) + '&password=' + encodeURIComponent(session.password));
+            const res = await fetch(API + '/shop/referrals', {
+                headers: {
+                    'email': session.email,
+                    'password': session.password
+                }
+            });
             const ref = await res.json();
             document.getElementById('tab-content').innerHTML = `
                 <div class="card" style="background:linear-gradient(135deg,#fef3c7,#fde68a);text-align:center;"><h3><i class="fa-solid fa-gift"></i> Your Referral Code</h3><div style="background:white;padding:12px 28px;border-radius:12px;font-size:1.3rem;font-weight:700;margin:8px 0;">${ref.referral_code || 'N/A'}</div><button class="btn btn-sm" onclick="copyRef('${ref.referral_code || ''}')">Copy Code</button></div>
