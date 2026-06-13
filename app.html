@@ -408,6 +408,55 @@
 <script>
     // ========== CONFIG ==========
     const API = 'https://emltechstudio-myshop-api.hf.space';
+
+    // ========== LOADING & TOAST SYSTEM ==========
+    function showAppLoading(show) {
+        let overlay = document.getElementById('app-loading-overlay');
+        if (!overlay) {
+            overlay = document.createElement('div');
+            overlay.id = 'app-loading-overlay';
+            overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(255,255,255,0.85);display:flex;align-items:center;justify-content:center;z-index:9999;transition:opacity 0.2s;';
+            overlay.innerHTML = '<div style="text-align:center;"><div style="width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--brand);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto;"></div><p style="margin-top:12px;color:var(--text2);font-size:0.9rem;font-weight:600;">Loading...</p></div>';
+            document.body.appendChild(overlay);
+        }
+        overlay.style.opacity = show ? '1' : '0';
+        overlay.style.pointerEvents = show ? 'auto' : 'none';
+    }
+
+    function setButtonLoading(btn, loading) {
+        if (!btn) return;
+        if (loading) {
+            btn._originalHTML = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> ' + (btn.dataset.loadingText || 'Loading...');
+            btn.disabled = true;
+            btn.style.opacity = '0.7';
+        } else {
+            btn.innerHTML = btn._originalHTML || btn.innerHTML;
+            btn.disabled = false;
+            btn.style.opacity = '1';
+        }
+    }
+
+    function showToast(message, type = 'error') {
+        let toast = document.getElementById('app-toast');
+        if (!toast) {
+            toast = document.createElement('div');
+            toast.id = 'app-toast';
+            toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);padding:14px 24px;border-radius:12px;font-weight:600;font-size:0.9rem;z-index:10000;transition:transform 0.3s ease,opacity 0.3s ease;opacity:0;box-shadow:0 8px 24px rgba(0,0,0,0.15);max-width:90%;text-align:center;';
+            document.body.appendChild(toast);
+        }
+        toast.textContent = message;
+        toast.style.background = type === 'success' ? '#d1fae5' : (type === 'info' ? '#dbeafe' : '#fee2e2');
+        toast.style.color = type === 'success' ? '#065f46' : (type === 'info' ? '#1e40af' : '#991b1b');
+        toast.style.border = '1px solid ' + (type === 'success' ? '#a7f3d0' : (type === 'info' ? '#bfdbfe' : '#fecaca'));
+        toast.style.transform = 'translateX(-50%) translateY(0)';
+        toast.style.opacity = '1';
+        clearTimeout(toast._timer);
+        toast._timer = setTimeout(() => {
+            toast.style.transform = 'translateX(-50%) translateY(100px)';
+            toast.style.opacity = '0';
+        }, 4000);
+    }
     async function safeJson(res) {
         const ct = res.headers.get('content-type') || '';
         if (ct.includes('application/json')) {
@@ -684,6 +733,10 @@
     }
 
     async function register() {
+        const btn = document.querySelector('#step4 .btn-success');
+        setButtonLoading(btn, true);
+        showAppLoading(true);
+
         const email = document.getElementById('reg-email').value.trim();
         const name = document.getElementById('reg-name').value.trim();
         const password = document.getElementById('reg-password').value;
@@ -736,7 +789,13 @@
             if(!res.ok) throw new Error(data.detail || 'Registration failed');
             showMsg('reg-msg','✓ Shop created! Redirecting to sign in...','success');
             setTimeout(()=>showLogin(),2000);
-        }catch(e){ showMsg('reg-msg', e.message, 'error'); }
+        }catch(e){ 
+            showMsg('reg-msg', e.message, 'error'); 
+            showToast(e.message || 'Registration failed', 'error');
+        } finally {
+            setButtonLoading(btn, false);
+            showAppLoading(false);
+        }
     }
 
     // Login, Logout, Recovery
@@ -744,18 +803,28 @@
         const email = document.getElementById('login-email').value.trim();
         const password = document.getElementById('login-password').value;
         const btn = document.getElementById('login-btn');
-        btn.disabled = true;
+
+        if(!email || !password){ showMsg('login-msg', 'Enter email and password', 'error'); return; }
+
+        setButtonLoading(btn, true);
+        showAppLoading(true);
         try{
             const res = await fetch(API + '/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password})});
-            if(!res.ok) throw new Error('Invalid email or password');
-            const data = await res.json();
+            let data;
+            try { data = await res.json(); } catch(e) { throw new Error('Server error: ' + res.status); }
+            if(!res.ok) throw new Error(data.detail || 'Invalid email or password');
             data.email = email;
             data.password = password;
             session = data;
             localStorage.setItem('myshop_session', JSON.stringify(session));
+            showToast('Login successful!', 'success');
             showDashboard();
-        }catch(e){ showMsg('login-msg', e.message, 'error'); }
-        finally{ btn.disabled = false; }
+        }catch(e){ 
+            console.error('Login error:', e);
+            showMsg('login-msg', e.message || 'Network error. Please try again.', 'error'); 
+            showToast(e.message || 'Login failed', 'error');
+        }
+        finally{ setButtonLoading(btn, false); showAppLoading(false); }
     }
     function logout(){ localStorage.removeItem('myshop_session'); session=null; shopData=null; showLogin(); }
     async function fetchSecurityQuestions(){
@@ -895,6 +964,7 @@
             ? 'Are you sure? Deactivating your shop will make it invisible to the public. You can reactivate anytime.'
             : 'Reactivate your shop to make it live again.';
         if (!confirm(confirmMsg)) return;
+        showAppLoading(true);
         try {
             const endpoint = action === 'deactivate' ? '/shop/' + session.slug + '/deactivate' : '/shop/' + session.slug + '/reactivate';
             const res = await fetch(API + endpoint, {
@@ -904,16 +974,19 @@
                     'password': session.password
                 }
             });
-            const data = await res.json();
+            let data;
+            try { data = await res.json(); } catch(e) { throw new Error('Server error: ' + res.status); }
             if (res.ok) {
-                alert(data.message);
+                showToast(data.message, 'success');
                 shopData = null;
                 await loadOverview();
             } else {
-                alert(data.detail || 'Operation failed');
+                throw new Error(data.detail || 'Operation failed');
             }
         } catch (e) {
-            alert('Error: ' + e.message);
+            showToast(e.message || 'Error', 'error');
+        } finally {
+            showAppLoading(false);
         }
     }
 
@@ -1289,6 +1362,9 @@
     }
 
     async function saveEdit(){
+        const btn = document.querySelector('#edit-card .btn');
+        setButtonLoading(btn, true);
+        showAppLoading(true);
         if(!session) return;
         const allSocials = { ...editSocialLinks };
         for(let [platform, identifier] of Object.entries(editMessagingLinks)){
@@ -1330,7 +1406,7 @@
             }
             showMsg('edit-msg','✓ Changes saved!','success');
             shopData = null;
-        }catch(e){ showMsg('edit-msg', e.message, 'error'); }
+        }catch(e){ showMsg('edit-msg', e.message, 'error'); showToast(e.message || 'Save failed', 'error'); } finally { setButtonLoading(btn, false); showAppLoading(false); }
     }
 
     // Payment intents and activate tab
@@ -1393,11 +1469,12 @@
 
     async function initiatePayment(plan) {
         if (!session) {
-            alert('Please log in again.');
+            showToast('Please log in again.', 'error');
             return;
         }
         const btns = document.querySelectorAll('.plan-card .btn, .card .btn-outline');
-        btns.forEach(btn => btn.disabled = true);
+        btns.forEach(btn => { btn.disabled = true; btn.style.opacity = '0.5'; });
+        showAppLoading(true);
         try {
             const res = await fetch(API + '/payment/create-intent?plan=' + plan, {
                 method: 'POST',
@@ -1422,9 +1499,10 @@
                 alert(data.message || 'Failed to initiate payment');
             }
         } catch (e) {
-            alert('Error: ' + e.message);
+            showToast(e.message || 'Payment error', 'error');
         } finally {
-            btns.forEach(btn => btn.disabled = false);
+            btns.forEach(btn => { btn.disabled = false; btn.style.opacity = '1'; });
+            showAppLoading(false);
         }
     }
 
@@ -1570,6 +1648,7 @@
 
     async function loadReferrals(){
         if(!session) return;
+        showAppLoading(true);
         try{
             const res = await fetch(API + '/shop/referrals', {
                 headers: {
@@ -1577,14 +1656,19 @@
                     'password': session.password
                 }
             });
-            const ref = await res.json();
+            let ref;
+            try { ref = await res.json(); } catch(e) { throw new Error('Server error'); }
+            if(!res.ok) throw new Error(ref.detail || 'Failed to load referrals');
             document.getElementById('tab-content').innerHTML = `
                 <div class="card" style="background:linear-gradient(135deg,#fef3c7,#fde68a);text-align:center;"><h3><i class="fa-solid fa-gift"></i> Your Referral Code</h3><div style="background:white;padding:12px 28px;border-radius:12px;font-size:1.3rem;font-weight:700;margin:8px 0;">${ref.referral_code || 'N/A'}</div><button class="btn btn-sm" onclick="copyRef('${ref.referral_code || ''}')">Copy Code</button></div>
                 <div class="stats-grid"><div class="stat-card" style="background:linear-gradient(135deg,#10b981,#059669);"><h3>${ref.total_referred || 0}</h3><p>People Referred</p></div></div>
                 <div class="card"><h3>Share Your Link</h3><div style="display:flex;gap:10px;"><input type="text" value="https://myshop.afric.site/?ref=${ref.referral_code || ''}" readonly><button class="btn btn-sm" onclick="copyShareLink(this)">Copy</button></div></div>
                 <div class="card" style="text-align:center;background:var(--bg);"><p><i class="fa-solid fa-info-circle"></i> Referral rewards coming soon!</p></div>`;
         } catch(e){
-            document.getElementById('tab-content').innerHTML = '<div class="card"><p style="color:var(--danger);">Error loading referrals.</p></div>';
+            document.getElementById('tab-content').innerHTML = '<div class="card"><p style="color:var(--danger);">Error: ' + e.message + '</p></div>';
+            showToast(e.message || 'Error loading referrals', 'error');
+        } finally {
+            showAppLoading(false);
         }
     }
 
