@@ -478,26 +478,38 @@ function showDashboard() {
 
     loadOverview();
 }
-
 async function adminLogin() {
-    const email = document.getElementById('admin-email').value.trim();
-    const password = document.getElementById('admin-password').value;
-    const key = document.getElementById('admin-key').value.trim();
-
-    if (!email || !password) {
-        showMsg('login-msg', 'Email and password required');
-        return;
-    }
-
+    // ...
     showLoading(true);
+    showMsg('login-msg', 'Connecting...', 'info');  // Feedback immediately
+    
     try {
-        const res = await fetch(API + '/admin/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password, admin_key: key || undefined })
-        });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.detail || 'Login failed');
+        const res = await fetch(API + '/admin/login', {...});
+        
+        // Handle non-JSON responses (500 errors, etc.)
+        let data;
+        try {
+            data = await res.json();
+        } catch (jsonErr) {
+            const text = await res.text();
+            throw new Error('Server error: ' + res.status + ' ' + text.slice(0, 100));
+        }
+        
+        if (!res.ok) throw new Error(data.detail || 'Login failed (' + res.status + ')');
+        
+        // Success
+        adminToken = data.token;
+        // ...
+        showMsg('login-msg', 'Login successful!', 'success');
+        setTimeout(showDashboard, 500);
+        
+    } catch (e) {
+        console.error('Login error:', e);  // Log to console
+        showMsg('login-msg', e.message || 'Network error. Check console (F12).');
+    } finally {
+        showLoading(false);  // Always hide spinner
+    }
+}
 
         adminToken = data.token;
         adminRole = data.role;
