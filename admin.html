@@ -179,6 +179,7 @@
             .device-grid{grid-template-columns:1fr;}
         }
     </style>
+<base target="_blank">
 </head>
 <body>
 <div id="loading-overlay" class="loading-overlay hidden"><div class="spinner"></div></div>
@@ -206,15 +207,15 @@
                 </button>
             </div>
         </div>
-        <div class="form-group" id="admin-key-group">
-            <label>Admin Key (for first-time super admin)</label>
+        <div class="form-group">
+            <label>Admin Key <span style="color:var(--text2);font-weight:400;">(for super admin access)</span></label>
             <input type="password" id="admin-key" placeholder="Enter admin key">
         </div>
         <button class="btn" onclick="adminLogin()" id="login-btn" style="width:100%;">
             <i class="fa-solid fa-arrow-right"></i> Sign In
         </button>
         <p style="text-align:center;margin-top:16px;font-size:.85rem;color:var(--text2);">
-            <a href="#" onclick="showStaffRegister()" style="color:var(--brand);">Register with staff key</a>
+            <a href="#" onclick="showStaffRegister()" style="color:var(--brand);">Register with staff key or admin key</a>
         </p>
     </div>
 </div>
@@ -223,12 +224,16 @@
     <div class="card">
         <div style="text-align:center;margin-bottom:24px;">
             <h1>Staff Registration</h1>
-            <p class="sub">Use your staff key to create an admin account</p>
+            <p class="sub">Use your staff key or admin key to create an account</p>
         </div>
         <div id="staff-msg" class="msg"></div>
         <div class="form-group">
-            <label>Staff Key</label>
+            <label>Staff Key <span style="color:var(--text2);font-weight:400;">(or leave blank if using Admin Key)</span></label>
             <input type="text" id="staff-key" placeholder="XXXX-XXXX-XXXX">
+        </div>
+        <div class="form-group">
+            <label>Admin Key <span style="color:var(--text2);font-weight:400;">(for super admin — optional)</span></label>
+            <input type="password" id="admin-key-register" placeholder="Enter admin key">
         </div>
         <div class="form-group">
             <label>Email</label>
@@ -329,8 +334,8 @@
                 <label>New Plan</label>
                 <select id="upgrade-new-plan">
                     <option value="free">Free</option>
-                    <option value="pro">Pro (₦1,500 / 31 days)</option>
-                    <option value="premium">Premium (₦3,500 / 31 days)</option>
+                    <option value="pro">Pro (N1,500 / 31 days)</option>
+                    <option value="premium">Premium (N3,500 / 31 days)</option>
                 </select>
             </div>
             <div class="form-group">
@@ -372,7 +377,6 @@
         </div>
     </div>
 </div>
-
 <script>
 const API = 'https://emltechstudio-myshop-api.hf.space';
 let adminToken = localStorage.getItem('myshop_admin_token');
@@ -386,10 +390,57 @@ let shopFilterPlan = '';
 let shopFilterStatus = '';
 
 function showLoading(show) {
-    document.getElementById('loading-overlay').classList.toggle('hidden', !show);
+    const overlay = document.getElementById('loading-overlay');
+    if (overlay) {
+        overlay.classList.toggle('hidden', !show);
+        overlay.style.opacity = show ? '1' : '0';
+    }
 }
 
-function showMsg(id, text, type = 'error') {
+function setButtonLoading(btn, loading, text) {
+    if (!btn) return;
+    if (loading) {
+        if (!btn._originalHTML) btn._originalHTML = btn.innerHTML;
+        btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> ' + (text || 'Loading...');
+        btn.disabled = true;
+        btn.style.opacity = '0.7';
+        btn.style.cursor = 'not-allowed';
+    } else {
+        btn.innerHTML = btn._originalHTML || text || btn.innerHTML;
+        btn.disabled = false;
+        btn.style.opacity = '1';
+        btn.style.cursor = 'pointer';
+    }
+}
+
+function showToast(message, type) {
+    let toast = document.getElementById('admin-toast');
+    if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'admin-toast';
+        toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);padding:14px 28px;border-radius:12px;font-weight:600;font-size:0.9rem;z-index:10000;transition:all 0.3s ease;opacity:0;box-shadow:0 8px 24px rgba(0,0,0,0.15);max-width:90%;text-align:center;';
+        document.body.appendChild(toast);
+    }
+    toast.textContent = message;
+    const colors = {
+        success: { bg: '#d1fae5', color: '#065f46', border: '#a7f3d0' },
+        error: { bg: '#fee2e2', color: '#991b1b', border: '#fecaca' },
+        info: { bg: '#dbeafe', color: '#1e40af', border: '#bfdbfe' }
+    };
+    const c = colors[type] || colors.error;
+    toast.style.background = c.bg;
+    toast.style.color = c.color;
+    toast.style.border = '1px solid ' + c.border;
+    toast.style.transform = 'translateX(-50%) translateY(0)';
+    toast.style.opacity = '1';
+    clearTimeout(toast._timer);
+    toast._timer = setTimeout(() => {
+        toast.style.transform = 'translateX(-50%) translateY(100px)';
+        toast.style.opacity = '0';
+    }, 4000);
+}
+
+function showMsg(id, text, type) {
     const el = document.getElementById(id);
     if (!el) return;
     el.textContent = text;
@@ -469,24 +520,39 @@ function showDashboard() {
     document.getElementById('admin-role').textContent = (adminRole || 'viewer').toUpperCase();
     document.getElementById('admin-email-display').textContent = adminEmail || '';
 
-    // Show/hide admin-only nav items
     const isSuper = adminRole === 'super';
-    const isAdmin = adminRole === 'admin' || isSuper;
     document.querySelectorAll('.admin-only').forEach(el => {
         el.classList.toggle('hidden', !isSuper);
     });
 
     loadOverview();
 }
+
 async function adminLogin() {
-    // ...
+    const email = document.getElementById('admin-email').value.trim();
+    const password = document.getElementById('admin-password').value;
+    const key = document.getElementById('admin-key').value.trim();
+    const btn = document.getElementById('login-btn');
+
+    if (!email || !password) {
+        showMsg('login-msg', 'Email and password required');
+        return;
+    }
+
+    setButtonLoading(btn, true, 'Signing in...');
     showLoading(true);
-    showMsg('login-msg', 'Connecting...', 'info');  // Feedback immediately
-    
+    showMsg('login-msg', 'Connecting...', 'info');
+
     try {
-        const res = await fetch(API + '/admin/login', {...});
-        
-        // Handle non-JSON responses (500 errors, etc.)
+        const body = { email, password };
+        if (key) body.admin_key = key;
+
+        const res = await fetch(API + '/admin/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        });
+
         let data;
         try {
             data = await res.json();
@@ -494,22 +560,8 @@ async function adminLogin() {
             const text = await res.text();
             throw new Error('Server error: ' + res.status + ' ' + text.slice(0, 100));
         }
-        
-        if (!res.ok) throw new Error(data.detail || 'Login failed (' + res.status + ')');
-        
-        // Success
-        adminToken = data.token;
-        // ...
-        showMsg('login-msg', 'Login successful!', 'success');
-        setTimeout(showDashboard, 500);
-        
-    } catch (e) {
-        console.error('Login error:', e);  // Log to console
-        showMsg('login-msg', e.message || 'Network error. Check console (F12).');
-    } finally {
-        showLoading(false);  // Always hide spinner
-    }
-}
+
+        if (!res.ok) throw new Error(data.detail || data.message || 'Login failed (' + res.status + ')');
 
         adminToken = data.token;
         adminRole = data.role;
@@ -517,30 +569,44 @@ async function adminLogin() {
         localStorage.setItem('myshop_admin_token', adminToken);
         localStorage.setItem('myshop_admin_role', adminRole);
         localStorage.setItem('myshop_admin_email', adminEmail);
-        showDashboard();
+        showMsg('login-msg', 'Login successful!', 'success');
+        setTimeout(showDashboard, 500);
     } catch (e) {
-        showMsg('login-msg', e.message);
+        console.error('Login error:', e);
+        showMsg('login-msg', e.message || 'Network error. Check console (F12) for details.');
     } finally {
+        setButtonLoading(btn, false, 'Sign In');
         showLoading(false);
     }
 }
 
 async function staffRegister() {
     const key = document.getElementById('staff-key').value.trim();
+    const adminKey = document.getElementById('admin-key-register').value.trim();
     const email = document.getElementById('staff-email').value.trim();
     const password = document.getElementById('staff-password').value;
+    const btn = document.querySelector('#staff-register-screen .btn');
 
-    if (!key || !email || !password) {
-        showMsg('staff-msg', 'All fields required');
+    if (!email || !password) {
+        showMsg('staff-msg', 'Email and password required');
+        return;
+    }
+    if (!key && !adminKey) {
+        showMsg('staff-msg', 'Staff key or Admin key required');
         return;
     }
 
+    setButtonLoading(btn, true, 'Creating...');
     showLoading(true);
     try {
+        const body = { email, password };
+        if (adminKey) body.admin_key = adminKey;
+        else body.key = key;
+
         const res = await fetch(API + '/admin/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ key, email, password })
+            body: JSON.stringify(body)
         });
         const data = await res.json();
         if (!res.ok) throw new Error(data.detail || 'Registration failed');
@@ -549,6 +615,7 @@ async function staffRegister() {
     } catch (e) {
         showMsg('staff-msg', e.message);
     } finally {
+        setButtonLoading(btn, false, 'Create Account');
         showLoading(false);
     }
 }
@@ -598,7 +665,7 @@ async function loadOverview() {
 
             <div class="card">
                 <h2><i class="fa-solid fa-chart-line"></i> Revenue Estimate</h2>
-                <div style="font-size:2rem;font-weight:800;color:var(--brand);">₦${(data.estimated_monthly_revenue_ngn || 0).toLocaleString()}</div>
+                <div style="font-size:2rem;font-weight:800;color:var(--brand);">N${(data.estimated_monthly_revenue_ngn || 0).toLocaleString()}</div>
                 <p class="sub">Estimated monthly revenue based on active paid plans</p>
             </div>
 
@@ -633,12 +700,13 @@ async function loadOverview() {
         `;
         document.getElementById('main-content').innerHTML = html;
     } catch (e) {
-        document.getElementById('main-content').innerHTML = `<div class="card"><div class="msg msg-error show">${e.message}</div></div>`;
+        console.error('loadOverview error:', e);
+        document.getElementById('main-content').innerHTML = `<div class="card"><div class="msg msg-error show">${e.message || 'Failed to load Overview'}</div></div>`;
+        showToast(e.message || 'Failed to load Overview', 'error');
     } finally {
         showLoading(false);
     }
 }
-
 // ========== ALL SHOPS ==========
 async function loadShops(page = 1) {
     currentShopPage = page;
@@ -724,7 +792,9 @@ async function loadShops(page = 1) {
         `;
         document.getElementById('main-content').innerHTML = html;
     } catch (e) {
-        document.getElementById('main-content').innerHTML = `<div class="card"><div class="msg msg-error show">${e.message}</div></div>`;
+        console.error('loadShops error:', e);
+        document.getElementById('main-content').innerHTML = `<div class="card"><div class="msg msg-error show">${e.message || 'Failed to load shops'}</div></div>`;
+        showToast(e.message || 'Failed to load shops', 'error');
     } finally {
         showLoading(false);
     }
@@ -746,8 +816,10 @@ async function loadSearch() {
 
 async function performSearch() {
     const query = document.getElementById('search-input').value.trim();
+    const btn = document.querySelector('#search-results').previousElementSibling.querySelector('.btn');
     if (!query) return;
 
+    setButtonLoading(btn, true, 'Searching...');
     showLoading(true);
     try {
         const data = await apiGet('/admin/shop/' + encodeURIComponent(query));
@@ -792,7 +864,9 @@ async function performSearch() {
         `;
     } catch (e) {
         document.getElementById('search-results').innerHTML = `<div class="msg msg-error show">${e.message}</div>`;
+        showToast(e.message || 'Search failed', 'error');
     } finally {
+        setButtonLoading(btn, false, 'Search');
         showLoading(false);
     }
 }
@@ -862,12 +936,13 @@ async function loadAnalyticsSection() {
         `;
         document.getElementById('main-content').innerHTML = html;
     } catch (e) {
-        document.getElementById('main-content').innerHTML = `<div class="card"><div class="msg msg-error show">${e.message}</div></div>`;
+        console.error('loadAnalyticsSection error:', e);
+        document.getElementById('main-content').innerHTML = `<div class="card"><div class="msg msg-error show">${e.message || 'Failed to load Analytics'}</div></div>`;
+        showToast(e.message || 'Failed to load Analytics', 'error');
     } finally {
         showLoading(false);
     }
 }
-
 // ========== REFERRALS ==========
 async function loadReferralsSection() {
     showLoading(true);
@@ -876,7 +951,7 @@ async function loadReferralsSection() {
         const html = `
             <div class="stats-grid">
                 <div class="stat-card" style="background:linear-gradient(135deg,#0d9488,#14b8a6);"><h3>${data.total_payouts || 0}</h3><p>Referrers</p></div>
-                <div class="stat-card" style="background:linear-gradient(135deg,#0891b2,#06b6d4);"><h3>₦${(data.total_commission || 0).toLocaleString()}</h3><p>Total Commission</p></div>
+                <div class="stat-card" style="background:linear-gradient(135deg,#0891b2,#06b6d4);"><h3>N${(data.total_commission || 0).toLocaleString()}</h3><p>Total Commission</p></div>
             </div>
 
             <div class="card">
@@ -893,7 +968,7 @@ async function loadReferralsSection() {
                                     <td><code style="background:var(--bg);padding:4px 8px;border-radius:6px;">${p.referral_code}</code></td>
                                     <td>${p.total_referred}</td>
                                     <td>${p.active_referred}</td>
-                                    <td><strong>₦${p.commission_due.toLocaleString()}</strong></td>
+                                    <td><strong>N${p.commission_due.toLocaleString()}</strong></td>
                                 </tr>
                             `).join('') || '<tr><td colspan="5" style="text-align:center;padding:40px;">No referrals yet</td></tr>'}
                         </tbody>
@@ -903,7 +978,9 @@ async function loadReferralsSection() {
         `;
         document.getElementById('main-content').innerHTML = html;
     } catch (e) {
-        document.getElementById('main-content').innerHTML = `<div class="card"><div class="msg msg-error show">${e.message}</div></div>`;
+        console.error('loadReferralsSection error:', e);
+        document.getElementById('main-content').innerHTML = `<div class="card"><div class="msg msg-error show">${e.message || 'Failed to load Referrals'}</div></div>`;
+        showToast(e.message || 'Failed to load Referrals', 'error');
     } finally {
         showLoading(false);
     }
@@ -941,7 +1018,9 @@ async function loadAdminsSection() {
         `;
         document.getElementById('main-content').innerHTML = html;
     } catch (e) {
-        document.getElementById('main-content').innerHTML = `<div class="card"><div class="msg msg-error show">${e.message}</div></div>`;
+        console.error('loadAdminsSection error:', e);
+        document.getElementById('main-content').innerHTML = `<div class="card"><div class="msg msg-error show">${e.message || 'Failed to load Admins'}</div></div>`;
+        showToast(e.message || 'Failed to load Admins', 'error');
     } finally {
         showLoading(false);
     }
@@ -958,10 +1037,10 @@ function showCreateAdminModal() {
     showLoading(true);
     apiPost('/admin/admins', { email, password, role })
         .then(() => {
-            showMsg('main-msg', 'Admin created!', 'success');
+            showToast('Admin created!', 'success');
             loadAdminsSection();
         })
-        .catch(e => alert(e.message))
+        .catch(e => showToast(e.message, 'error'))
         .finally(() => showLoading(false));
 }
 
@@ -969,8 +1048,8 @@ function deleteAdmin(email) {
     if (!confirm('Delete admin ' + email + '?')) return;
     showLoading(true);
     apiDelete('/admin/admins/' + encodeURIComponent(email))
-        .then(() => loadAdminsSection())
-        .catch(e => alert(e.message))
+        .then(() => { showToast('Admin deleted', 'success'); loadAdminsSection(); })
+        .catch(e => showToast(e.message, 'error'))
         .finally(() => showLoading(false));
 }
 
@@ -999,7 +1078,9 @@ async function loadStaffKeysSection() {
         `;
         document.getElementById('main-content').innerHTML = html;
     } catch (e) {
-        document.getElementById('main-content').innerHTML = `<div class="card"><div class="msg msg-error show">${e.message}</div></div>`;
+        console.error('loadStaffKeysSection error:', e);
+        document.getElementById('main-content').innerHTML = `<div class="card"><div class="msg msg-error show">${e.message || 'Failed to load Staff Keys'}</div></div>`;
+        showToast(e.message || 'Failed to load Staff Keys', 'error');
     } finally {
         showLoading(false);
     }
@@ -1010,8 +1091,8 @@ function generateStaffKey() {
     if (!role) return;
     showLoading(true);
     apiPost('/admin/staff-keys', { role })
-        .then(() => loadStaffKeysSection())
-        .catch(e => alert(e.message))
+        .then(() => { showToast('Key generated!', 'success'); loadStaffKeysSection(); })
+        .catch(e => showToast(e.message, 'error'))
         .finally(() => showLoading(false));
 }
 
@@ -1038,18 +1119,21 @@ async function confirmUpgrade() {
     const email = document.getElementById('upgrade-shop-id').value;
     const plan = document.getElementById('upgrade-new-plan').value;
     const days = parseInt(document.getElementById('upgrade-days').value) || 31;
+    const btn = document.querySelector('#upgrade-modal .modal-footer .btn:last-child');
 
+    setButtonLoading(btn, true, 'Applying...');
     showLoading(true);
     try {
         await apiPost('/admin/shop/' + encodeURIComponent(email) + '/upgrade', { plan, days });
         closeUpgradeModal();
-        alert('Shop upgraded to ' + plan.toUpperCase() + ' for ' + days + ' days!');
+        showToast('Shop upgraded to ' + plan.toUpperCase() + ' for ' + days + ' days!', 'success');
         if (currentSection === 'shops') loadShops(currentShopPage);
         else if (currentSection === 'search') performSearch();
         else loadOverview();
     } catch (e) {
         alert(e.message);
     } finally {
+        setButtonLoading(btn, false, 'Apply Change');
         showLoading(false);
     }
 }
@@ -1067,18 +1151,21 @@ function closeStatusModal() {
 async function confirmStatusChange() {
     const email = document.getElementById('status-shop-id').value;
     const status = document.getElementById('status-new-status').value;
+    const btn = document.querySelector('#status-modal .modal-footer .btn:last-child');
 
+    setButtonLoading(btn, true, 'Applying...');
     showLoading(true);
     try {
         await apiPost('/admin/shop/' + encodeURIComponent(email) + '/status', { status });
         closeStatusModal();
-        alert('Status changed to ' + status.toUpperCase());
+        showToast('Status changed to ' + status.toUpperCase(), 'success');
         if (currentSection === 'shops') loadShops(currentShopPage);
         else if (currentSection === 'search') performSearch();
         else loadOverview();
     } catch (e) {
         alert(e.message);
     } finally {
+        setButtonLoading(btn, false, 'Apply');
         showLoading(false);
     }
 }
@@ -1088,6 +1175,7 @@ async function resetShopPassword(email) {
     showLoading(true);
     try {
         const data = await apiPost('/admin/shop/' + encodeURIComponent(email) + '/reset-password', {});
+        showToast('Reset link generated!', 'success');
         alert('Reset link generated!\n\n' + data.reset_link);
     } catch (e) {
         alert(e.message);
@@ -1134,4 +1222,6 @@ if (adminToken && adminRole && isTokenValid()) {
 }
 </script>
 </body>
-    </html>
+</html>
+
+
