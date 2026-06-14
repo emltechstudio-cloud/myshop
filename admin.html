@@ -135,6 +135,7 @@
         .msg.show{display:block;}
         .msg-success{background:#d1fae5;color:#065f46;border:1px solid #a7f3d0;}
         .msg-error{background:#fee2e2;color:#991b1b;border:1px solid #fecaca;}
+        .msg-info{background:#dbeafe;color:#1e40af;border:1px solid #bfdbfe;}
 
         .tabs{display:flex;gap:4px;margin-bottom:20px;border-bottom:2px solid var(--border);padding-bottom:2px;}
         .tab{padding:10px 16px;border-radius:12px 12px 0 0;font-weight:600;cursor:pointer;transition:all .2s;border:none;background:none;color:var(--text2);font-size:.9rem;white-space:nowrap;}
@@ -179,7 +180,6 @@
             .device-grid{grid-template-columns:1fr;}
         }
     </style>
-<base target="_blank">
 </head>
 <body>
 <div id="loading-overlay" class="loading-overlay hidden"><div class="spinner"></div></div>
@@ -196,26 +196,26 @@
         <div id="login-msg" class="msg"></div>
         <div class="form-group">
             <label>Email</label>
-            <input type="email" id="admin-email" placeholder="admin@example.com">
+            <input type="email" id="admin-email" placeholder="admin@example.com" onkeydown="if(event.key==='Enter')adminLogin()">
         </div>
         <div class="form-group">
             <label>Password</label>
             <div style="position:relative;">
-                <input type="password" id="admin-password" placeholder="••••••••" style="padding-right:44px;">
+                <input type="password" id="admin-password" placeholder="••••••••" style="padding-right:44px;" onkeydown="if(event.key==='Enter')adminLogin()">
                 <button type="button" onclick="togglePassword('admin-password', this)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text2);cursor:pointer;font-size:1rem;padding:4px;">
                     <i class="fa-solid fa-eye"></i>
                 </button>
             </div>
         </div>
         <div class="form-group">
-            <label>Admin Key <span style="color:var(--text2);font-weight:400;">(for super admin access)</span></label>
-            <input type="password" id="admin-key" placeholder="Enter admin key">
+            <label>Admin Key <span style="color:var(--text2);font-weight:400;">(for super admin signup/login)</span></label>
+            <input type="password" id="admin-key" placeholder="Enter admin key" onkeydown="if(event.key==='Enter')adminLogin()">
         </div>
         <button class="btn" onclick="adminLogin()" id="login-btn" style="width:100%;">
             <i class="fa-solid fa-arrow-right"></i> Sign In
         </button>
         <p style="text-align:center;margin-top:16px;font-size:.85rem;color:var(--text2);">
-            <a href="#" onclick="showStaffRegister()" style="color:var(--brand);">Register with staff key or admin key</a>
+            <a href="#" onclick="showStaffRegister();return false;" style="color:var(--brand);">Register with staff key or admin key</a>
         </p>
     </div>
 </div>
@@ -248,9 +248,9 @@
                 </button>
             </div>
         </div>
-        <button class="btn" onclick="staffRegister()" style="width:100%;">Create Account</button>
+        <button class="btn" onclick="staffRegister()" id="register-btn" style="width:100%;">Create Account</button>
         <p style="text-align:center;margin-top:16px;">
-            <a href="#" onclick="showLogin()" style="color:var(--brand);">Back to Login</a>
+            <a href="#" onclick="showLogin();return false;" style="color:var(--brand);">Back to Login</a>
         </p>
     </div>
 </div>
@@ -267,264 +267,92 @@
                 </button>
             </div>
         </div>
-
         <div class="sidebar-layout">
             <div class="sidebar" id="sidebar">
-                <div class="nav-item active" onclick="switchSection('overview', this)">
-                    <i class="fa-solid fa-chart-pie"></i> Overview
-                </div>
-                <div class="nav-item" onclick="switchSection('shops', this)">
-                    <i class="fa-solid fa-store"></i> All Shops
-                </div>
-                <div class="nav-item" onclick="switchSection('search', this)">
-                    <i class="fa-solid fa-magnifying-glass"></i> Search
-                </div>
-                <div class="nav-item" onclick="switchSection('analytics', this)">
-                    <i class="fa-solid fa-chart-line"></i> Analytics
-                </div>
-                <div class="nav-item" onclick="switchSection('referrals', this)">
-                    <i class="fa-solid fa-gift"></i> Referrals
-                </div>
-                <div class="nav-item admin-only hidden" onclick="switchSection('admins', this)">
-                    <i class="fa-solid fa-users-gear"></i> Admins
-                </div>
-                <div class="nav-item admin-only hidden" onclick="switchSection('staff-keys', this)">
-                    <i class="fa-solid fa-key"></i> Staff Keys
-                </div>
+                <div class="nav-item active" onclick="switchSection('overview', this)"><i class="fa-solid fa-chart-pie"></i> Overview</div>
+                <div class="nav-item" onclick="switchSection('shops', this)"><i class="fa-solid fa-store"></i> All Shops</div>
+                <div class="nav-item" onclick="switchSection('search', this)"><i class="fa-solid fa-magnifying-glass"></i> Search</div>
+                <div class="nav-item" onclick="switchSection('analytics', this)"><i class="fa-solid fa-chart-line"></i> Analytics</div>
+                <div class="nav-item" onclick="switchSection('referrals', this)"><i class="fa-solid fa-gift"></i> Referrals</div>
+                <div class="nav-item admin-only hidden" onclick="switchSection('admins', this)"><i class="fa-solid fa-users-gear"></i> Admins</div>
+                <div class="nav-item admin-only hidden" onclick="switchSection('staff-keys', this)"><i class="fa-solid fa-key"></i> Staff Keys</div>
             </div>
-
-            <div class="main-content" id="main-content">
-                <!-- Content injected by JS -->
-            </div>
+            <div class="main-content" id="main-content"></div>
         </div>
     </div>
 </div>
 
-<!-- Shop Detail Modal -->
 <div id="shop-modal" class="modal-overlay">
     <div class="modal">
-        <div class="modal-header">
-            <h3><i class="fa-solid fa-store"></i> Shop Details</h3>
-            <button class="modal-close" onclick="closeModal()">&times;</button>
-        </div>
+        <div class="modal-header"><h3><i class="fa-solid fa-store"></i> Shop Details</h3><button class="modal-close" onclick="closeModal()">&times;</button></div>
         <div class="modal-body" id="shop-modal-body"></div>
-        <div class="modal-footer">
-            <button class="btn btn-outline" onclick="closeModal()">Close</button>
-        </div>
+        <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Close</button></div>
     </div>
 </div>
 
-<!-- Upgrade Modal -->
 <div id="upgrade-modal" class="modal-overlay">
     <div class="modal">
-        <div class="modal-header">
-            <h3><i class="fa-solid fa-crown"></i> Upgrade/Downgrade Shop</h3>
-            <button class="modal-close" onclick="closeUpgradeModal()">&times;</button>
-        </div>
+        <div class="modal-header"><h3><i class="fa-solid fa-crown"></i> Upgrade/Downgrade Shop</h3><button class="modal-close" onclick="closeUpgradeModal()">&times;</button></div>
         <div class="modal-body">
-            <div class="form-group">
-                <label>Shop</label>
-                <input type="text" id="upgrade-shop-id" readonly>
-            </div>
-            <div class="form-group">
-                <label>Current Plan</label>
-                <input type="text" id="upgrade-current-plan" readonly>
-            </div>
-            <div class="form-group">
-                <label>New Plan</label>
-                <select id="upgrade-new-plan">
-                    <option value="free">Free</option>
-                    <option value="pro">Pro (N1,500 / 31 days)</option>
-                    <option value="premium">Premium (N3,500 / 31 days)</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Duration (days)</label>
-                <input type="number" id="upgrade-days" value="31" min="1" max="365">
-            </div>
+            <div class="form-group"><label>Shop</label><input type="text" id="upgrade-shop-id" readonly></div>
+            <div class="form-group"><label>Current Plan</label><input type="text" id="upgrade-current-plan" readonly></div>
+            <div class="form-group"><label>New Plan</label><select id="upgrade-new-plan"><option value="free">Free</option><option value="pro">Pro (N1,500 / 31 days)</option><option value="premium">Premium (N3,500 / 31 days)</option></select></div>
+            <div class="form-group"><label>Duration (days)</label><input type="number" id="upgrade-days" value="31" min="1" max="365"></div>
         </div>
-        <div class="modal-footer">
-            <button class="btn btn-outline" onclick="closeUpgradeModal()">Cancel</button>
-            <button class="btn" onclick="confirmUpgrade()">Apply Change</button>
-        </div>
+        <div class="modal-footer"><button class="btn btn-outline" onclick="closeUpgradeModal()">Cancel</button><button class="btn" onclick="confirmUpgrade()">Apply Change</button></div>
     </div>
 </div>
 
-<!-- Status Modal -->
 <div id="status-modal" class="modal-overlay">
     <div class="modal">
-        <div class="modal-header">
-            <h3><i class="fa-solid fa-toggle-on"></i> Change Shop Status</h3>
-            <button class="modal-close" onclick="closeStatusModal()">&times;</button>
-        </div>
+        <div class="modal-header"><h3><i class="fa-solid fa-toggle-on"></i> Change Shop Status</h3><button class="modal-close" onclick="closeStatusModal()">&times;</button></div>
         <div class="modal-body">
-            <div class="form-group">
-                <label>Shop</label>
-                <input type="text" id="status-shop-id" readonly>
-            </div>
-            <div class="form-group">
-                <label>New Status</label>
-                <select id="status-new-status">
-                    <option value="active">Active</option>
-                    <option value="expired">Expired</option>
-                    <option value="flagged">Flagged</option>
-                </select>
-            </div>
+            <div class="form-group"><label>Shop</label><input type="text" id="status-shop-id" readonly></div>
+            <div class="form-group"><label>New Status</label><select id="status-new-status"><option value="active">Active</option><option value="expired">Expired</option><option value="flagged">Flagged</option></select></div>
         </div>
-        <div class="modal-footer">
-            <button class="btn btn-outline" onclick="closeStatusModal()">Cancel</button>
-            <button class="btn" onclick="confirmStatusChange()">Apply</button>
-        </div>
+        <div class="modal-footer"><button class="btn btn-outline" onclick="closeStatusModal()">Cancel</button><button class="btn" onclick="confirmStatusChange()">Apply</button></div>
     </div>
 </div>
+
 <script>
 const API = 'https://emltechstudio-myshop-api.hf.space';
 let adminToken = localStorage.getItem('myshop_admin_token');
 let adminRole = localStorage.getItem('myshop_admin_role');
 let adminEmail = localStorage.getItem('myshop_admin_email');
-let currentSection = 'overview';
-let allShopsData = [];
-let currentShopPage = 1;
-let shopSearchQuery = '';
-let shopFilterPlan = '';
-let shopFilterStatus = '';
+let currentSection = 'overview', allShopsData = [], currentShopPage = 1;
+let shopSearchQuery = '', shopFilterPlan = '', shopFilterStatus = '';
 
-function showLoading(show) {
-    const overlay = document.getElementById('loading-overlay');
-    if (overlay) {
-        overlay.classList.toggle('hidden', !show);
-        overlay.style.opacity = show ? '1' : '0';
-    }
-}
-
+function showLoading(show) { const el = document.getElementById('loading-overlay'); if(el) el.classList.toggle('hidden', !show); }
 function setButtonLoading(btn, loading, text) {
-    if (!btn) return;
-    if (loading) {
-        if (!btn._originalHTML) btn._originalHTML = btn.innerHTML;
-        btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> ' + (text || 'Loading...');
-        btn.disabled = true;
-        btn.style.opacity = '0.7';
-        btn.style.cursor = 'not-allowed';
-    } else {
-        btn.innerHTML = btn._originalHTML || text || btn.innerHTML;
-        btn.disabled = false;
-        btn.style.opacity = '1';
-        btn.style.cursor = 'pointer';
-    }
+    if(!btn) return;
+    if(loading){ if(!btn._orig) btn._orig = btn.innerHTML; btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> ' + (text||'Loading...'); btn.disabled = true; }
+    else { btn.innerHTML = btn._orig || text || btn.innerHTML; btn.disabled = false; }
 }
-
-function showToast(message, type) {
-    let toast = document.getElementById('admin-toast');
-    if (!toast) {
-        toast = document.createElement('div');
-        toast.id = 'admin-toast';
-        toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);padding:14px 28px;border-radius:12px;font-weight:600;font-size:0.9rem;z-index:10000;transition:all 0.3s ease;opacity:0;box-shadow:0 8px 24px rgba(0,0,0,0.15);max-width:90%;text-align:center;';
-        document.body.appendChild(toast);
-    }
-    toast.textContent = message;
-    const colors = {
-        success: { bg: '#d1fae5', color: '#065f46', border: '#a7f3d0' },
-        error: { bg: '#fee2e2', color: '#991b1b', border: '#fecaca' },
-        info: { bg: '#dbeafe', color: '#1e40af', border: '#bfdbfe' }
-    };
-    const c = colors[type] || colors.error;
-    toast.style.background = c.bg;
-    toast.style.color = c.color;
-    toast.style.border = '1px solid ' + c.border;
-    toast.style.transform = 'translateX(-50%) translateY(0)';
-    toast.style.opacity = '1';
-    clearTimeout(toast._timer);
-    toast._timer = setTimeout(() => {
-        toast.style.transform = 'translateX(-50%) translateY(100px)';
-        toast.style.opacity = '0';
-    }, 4000);
+function showToast(msg, type) {
+    let t = document.getElementById('admin-toast');
+    if(!t){ t = document.createElement('div'); t.id='admin-toast'; t.style.cssText='position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);padding:14px 28px;border-radius:12px;font-weight:600;font-size:0.9rem;z-index:10000;transition:all 0.3s ease;opacity:0;box-shadow:0 8px 24px rgba(0,0,0,0.15);max-width:90%;text-align:center;'; document.body.appendChild(t); }
+    t.textContent = msg;
+    const c = { success:{bg:'#d1fae5',color:'#065f46',border:'#a7f3d0'}, error:{bg:'#fee2e2',color:'#991b1b',border:'#fecaca'}, info:{bg:'#dbeafe',color:'#1e40af',border:'#bfdbfe'} }[type] || c.error;
+    t.style.background = c.bg; t.style.color = c.color; t.style.border = '1px solid '+c.border;
+    t.style.transform = 'translateX(-50%) translateY(0)'; t.style.opacity = '1';
+    clearTimeout(t._timer); t._timer = setTimeout(()=>{ t.style.transform='translateX(-50%) translateY(100px)'; t.style.opacity='0'; }, 4000);
 }
+function showMsg(id, text, type) { const el = document.getElementById(id); if(!el) return; el.textContent = text; el.className = 'msg msg-'+type+' show'; setTimeout(()=>el.classList.remove('show'), 5000); }
+function authHeaders() { return { 'Authorization':'Bearer '+adminToken, 'Content-Type':'application/json' }; }
 
-function showMsg(id, text, type) {
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.textContent = text;
-    el.className = 'msg msg-' + type + ' show';
-    setTimeout(() => el.classList.remove('show'), 5000);
-}
+async function apiGet(ep) { const r = await fetch(API+ep,{headers:authHeaders()}); if(r.status===403){logout();throw new Error('Session expired');} if(!r.ok){const d=await r.json().catch(()=>({}));throw new Error(d.detail||'Request failed');} return r.json(); }
+async function apiPost(ep, body) { const r = await fetch(API+ep,{method:'POST',headers:authHeaders(),body:JSON.stringify(body)}); if(r.status===403){logout();throw new Error('Session expired');} if(!r.ok){const d=await r.json().catch(()=>({}));throw new Error(d.detail||'Request failed');} return r.json(); }
+async function apiDelete(ep) { const r = await fetch(API+ep,{method:'DELETE',headers:authHeaders()}); if(r.status===403){logout();throw new Error('Session expired');} if(!r.ok){const d=await r.json().catch(()=>({}));throw new Error(d.detail||'Request failed');} return r.json(); }
 
-function authHeaders() {
-    return {
-        'Authorization': 'Bearer ' + adminToken,
-        'Content-Type': 'application/json'
-    };
-}
-
-async function apiGet(endpoint) {
-    const res = await fetch(API + endpoint, { headers: authHeaders() });
-    if (res.status === 403) {
-        logout();
-        throw new Error('Session expired. Please login again.');
-    }
-    if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data.detail || 'Request failed');
-    }
-    return res.json();
-}
-
-async function apiPost(endpoint, body) {
-    const res = await fetch(API + endpoint, {
-        method: 'POST',
-        headers: authHeaders(),
-        body: JSON.stringify(body)
-    });
-    if (res.status === 403) {
-        logout();
-        throw new Error('Session expired. Please login again.');
-    }
-    if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data.detail || 'Request failed');
-    }
-    return res.json();
-}
-
-async function apiDelete(endpoint) {
-    const res = await fetch(API + endpoint, {
-        method: 'DELETE',
-        headers: authHeaders()
-    });
-    if (res.status === 403) {
-        logout();
-        throw new Error('Session expired. Please login again.');
-    }
-    if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data.detail || 'Request failed');
-    }
-    return res.json();
-}
-
-// ========== AUTH ==========
-function showLogin() {
-    document.getElementById('login-screen').classList.remove('hidden');
-    document.getElementById('staff-register-screen').classList.add('hidden');
-    document.getElementById('dashboard').classList.add('hidden');
-}
-
-function showStaffRegister() {
-    document.getElementById('login-screen').classList.add('hidden');
-    document.getElementById('staff-register-screen').classList.remove('hidden');
-}
-
+function showLogin() { document.getElementById('login-screen').classList.remove('hidden'); document.getElementById('staff-register-screen').classList.add('hidden'); document.getElementById('dashboard').classList.add('hidden'); }
+function showStaffRegister() { document.getElementById('login-screen').classList.add('hidden'); document.getElementById('staff-register-screen').classList.remove('hidden'); }
 function showDashboard() {
     document.getElementById('login-screen').classList.add('hidden');
     document.getElementById('staff-register-screen').classList.add('hidden');
     document.getElementById('dashboard').classList.remove('hidden');
     document.getElementById('admin-role').textContent = (adminRole || 'viewer').toUpperCase();
     document.getElementById('admin-email-display').textContent = adminEmail || '';
-
-    const isSuper = adminRole === 'super';
-    document.querySelectorAll('.admin-only').forEach(el => {
-        el.classList.toggle('hidden', !isSuper);
-    });
-
+    document.querySelectorAll('.admin-only').forEach(el => el.classList.toggle('hidden', adminRole !== 'super'));
     loadOverview();
 }
 
@@ -533,51 +361,21 @@ async function adminLogin() {
     const password = document.getElementById('admin-password').value;
     const key = document.getElementById('admin-key').value.trim();
     const btn = document.getElementById('login-btn');
-
-    if (!email || !password) {
-        showMsg('login-msg', 'Email and password required');
-        return;
-    }
-
-    setButtonLoading(btn, true, 'Signing in...');
-    showLoading(true);
-    showMsg('login-msg', 'Connecting...', 'info');
-
+    if (!email || !password) { showMsg('login-msg', 'Email and password required', 'error'); return; }
+    setButtonLoading(btn, true, 'Signing in...'); showLoading(true); showMsg('login-msg', 'Connecting...', 'info');
     try {
-        const body = { email, password };
-        if (key) body.admin_key = key;
-
-        const res = await fetch(API + '/admin/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(body)
-        });
-
-        let data;
-        try {
-            data = await res.json();
-        } catch (jsonErr) {
-            const text = await res.text();
-            throw new Error('Server error: ' + res.status + ' ' + text.slice(0, 100));
-        }
-
+        const body = { email, password }; if (key) body.admin_key = key;
+        const res = await fetch(API + '/admin/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+        let data; try { data = await res.json(); } catch (e) { const text = await res.text(); throw new Error('Server error: ' + res.status + ' — ' + text.slice(0, 200)); }
         if (!res.ok) throw new Error(data.detail || data.message || 'Login failed (' + res.status + ')');
-
-        adminToken = data.token;
-        adminRole = data.role;
-        adminEmail = data.email;
+        adminToken = data.token; adminRole = data.role; adminEmail = data.email;
         localStorage.setItem('myshop_admin_token', adminToken);
         localStorage.setItem('myshop_admin_role', adminRole);
         localStorage.setItem('myshop_admin_email', adminEmail);
         showMsg('login-msg', 'Login successful!', 'success');
         setTimeout(showDashboard, 500);
-    } catch (e) {
-        console.error('Login error:', e);
-        showMsg('login-msg', e.message || 'Network error. Check console (F12) for details.');
-    } finally {
-        setButtonLoading(btn, false, 'Sign In');
-        showLoading(false);
-    }
+    } catch (e) { console.error('Login error:', e); showMsg('login-msg', e.message || 'Network error', 'error'); }
+    finally { setButtonLoading(btn, false, 'Sign In'); showLoading(false); }
 }
 
 async function staffRegister() {
@@ -585,60 +383,40 @@ async function staffRegister() {
     const adminKey = document.getElementById('admin-key-register').value.trim();
     const email = document.getElementById('staff-email').value.trim();
     const password = document.getElementById('staff-password').value;
-    const btn = document.querySelector('#staff-register-screen .btn');
-
-    if (!email || !password) {
-        showMsg('staff-msg', 'Email and password required');
-        return;
-    }
-    if (!key && !adminKey) {
-        showMsg('staff-msg', 'Staff key or Admin key required');
-        return;
-    }
-
-    setButtonLoading(btn, true, 'Creating...');
-    showLoading(true);
+    const btn = document.getElementById('register-btn');
+    if (!email || !password) { showMsg('staff-msg', 'Email and password required', 'error'); return; }
+    if (!key && !adminKey) { showMsg('staff-msg', 'Staff key or Admin key required', 'error'); return; }
+    setButtonLoading(btn, true, 'Creating...'); showLoading(true);
     try {
         const body = { email, password };
-        if (adminKey) body.admin_key = adminKey;
-        else body.key = key;
-
-        const res = await fetch(API + '/admin/register', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(body)
-        });
+        if (adminKey) body.admin_key = adminKey; else body.key = key;
+        const res = await fetch(API + '/admin/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
         const data = await res.json();
         if (!res.ok) throw new Error(data.detail || 'Registration failed');
-        showMsg('staff-msg', 'Account created! Please login.', 'success');
-        setTimeout(showLogin, 2000);
-    } catch (e) {
-        showMsg('staff-msg', e.message);
-    } finally {
-        setButtonLoading(btn, false, 'Create Account');
-        showLoading(false);
-    }
+        // Auto-login if backend returns token
+        if (data.token) {
+            adminToken = data.token; adminRole = data.role; adminEmail = data.email;
+            localStorage.setItem('myshop_admin_token', adminToken);
+            localStorage.setItem('myshop_admin_role', adminRole);
+            localStorage.setItem('myshop_admin_email', adminEmail);
+            showMsg('staff-msg', 'Account created! Logging you in...', 'success');
+            setTimeout(showDashboard, 1000);
+        } else {
+            showMsg('staff-msg', 'Account created! Please login.', 'success');
+            setTimeout(showLogin, 2000);
+        }
+    } catch (e) { showMsg('staff-msg', e.message, 'error'); }
+    finally { setButtonLoading(btn, false, 'Create Account'); showLoading(false); }
 }
 
-function logout() {
-    localStorage.removeItem('myshop_admin_token');
-    localStorage.removeItem('myshop_admin_role');
-    localStorage.removeItem('myshop_admin_email');
-    adminToken = null;
-    adminRole = null;
-    adminEmail = null;
-    showLogin();
-}
+function logout() { localStorage.removeItem('myshop_admin_token'); localStorage.removeItem('myshop_admin_role'); localStorage.removeItem('myshop_admin_email'); adminToken = null; adminRole = null; adminEmail = null; showLogin(); }
 
-// ========== NAVIGATION ==========
 function switchSection(section, el) {
     currentSection = section;
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
     if (el) el.classList.add('active');
-
     const content = document.getElementById('main-content');
     content.innerHTML = '<div class="card" style="text-align:center;padding:60px;"><i class="fa-solid fa-circle-notch fa-spin" style="font-size:2rem;color:var(--brand);"></i><p>Loading...</p></div>';
-
     if (section === 'overview') loadOverview();
     else if (section === 'shops') loadShops();
     else if (section === 'search') loadSearch();
@@ -648,12 +426,11 @@ function switchSection(section, el) {
     else if (section === 'staff-keys') loadStaffKeysSection();
 }
 
-// ========== OVERVIEW ==========
 async function loadOverview() {
     showLoading(true);
     try {
         const data = await apiGet('/admin/analytics');
-        const html = `
+        document.getElementById('main-content').innerHTML = `
             <div class="stats-grid">
                 <div class="stat-card"><h3>${data.total_shops || 0}</h3><p>Total Shops</p></div>
                 <div class="stat-card success"><h3>${data.status_breakdown?.active || 0}</h3><p>Active</p></div>
@@ -662,183 +439,114 @@ async function loadOverview() {
                 <div class="stat-card info"><h3>${data.plan_breakdown?.pro || 0}</h3><p>Pro Plans</p></div>
                 <div class="stat-card" style="background:linear-gradient(135deg,#7c3aed,#a855f7);"><h3>${data.plan_breakdown?.premium || 0}</h3><p>Premium Plans</p></div>
             </div>
-
-            <div class="card">
-                <h2><i class="fa-solid fa-chart-line"></i> Revenue Estimate</h2>
+            <div class="card"><h2><i class="fa-solid fa-chart-line"></i> Revenue Estimate</h2>
                 <div style="font-size:2rem;font-weight:800;color:var(--brand);">N${(data.estimated_monthly_revenue_ngn || 0).toLocaleString()}</div>
                 <p class="sub">Estimated monthly revenue based on active paid plans</p>
             </div>
-
-            <div class="card">
-                <h2><i class="fa-solid fa-globe"></i> Top Countries</h2>
+            <div class="card"><h2><i class="fa-solid fa-globe"></i> Top Countries</h2>
                 ${Object.entries(data.countries || {}).sort((a,b) => b[1]-a[1]).slice(0,10).map(([c,v]) => `
                     <div class="country-item"><span>${c}</span><span style="font-weight:700;">${v}</span></div>
                 `).join('') || '<p class="sub">No data yet</p>'}
             </div>
-
-            <div class="card">
-                <h2><i class="fa-solid fa-arrow-trend-up"></i> Top Shops by Visits</h2>
-                <div class="table-wrap">
-                    <table>
-                        <thead><tr><th>Shop</th><th>Visits</th><th>Plan</th></tr></thead>
-                        <tbody>
-                            ${(data.top_shops_by_visits || []).map(s => `
-                                <tr><td><strong>${s.slug}</strong></td><td>${s.visits}</td><td><span class="plan-badge plan-${s.plan}">${s.plan.toUpperCase()}</span></td></tr>
-                            `).join('') || '<tr><td colspan="3" style="text-align:center;color:var(--text2);">No visits yet</td></tr>'}
-                        </tbody>
-                    </table>
-                </div>
+            <div class="card"><h2><i class="fa-solid fa-arrow-trend-up"></i> Top Shops by Visits</h2>
+                <div class="table-wrap"><table><thead><tr><th>Shop</th><th>Visits</th><th>Plan</th></tr></thead><tbody>
+                    ${(data.top_shops_by_visits || []).map(s => `
+                        <tr><td><strong>${s.slug}</strong></td><td>${s.visits}</td><td><span class="plan-badge plan-${s.plan}">${s.plan.toUpperCase()}</span></td></tr>
+                    `).join('') || '<tr><td colspan="3" style="text-align:center;color:var(--text2);">No visits yet</td></tr>'}
+                </tbody></table></div>
             </div>
-
-            <div class="card">
-                <h2><i class="fa-solid fa-users"></i> Referral Stats</h2>
+            <div class="card"><h2><i class="fa-solid fa-users"></i> Referral Stats</h2>
                 <div class="stats-grid" style="grid-template-columns:repeat(2,1fr);">
                     <div class="stat-card" style="background:linear-gradient(135deg,#0d9488,#14b8a6);"><h3>${data.referral_stats?.total_referral_codes || 0}</h3><p>Referral Codes</p></div>
                     <div class="stat-card" style="background:linear-gradient(135deg,#0891b2,#06b6d4);"><h3>${data.referral_stats?.total_referred || 0}</h3><p>Total Referred</p></div>
                 </div>
-            </div>
-        `;
-        document.getElementById('main-content').innerHTML = html;
-    } catch (e) {
-        console.error('loadOverview error:', e);
-        document.getElementById('main-content').innerHTML = `<div class="card"><div class="msg msg-error show">${e.message || 'Failed to load Overview'}</div></div>`;
-        showToast(e.message || 'Failed to load Overview', 'error');
-    } finally {
-        showLoading(false);
-    }
+            </div>`;
+    } catch (e) { document.getElementById('main-content').innerHTML = `<div class="card"><div class="msg msg-error show">${e.message || 'Failed to load Overview'}</div></div>`; showToast(e.message || 'Failed to load Overview', 'error'); }
+    finally { showLoading(false); }
 }
-// ========== ALL SHOPS ==========
+
 async function loadShops(page = 1) {
-    currentShopPage = page;
-    showLoading(true);
+    currentShopPage = page; showLoading(true);
     try {
         const params = new URLSearchParams();
-        params.set('page', page);
-        params.set('limit', 50);
+        params.set('page', page); params.set('limit', 50);
         if (shopSearchQuery) params.set('search', shopSearchQuery);
         if (shopFilterPlan) params.set('plan', shopFilterPlan);
         if (shopFilterStatus) params.set('status', shopFilterStatus);
-
         const data = await apiGet('/admin/shops?' + params.toString());
         allShopsData = data.shops || [];
-
-        const html = `
-            <div class="card">
-                <h2><i class="fa-solid fa-store"></i> All Shops</h2>
+        document.getElementById('main-content').innerHTML = `
+            <div class="card"><h2><i class="fa-solid fa-store"></i> All Shops</h2>
                 <div class="search-bar">
                     <input type="text" id="shop-search-input" placeholder="Search by email or slug..." value="${shopSearchQuery}" onkeyup="if(event.key==='Enter'){shopSearchQuery=this.value;loadShops(1);}">
                     <select id="shop-filter-plan" onchange="shopFilterPlan=this.value;loadShops(1);">
-                        <option value="">All Plans</option>
-                        <option value="free" ${shopFilterPlan==='free'?'selected':''}>Free</option>
-                        <option value="pro" ${shopFilterPlan==='pro'?'selected':''}>Pro</option>
-                        <option value="premium" ${shopFilterPlan==='premium'?'selected':''}>Premium</option>
+                        <option value="">All Plans</option><option value="free" ${shopFilterPlan==='free'?'selected':''}>Free</option><option value="pro" ${shopFilterPlan==='pro'?'selected':''}>Pro</option><option value="premium" ${shopFilterPlan==='premium'?'selected':''}>Premium</option>
                     </select>
                     <select id="shop-filter-status" onchange="shopFilterStatus=this.value;loadShops(1);">
-                        <option value="">All Status</option>
-                        <option value="active" ${shopFilterStatus==='active'?'selected':''}>Active</option>
-                        <option value="expired" ${shopFilterStatus==='expired'?'selected':''}>Expired</option>
-                        <option value="flagged" ${shopFilterStatus==='flagged'?'selected':''}>Flagged</option>
-                        <option value="pending" ${shopFilterStatus==='pending'?'selected':''}>Pending</option>
+                        <option value="">All Status</option><option value="active" ${shopFilterStatus==='active'?'selected':''}>Active</option><option value="expired" ${shopFilterStatus==='expired'?'selected':''}>Expired</option><option value="flagged" ${shopFilterStatus==='flagged'?'selected':''}>Flagged</option><option value="pending" ${shopFilterStatus==='pending'?'selected':''}>Pending</option>
                     </select>
                     <button class="btn btn-sm" onclick="shopSearchQuery=document.getElementById('shop-search-input').value;loadShops(1);"><i class="fa-solid fa-magnifying-glass"></i></button>
                     <button class="btn btn-outline btn-sm" onclick="shopSearchQuery='';shopFilterPlan='';shopFilterStatus='';loadShops(1);"><i class="fa-solid fa-rotate-left"></i></button>
                 </div>
-
-                <div class="table-wrap">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Shop</th>
-                                <th>Email</th>
-                                <th>Plan</th>
-                                <th>Status</th>
-                                <th>Visits</th>
-                                <th>Country</th>
-                                <th>Created</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${allShopsData.map(s => `
-                                <tr>
-                                    <td><strong>${s.slug}</strong></td>
-                                    <td>${s.email}</td>
-                                    <td><span class="plan-badge plan-${s.plan}">${s.plan.toUpperCase()}</span></td>
-                                    <td><span class="status-badge status-${s.status}"><i class="fa-solid fa-circle" style="font-size:.4rem;"></i> ${s.status.toUpperCase()}</span></td>
-                                    <td>${s.visit_count}</td>
-                                    <td>${s.country || '-'}</td>
-                                    <td>${s.created_at ? s.created_at.slice(0,10) : '-'}</td>
-                                    <td>
-                                        <div class="action-btns">
-                                            <button class="action-btn view" onclick="viewShop('${s.email}')"><i class="fa-solid fa-eye"></i></button>
-                                            <button class="action-btn upgrade" onclick="openUpgrade('${s.email}', '${s.plan}')"><i class="fa-solid fa-crown"></i></button>
-                                            <button class="action-btn edit" onclick="openStatusModal('${s.email}', '${s.status}')"><i class="fa-solid fa-toggle-on"></i></button>
-                                            <a href="https://myshop.afric.site/${s.slug}" target="_blank" class="action-btn view" style="text-decoration:none;"><i class="fa-solid fa-external-link-alt"></i></a>
-                                        </div>
-                                    </td>
-                                </tr>
-                            `).join('') || '<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--text2);">No shops found</td></tr>'}
-                        </tbody>
-                    </table>
-                </div>
-
+                <div class="table-wrap"><table><thead><tr><th>Shop</th><th>Email</th><th>Plan</th><th>Status</th><th>Visits</th><th>Country</th><th>Created</th><th>Actions</th></tr></thead><tbody>
+                    ${allShopsData.map(s => `
+                        <tr>
+                            <td><strong>${s.slug}</strong></td>
+                            <td>${s.email}</td>
+                            <td><span class="plan-badge plan-${s.plan}">${s.plan.toUpperCase()}</span></td>
+                            <td><span class="status-badge status-${s.status}"><i class="fa-solid fa-circle" style="font-size:.4rem;"></i> ${s.status.toUpperCase()}</span></td>
+                            <td>${s.visit_count}</td>
+                            <td>${s.country || '-'}</td>
+                            <td>${s.created_at ? s.created_at.slice(0,10) : '-'}</td>
+                            <td><div class="action-btns">
+                                <button class="action-btn view" onclick="viewShop('${s.email}')"><i class="fa-solid fa-eye"></i></button>
+                                <button class="action-btn upgrade" onclick="openUpgrade('${s.email}', '${s.plan}')"><i class="fa-solid fa-crown"></i></button>
+                                <button class="action-btn edit" onclick="openStatusModal('${s.email}', '${s.status}')"><i class="fa-solid fa-toggle-on"></i></button>
+                                <a href="https://myshop.afric.site/${s.slug}" target="_blank" class="action-btn view" style="text-decoration:none;"><i class="fa-solid fa-external-link-alt"></i></a>
+                            </div></td>
+                        </tr>
+                    `).join('') || '<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--text2);">No shops found</td></tr>'}
+                </tbody></table></div>
                 <div class="pagination">
                     <button class="page-btn" onclick="loadShops(${page-1})" ${page<=1?'disabled':''}><i class="fa-solid fa-chevron-left"></i></button>
                     <span style="font-weight:600;color:var(--text2);">Page ${page} of ${Math.ceil((data.total || 0)/50) || 1}</span>
                     <button class="page-btn" onclick="loadShops(${page+1})" ${page*50 >= (data.total || 0)?'disabled':''}><i class="fa-solid fa-chevron-right"></i></button>
                 </div>
                 <p style="text-align:center;color:var(--text2);font-size:.85rem;margin-top:8px;">Showing ${allShopsData.length} of ${data.total || 0} shops</p>
-            </div>
-        `;
-        document.getElementById('main-content').innerHTML = html;
-    } catch (e) {
-        console.error('loadShops error:', e);
-        document.getElementById('main-content').innerHTML = `<div class="card"><div class="msg msg-error show">${e.message || 'Failed to load shops'}</div></div>`;
-        showToast(e.message || 'Failed to load shops', 'error');
-    } finally {
-        showLoading(false);
-    }
+            </div>`;
+    } catch (e) { document.getElementById('main-content').innerHTML = `<div class="card"><div class="msg msg-error show">${e.message || 'Failed to load shops'}</div></div>`; showToast(e.message || 'Failed to load shops', 'error'); }
+    finally { showLoading(false); }
 }
 
-// ========== SEARCH ==========
-async function loadSearch() {
+function loadSearch() {
     document.getElementById('main-content').innerHTML = `
-        <div class="card">
-            <h2><i class="fa-solid fa-magnifying-glass"></i> Search Shops</h2>
+        <div class="card"><h2><i class="fa-solid fa-magnifying-glass"></i> Search Shops</h2>
             <div class="search-bar" style="margin-bottom:24px;">
                 <input type="text" id="search-input" placeholder="Enter email or slug..." style="flex:1;" onkeyup="if(event.key==='Enter')performSearch()">
                 <button class="btn" onclick="performSearch()"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
             </div>
             <div id="search-results"></div>
-        </div>
-    `;
+        </div>`;
 }
 
 async function performSearch() {
     const query = document.getElementById('search-input').value.trim();
     const btn = document.querySelector('#search-results').previousElementSibling.querySelector('.btn');
     if (!query) return;
-
-    setButtonLoading(btn, true, 'Searching...');
-    showLoading(true);
+    setButtonLoading(btn, true, 'Searching...'); showLoading(true);
     try {
         const data = await apiGet('/admin/shop/' + encodeURIComponent(query));
         const shop = data;
         const shopJson = typeof shop.shop_json === 'string' ? JSON.parse(shop.shop_json) : (shop.shop_json || {});
-
         document.getElementById('search-results').innerHTML = `
             <div class="card" style="animation:fadeIn 0.3s ease;">
                 <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;flex-wrap:wrap;gap:12px;">
-                    <div>
-                        <h3 style="font-size:1.3rem;">${shopJson.business_name || shop.slug}</h3>
-                        <p style="color:var(--text2);font-size:.9rem;">${shop.email}</p>
-                    </div>
+                    <div><h3 style="font-size:1.3rem;">${shopJson.business_name || shop.slug}</h3><p style="color:var(--text2);font-size:.9rem;">${shop.email}</p></div>
                     <div style="display:flex;gap:8px;">
                         <span class="plan-badge plan-${shop.plan}">${shop.plan.toUpperCase()}</span>
                         <span class="status-badge status-${shop.status}">${shop.status.toUpperCase()}</span>
                     </div>
                 </div>
-
                 <div class="detail-grid">
                     <div class="detail-item"><label>Slug</label><value>${shop.slug}</value></div>
                     <div class="detail-item"><label>Email</label><value>${shop.email}</value></div>
@@ -853,25 +561,17 @@ async function performSearch() {
                     <div class="detail-item"><label>Sub Type</label><value>${shop.sub_type || '-'}</value></div>
                     <div class="detail-item"><label>Phone</label><value>${shopJson.contact?.phone || '-'}</value></div>
                 </div>
-
                 <div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap;">
                     <button class="btn" onclick="openUpgrade('${shop.email}', '${shop.plan}')"><i class="fa-solid fa-crown"></i> Upgrade/Downgrade</button>
                     <button class="btn btn-outline" onclick="openStatusModal('${shop.email}', '${shop.status}')"><i class="fa-solid fa-toggle-on"></i> Change Status</button>
                     <a href="https://myshop.afric.site/${shop.slug}" target="_blank" class="btn btn-outline" style="text-decoration:none;"><i class="fa-solid fa-external-link-alt"></i> View Live</a>
                     <button class="btn btn-danger" onclick="resetShopPassword('${shop.email}')"><i class="fa-solid fa-key"></i> Reset Password</button>
                 </div>
-            </div>
-        `;
-    } catch (e) {
-        document.getElementById('search-results').innerHTML = `<div class="msg msg-error show">${e.message}</div>`;
-        showToast(e.message || 'Search failed', 'error');
-    } finally {
-        setButtonLoading(btn, false, 'Search');
-        showLoading(false);
-    }
+            </div>`;
+    } catch (e) { document.getElementById('search-results').innerHTML = `<div class="msg msg-error show">${e.message}</div>`; showToast(e.message || 'Search failed', 'error'); }
+    finally { setButtonLoading(btn, false, 'Search'); showLoading(false); }
 }
 
-// ========== ANALYTICS ==========
 async function loadAnalyticsSection() {
     showLoading(true);
     try {
@@ -879,124 +579,76 @@ async function loadAnalyticsSection() {
         const dailySignups = data.daily_signups || {};
         const sortedDays = Object.entries(dailySignups).sort((a,b) => a[0].localeCompare(b[0])).slice(-30);
         const maxSignup = Math.max(...sortedDays.map(d => d[1]), 1);
-
-        const html = `
+        document.getElementById('main-content').innerHTML = `
             <div class="stats-grid">
                 <div class="stat-card"><h3>${data.total_shops || 0}</h3><p>Total Shops</p></div>
                 <div class="stat-card success"><h3>${data.status_breakdown?.active || 0}</h3><p>Active</p></div>
                 <div class="stat-card danger"><h3>${data.status_breakdown?.expired || 0}</h3><p>Expired</p></div>
                 <div class="stat-card warning"><h3>${data.status_breakdown?.flagged || 0}</h3><p>Flagged</p></div>
             </div>
-
-            <div class="card">
-                <h2><i class="fa-solid fa-chart-column"></i> Daily Signups (Last 30 Days)</h2>
-                <div class="chart-container">
-                    <div class="chart-bar">
-                        ${sortedDays.map(([day, count]) => `
-                            <div class="bar" style="height:${(count/maxSignup)*100}%;">
-                                <div class="bar-value">${count}</div>
-                                <div class="bar-label">${day.slice(5)}</div>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
+            <div class="card"><h2><i class="fa-solid fa-chart-column"></i> Daily Signups (Last 30 Days)</h2>
+                <div class="chart-container"><div class="chart-bar">
+                    ${sortedDays.map(([day, count]) => `
+                        <div class="bar" style="height:${(count/maxSignup)*100}%;">
+                            <div class="bar-value">${count}</div>
+                            <div class="bar-label">${day.slice(5)}</div>
+                        </div>
+                    `).join('')}
+                </div></div>
             </div>
-
-            <div class="card">
-                <h2><i class="fa-solid fa-globe"></i> Countries</h2>
+            <div class="card"><h2><i class="fa-solid fa-globe"></i> Countries</h2>
                 <div class="country-list">
                     ${Object.entries(data.countries || {}).sort((a,b) => b[1]-a[1]).map(([c,v]) => `
                         <div class="country-item"><span>${c}</span><span style="font-weight:700;">${v} shops</span></div>
                     `).join('') || '<p class="sub">No data</p>'}
                 </div>
             </div>
-
-            <div class="card">
-                <h2><i class="fa-solid fa-crown"></i> Plan Distribution</h2>
+            <div class="card"><h2><i class="fa-solid fa-crown"></i> Plan Distribution</h2>
                 <div class="stats-grid" style="grid-template-columns:repeat(3,1fr);">
                     <div class="stat-card" style="background:linear-gradient(135deg,#64748b,#94a3b8);"><h3>${data.plan_breakdown?.free || 0}</h3><p>Free</p></div>
                     <div class="stat-card info"><h3>${data.plan_breakdown?.pro || 0}</h3><p>Pro</p></div>
                     <div class="stat-card" style="background:linear-gradient(135deg,#7c3aed,#a855f7);"><h3>${data.plan_breakdown?.premium || 0}</h3><p>Premium</p></div>
                 </div>
             </div>
-
-            <div class="card">
-                <h2><i class="fa-solid fa-arrow-trend-up"></i> Top Shops by Visits</h2>
-                <div class="table-wrap">
-                    <table>
-                        <thead><tr><th>Rank</th><th>Shop</th><th>Visits</th><th>Plan</th></tr></thead>
-                        <tbody>
-                            ${(data.top_shops_by_visits || []).map((s, i) => `
-                                <tr><td><strong>#${i+1}</strong></td><td>${s.slug}</td><td>${s.visits}</td><td><span class="plan-badge plan-${s.plan}">${s.plan.toUpperCase()}</span></td></tr>
-                            `).join('') || '<tr><td colspan="4" style="text-align:center;">No data</td></tr>'}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        `;
-        document.getElementById('main-content').innerHTML = html;
-    } catch (e) {
-        console.error('loadAnalyticsSection error:', e);
-        document.getElementById('main-content').innerHTML = `<div class="card"><div class="msg msg-error show">${e.message || 'Failed to load Analytics'}</div></div>`;
-        showToast(e.message || 'Failed to load Analytics', 'error');
-    } finally {
-        showLoading(false);
-    }
+            <div class="card"><h2><i class="fa-solid fa-arrow-trend-up"></i> Top Shops by Visits</h2>
+                <div class="table-wrap"><table><thead><tr><th>Rank</th><th>Shop</th><th>Visits</th><th>Plan</th></tr></thead><tbody>
+                    ${(data.top_shops_by_visits || []).map((s, i) => `
+                        <tr><td><strong>#${i+1}</strong></td><td>${s.slug}</td><td>${s.visits}</td><td><span class="plan-badge plan-${s.plan}">${s.plan.toUpperCase()}</span></td></tr>
+                    `).join('') || '<tr><td colspan="4" style="text-align:center;">No data</td></tr>'}
+                </tbody></table></div>
+            </div>`;
+    } catch (e) { document.getElementById('main-content').innerHTML = `<div class="card"><div class="msg msg-error show">${e.message || 'Failed to load Analytics'}</div></div>`; showToast(e.message || 'Failed to load Analytics', 'error'); }
+    finally { showLoading(false); }
 }
-// ========== REFERRALS ==========
+
 async function loadReferralsSection() {
     showLoading(true);
     try {
         const data = await apiGet('/admin/referral-payouts');
-        const html = `
+        document.getElementById('main-content').innerHTML = `
             <div class="stats-grid">
                 <div class="stat-card" style="background:linear-gradient(135deg,#0d9488,#14b8a6);"><h3>${data.total_payouts || 0}</h3><p>Referrers</p></div>
                 <div class="stat-card" style="background:linear-gradient(135deg,#0891b2,#06b6d4);"><h3>N${(data.total_commission || 0).toLocaleString()}</h3><p>Total Commission</p></div>
             </div>
-
-            <div class="card">
-                <h2><i class="fa-solid fa-gift"></i> Referral Payouts</h2>
-                <div class="table-wrap">
-                    <table>
-                        <thead>
-                            <tr><th>Email</th><th>Code</th><th>Total Referred</th><th>Active</th><th>Commission</th></tr>
-                        </thead>
-                        <tbody>
-                            ${(data.payouts || []).map(p => `
-                                <tr>
-                                    <td>${p.email}</td>
-                                    <td><code style="background:var(--bg);padding:4px 8px;border-radius:6px;">${p.referral_code}</code></td>
-                                    <td>${p.total_referred}</td>
-                                    <td>${p.active_referred}</td>
-                                    <td><strong>N${p.commission_due.toLocaleString()}</strong></td>
-                                </tr>
-                            `).join('') || '<tr><td colspan="5" style="text-align:center;padding:40px;">No referrals yet</td></tr>'}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        `;
-        document.getElementById('main-content').innerHTML = html;
-    } catch (e) {
-        console.error('loadReferralsSection error:', e);
-        document.getElementById('main-content').innerHTML = `<div class="card"><div class="msg msg-error show">${e.message || 'Failed to load Referrals'}</div></div>`;
-        showToast(e.message || 'Failed to load Referrals', 'error');
-    } finally {
-        showLoading(false);
-    }
+            <div class="card"><h2><i class="fa-solid fa-gift"></i> Referral Payouts</h2>
+                <div class="table-wrap"><table><thead><tr><th>Email</th><th>Code</th><th>Total Referred</th><th>Active</th><th>Commission</th></tr></thead><tbody>
+                    ${(data.payouts || []).map(p => `
+                        <tr><td>${p.email}</td><td><code style="background:var(--bg);padding:4px 8px;border-radius:6px;">${p.referral_code}</code></td>
+                        <td>${p.total_referred}</td><td>${p.active_referred}</td><td><strong>N${p.commission_due.toLocaleString()}</strong></td></tr>
+                    `).join('') || '<tr><td colspan="5" style="text-align:center;padding:40px;">No referrals yet</td></tr>'}
+                </tbody></table></div>
+            </div>`;
+    } catch (e) { document.getElementById('main-content').innerHTML = `<div class="card"><div class="msg msg-error show">${e.message || 'Failed to load Referrals'}</div></div>`; showToast(e.message || 'Failed to load Referrals', 'error'); }
+    finally { showLoading(false); }
 }
 
-// ========== ADMINS (Super only) ==========
 async function loadAdminsSection() {
     showLoading(true);
     try {
         const data = await apiGet('/admin/admins');
-        const html = `
-            <div class="card">
-                <h2><i class="fa-solid fa-users-gear"></i> Admin Management</h2>
-                <div style="margin-bottom:20px;">
-                    <button class="btn" onclick="showCreateAdminModal()"><i class="fa-solid fa-plus"></i> Create Admin</button>
-                </div>
+        document.getElementById('main-content').innerHTML = `
+            <div class="card"><h2><i class="fa-solid fa-users-gear"></i> Admin Management</h2>
+                <div style="margin-bottom:20px;"><button class="btn" onclick="showCreateAdminModal()"><i class="fa-solid fa-plus"></i> Create Admin</button></div>
                 ${(data.admins || []).map(a => `
                     <div class="admin-card">
                         <div class="admin-info">
@@ -1014,32 +666,18 @@ async function loadAdminsSection() {
                         </div>
                     </div>
                 `).join('') || '<p class="sub">No admins found</p>'}
-            </div>
-        `;
-        document.getElementById('main-content').innerHTML = html;
-    } catch (e) {
-        console.error('loadAdminsSection error:', e);
-        document.getElementById('main-content').innerHTML = `<div class="card"><div class="msg msg-error show">${e.message || 'Failed to load Admins'}</div></div>`;
-        showToast(e.message || 'Failed to load Admins', 'error');
-    } finally {
-        showLoading(false);
-    }
+            </div>`;
+    } catch (e) { document.getElementById('main-content').innerHTML = `<div class="card"><div class="msg msg-error show">${e.message || 'Failed to load Admins'}</div></div>`; showToast(e.message || 'Failed to load Admins', 'error'); }
+    finally { showLoading(false); }
 }
 
 function showCreateAdminModal() {
-    const email = prompt('Admin email:');
-    if (!email) return;
-    const password = prompt('Password:');
-    if (!password) return;
-    const role = prompt('Role (viewer/editor/admin):', 'viewer');
-    if (!role) return;
-
+    const email = prompt('Admin email:'); if (!email) return;
+    const password = prompt('Password:'); if (!password) return;
+    const role = prompt('Role (viewer/editor/admin):', 'viewer'); if (!role) return;
     showLoading(true);
     apiPost('/admin/admins', { email, password, role })
-        .then(() => {
-            showToast('Admin created!', 'success');
-            loadAdminsSection();
-        })
+        .then(() => { showToast('Admin created!', 'success'); loadAdminsSection(); })
         .catch(e => showToast(e.message, 'error'))
         .finally(() => showLoading(false));
 }
@@ -1053,17 +691,13 @@ function deleteAdmin(email) {
         .finally(() => showLoading(false));
 }
 
-// ========== STAFF KEYS (Super only) ==========
 async function loadStaffKeysSection() {
     showLoading(true);
     try {
         const data = await apiGet('/admin/staff-keys');
-        const html = `
-            <div class="card">
-                <h2><i class="fa-solid fa-key"></i> Staff Keys</h2>
-                <div style="margin-bottom:20px;">
-                    <button class="btn" onclick="generateStaffKey()"><i class="fa-solid fa-plus"></i> Generate Key</button>
-                </div>
+        document.getElementById('main-content').innerHTML = `
+            <div class="card"><h2><i class="fa-solid fa-key"></i> Staff Keys</h2>
+                <div style="margin-bottom:20px;"><button class="btn" onclick="generateStaffKey()"><i class="fa-solid fa-plus"></i> Generate Key</button></div>
                 ${(data.staff_keys || []).map(k => `
                     <div class="key-card ${k.used ? 'key-used' : ''}">
                         <span class="key-value">${k.key}</span>
@@ -1074,21 +708,13 @@ async function loadStaffKeysSection() {
                         </div>
                     </div>
                 `).join('') || '<p class="sub">No keys generated</p>'}
-            </div>
-        `;
-        document.getElementById('main-content').innerHTML = html;
-    } catch (e) {
-        console.error('loadStaffKeysSection error:', e);
-        document.getElementById('main-content').innerHTML = `<div class="card"><div class="msg msg-error show">${e.message || 'Failed to load Staff Keys'}</div></div>`;
-        showToast(e.message || 'Failed to load Staff Keys', 'error');
-    } finally {
-        showLoading(false);
-    }
+            </div>`;
+    } catch (e) { document.getElementById('main-content').innerHTML = `<div class="card"><div class="msg msg-error show">${e.message || 'Failed to load Staff Keys'}</div></div>`; showToast(e.message || 'Failed to load Staff Keys', 'error'); }
+    finally { showLoading(false); }
 }
 
 function generateStaffKey() {
-    const role = prompt('Role (viewer/editor):', 'viewer');
-    if (!role) return;
+    const role = prompt('Role (viewer/editor):', 'viewer'); if (!role) return;
     showLoading(true);
     apiPost('/admin/staff-keys', { role })
         .then(() => { showToast('Key generated!', 'success'); loadStaffKeysSection(); })
@@ -1096,12 +722,7 @@ function generateStaffKey() {
         .finally(() => showLoading(false));
 }
 
-// ========== SHOP ACTIONS ==========
-function viewShop(email) {
-    document.getElementById('search-input').value = email;
-    performSearch();
-    switchSection('search', document.querySelectorAll('.nav-item')[2]);
-}
+function viewShop(email) { document.getElementById('search-input').value = email; performSearch(); switchSection('search', document.querySelectorAll('.nav-item')[2]); }
 
 function openUpgrade(email, currentPlan) {
     document.getElementById('upgrade-shop-id').value = email;
@@ -1110,32 +731,22 @@ function openUpgrade(email, currentPlan) {
     document.getElementById('upgrade-days').value = 31;
     document.getElementById('upgrade-modal').classList.add('active');
 }
-
-function closeUpgradeModal() {
-    document.getElementById('upgrade-modal').classList.remove('active');
-}
+function closeUpgradeModal() { document.getElementById('upgrade-modal').classList.remove('active'); }
 
 async function confirmUpgrade() {
     const email = document.getElementById('upgrade-shop-id').value;
     const plan = document.getElementById('upgrade-new-plan').value;
     const days = parseInt(document.getElementById('upgrade-days').value) || 31;
     const btn = document.querySelector('#upgrade-modal .modal-footer .btn:last-child');
-
-    setButtonLoading(btn, true, 'Applying...');
-    showLoading(true);
+    setButtonLoading(btn, true, 'Applying...'); showLoading(true);
     try {
         await apiPost('/admin/shop/' + encodeURIComponent(email) + '/upgrade', { plan, days });
-        closeUpgradeModal();
-        showToast('Shop upgraded to ' + plan.toUpperCase() + ' for ' + days + ' days!', 'success');
+        closeUpgradeModal(); showToast('Shop upgraded to ' + plan.toUpperCase() + ' for ' + days + ' days!', 'success');
         if (currentSection === 'shops') loadShops(currentShopPage);
         else if (currentSection === 'search') performSearch();
         else loadOverview();
-    } catch (e) {
-        alert(e.message);
-    } finally {
-        setButtonLoading(btn, false, 'Apply Change');
-        showLoading(false);
-    }
+    } catch (e) { alert(e.message); }
+    finally { setButtonLoading(btn, false, 'Apply Change'); showLoading(false); }
 }
 
 function openStatusModal(email, currentStatus) {
@@ -1143,31 +754,21 @@ function openStatusModal(email, currentStatus) {
     document.getElementById('status-new-status').value = currentStatus;
     document.getElementById('status-modal').classList.add('active');
 }
-
-function closeStatusModal() {
-    document.getElementById('status-modal').classList.remove('active');
-}
+function closeStatusModal() { document.getElementById('status-modal').classList.remove('active'); }
 
 async function confirmStatusChange() {
     const email = document.getElementById('status-shop-id').value;
     const status = document.getElementById('status-new-status').value;
     const btn = document.querySelector('#status-modal .modal-footer .btn:last-child');
-
-    setButtonLoading(btn, true, 'Applying...');
-    showLoading(true);
+    setButtonLoading(btn, true, 'Applying...'); showLoading(true);
     try {
         await apiPost('/admin/shop/' + encodeURIComponent(email) + '/status', { status });
-        closeStatusModal();
-        showToast('Status changed to ' + status.toUpperCase(), 'success');
+        closeStatusModal(); showToast('Status changed to ' + status.toUpperCase(), 'success');
         if (currentSection === 'shops') loadShops(currentShopPage);
         else if (currentSection === 'search') performSearch();
         else loadOverview();
-    } catch (e) {
-        alert(e.message);
-    } finally {
-        setButtonLoading(btn, false, 'Apply');
-        showLoading(false);
-    }
+    } catch (e) { alert(e.message); }
+    finally { setButtonLoading(btn, false, 'Apply'); showLoading(false); }
 }
 
 async function resetShopPassword(email) {
@@ -1177,51 +778,25 @@ async function resetShopPassword(email) {
         const data = await apiPost('/admin/shop/' + encodeURIComponent(email) + '/reset-password', {});
         showToast('Reset link generated!', 'success');
         alert('Reset link generated!\n\n' + data.reset_link);
-    } catch (e) {
-        alert(e.message);
-    } finally {
-        showLoading(false);
-    }
+    } catch (e) { alert(e.message); }
+    finally { showLoading(false); }
 }
 
-function closeModal() {
-    document.getElementById('shop-modal').classList.remove('active');
-}
+function closeModal() { document.getElementById('shop-modal').classList.remove('active'); }
 
-// ========== PASSWORD TOGGLE ==========
 function togglePassword(inputId, btn) {
     const input = document.getElementById(inputId);
     const icon = btn.querySelector('i');
-    if (input.type === 'password') {
-        input.type = 'text';
-        icon.className = 'fa-solid fa-eye-slash';
-    } else {
-        input.type = 'password';
-        icon.className = 'fa-solid fa-eye';
-    }
+    if (input.type === 'password') { input.type = 'text'; icon.className = 'fa-solid fa-eye-slash'; }
+    else { input.type = 'password'; icon.className = 'fa-solid fa-eye'; }
 }
 
-// ========== TOKEN CHECK ==========
 function isTokenValid() {
     if (!adminToken) return false;
-    try {
-        const payload = JSON.parse(atob(adminToken.split('.')[1]));
-        const exp = payload.exp * 1000;
-        return Date.now() < exp;
-    } catch (e) {
-        return false;
-    }
+    try { const payload = JSON.parse(atob(adminToken.split('.')[1])); const exp = payload.exp * 1000; return Date.now() < exp; } catch (e) { return false; }
 }
 
-// ========== INIT ==========
-if (adminToken && adminRole && isTokenValid()) {
-    showDashboard();
-} else {
-    logout();
-    showLogin();
-}
+if (adminToken && adminRole && isTokenValid()) { showDashboard(); } else { logout(); showLogin(); }
 </script>
 </body>
 </html>
-
-
