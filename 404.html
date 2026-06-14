@@ -1027,11 +1027,12 @@
                 ${heroCta}
             </header>`;
         } else {
-            html += `<header class="premium-hero">
-                <div class="premium-tagline">${escapeHtml(tagline || businessName)}</div>
-                ${json.description ? `<div class="premium-sub">${escapeHtml(json.description.slice(0, 120))}</div>` : ''}
-                ${location ? `<div class="premium-location"><i class="fa-solid fa-location-dot"></i> ${escapeHtml(location)}</div>` : ''}
-                ${heroCta}
+    html += `<header class="premium-hero">
+        <div class="premium-tagline">${escapeHtml(tagline || businessName)}</div>
+        ${location ? `<div class="premium-location"><i class="fa-solid fa-location-dot"></i> ${escapeHtml(location)}</div>` : ''}
+        ${heroCta}
+    </header>`;
+        }
             </header>`;
         }
 
