@@ -162,6 +162,18 @@
         .install-banner p{margin:0;font-weight:600;color:#075985;}
         .install-banner .btn-sm{background:#0284c7;color:white;border:none;box-shadow:none;}
         .install-banner .btn-sm:hover{background:#075985;}
+
+        /* NEW: Country analytics styles */
+        .country-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:10px;}
+        .country-bar-bg{background:var(--bg);border-radius:6px;height:8px;overflow:hidden;margin-top:6px;}
+        .country-bar-fill{background:linear-gradient(90deg,var(--brand),var(--brand-light));height:100%;border-radius:6px;transition:width 0.6s ease;}
+        .country-flag{width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:14px;margin-right:8px;background:var(--bg);border:1px solid var(--border);}
+        .country-row{display:flex;justify-content:space-between;align-items:center;}
+        .country-name{font-weight:600;font-size:0.9rem;}
+        .country-count{font-weight:700;color:var(--brand);font-size:0.9rem;}
+        .country-percent{font-size:0.8rem;color:var(--text2);margin-left:4px;}
+        .analytics-section-title{font-size:1.1rem;font-weight:700;margin:24px 0 12px;color:var(--brand-dark);display:flex;align-items:center;gap:8px;}
+
         @media(max-width:640px){.plan-grid{grid-template-columns:1fr;}}
         @media(max-width:640px){
             .container{padding:16px;}.card{padding:24px;}h1{font-size:1.5rem;}.preview-frame{height:450px;}.tab-bar{gap:4px;}.tab{padding:8px 12px;font-size:.85rem;}.stat-card h3{font-size:1.8rem;}.btn-group{flex-direction:column;}
@@ -346,7 +358,7 @@
             <div class="btn-group"><button class="btn btn-outline" onclick="prevStep(1)">Back</button><button class="btn" onclick="nextStep(3)">Continue</button></div>
         </div>
 
-        <!-- Step 3: Social & Messaging with clear per‑platform instructions -->
+        <!-- Step 3: Social & Messaging -->
         <div id="step3" class="hidden reg-step">
             <div class="form-section"><h3><i class="fa-solid fa-share-nodes"></i> Social & Messaging</h3>
                 <p class="sub">Add your social profiles and messaging apps (up to 5 for Free plan). You can add more later.</p>
@@ -407,9 +419,7 @@
     // ========== CONFIG ==========
     const API = 'https://emltechstudio-myshop-api.hf.space';
 
-    // ========== NO FULL-SCREEN LOADING OVERLAY ==========
-    // The function is kept but does nothing – we rely only on button spinners and toasts.
-    function showAppLoading(show) { /* intentionally empty – no overlay */ }
+    function showAppLoading(show) { /* intentionally empty */ }
 
     function setButtonLoading(btn, loading) {
         if (!btn) return;
@@ -460,7 +470,6 @@
     let recoveryQuestions = [];
     let recoveryEmail = '';
 
-    // Font lists (same as before)
     const PRO_HEADING_FONTS = [
         {name:'Inter',family:'Inter'},{name:'Poppins',family:'Poppins'},{name:'Playfair Display',family:'Playfair Display'},
         {name:'Space Grotesk',family:'Space Grotesk'},{name:'DM Sans',family:'DM Sans'},{name:'Montserrat',family:'Montserrat'},
@@ -501,7 +510,6 @@
         {name:'Gold',primary:'#d97706',secondary:'#fffbeb'},{name:'Slate',primary:'#475569',secondary:'#f8fafc'}
     ];
 
-    // 44+ platforms with user-friendly hints
     const ALL_PLATFORMS = [
         { name: "Facebook", icon: "fab fa-facebook-f", category: "social", urlTemplate: "https://facebook.com/{username}", hint: "Your page username (e.g., yourbrand)" },
         { name: "Instagram", icon: "fab fa-instagram", category: "social", urlTemplate: "https://instagram.com/{username}", hint: "Your username (e.g., @yourbrand)" },
@@ -544,7 +552,6 @@
     let regSocialLinks = {};
     let regMessagingLinks = {};
 
-    // Helper functions
     function togglePassword(inputId, btn) {
         const input = document.getElementById(inputId);
         const icon = btn.querySelector('i');
@@ -793,7 +800,7 @@
         }
     }
 
-    // Login, Logout, Recovery (unchanged)
+    // Login, Logout, Recovery
     async function login(){
         const email = document.getElementById('login-email').value.trim();
         const password = document.getElementById('login-password').value;
@@ -859,7 +866,7 @@
         showMsg('recovery-msg','Security answer incorrect. Please try again.','error');
     }
 
-    // Dashboard functions with FIXED field mappings
+    // Dashboard functions
     async function fetchShop(){
         if(!session) return {};
         if(shopData) return shopData;
@@ -1149,8 +1156,6 @@
         }
     }
 
-    // ================== FIXED loadEdit ==================
-    // Now reads catalog_url, whatsapp_catalog_url, phone, location directly from flat fields.
     async function loadEdit(){
         const shop = await fetchShop();
         const json = shop.shop_json || shop;
@@ -1174,7 +1179,6 @@
         }
         editCustomLinks = json.custom_links || [];
 
-        // CRITICAL FIX: use flat fields (catalog_url, whatsapp_catalog_url, phone, location)
         let html = `<div class="card" id="edit-card">
             <div id="edit-msg" class="msg"></div>
             <div class="form-section"><h3>Business Info</h3>
@@ -1414,7 +1418,7 @@
         }catch(e){ showMsg('edit-msg', e.message, 'error'); showToast(e.message || 'Save failed', 'error'); } finally { setButtonLoading(btn, false); showAppLoading(false); }
     }
 
-    // Payment intents and activate tab (unchanged)
+    // Payment intents and activate tab
     let _paymentLinks = {};
 
     async function loadActivate() {
@@ -1511,19 +1515,78 @@
         }
     }
 
-    // Analytics (unchanged)
+    // ═══════════════════════════════════════════════════════════════════
+    // UPDATED ANALYTICS WITH COUNTRY SUPPORT
+    // ═══════════════════════════════════════════════════════════════════
+
     async function loadAnalytics(){
         const shop = await fetchShop();
         const plan = shop.plan || 'free';
         const json = shop.shop_json || {};
         const analytics = json.analytics || {};
         const totalVisits = shop.visit_count || 0;
+
+        // Helper: render country bars
+        function renderCountryBars(countries, maxCount, limit) {
+            if (!countries || Object.keys(countries).length === 0) {
+                return '<p style="color:var(--text2);font-size:0.9rem;text-align:center;padding:20px;">No country data yet.</p>';
+            }
+            const sorted = Object.entries(countries).sort((a,b) => b[1] - a[1]).slice(0, limit);
+            let html = '';
+            sorted.forEach(([country, count]) => {
+                const pct = maxCount > 0 ? Math.round((count / maxCount) * 100) : 0;
+                const flag = getCountryFlag(country);
+                html += `
+                    <div class="country-card">
+                        <div class="country-row">
+                            <span class="country-name"><span class="country-flag">${flag}</span>${country}</span>
+                            <span><span class="country-count">${count}</span><span class="country-percent">(${pct}%)</span></span>
+                        </div>
+                        <div class="country-bar-bg"><div class="country-bar-fill" style="width:${pct}%;"></div></div>
+                    </div>
+                `;
+            });
+            return html;
+        }
+
+        function getCountryFlag(countryName) {
+            // Simple flag mapping for common countries
+            const flags = {
+                'Nigeria': '🇳🇬', 'Ghana': '🇬🇭', 'Kenya': '🇰🇪', 'South Africa': '🇿🇦',
+                'United States': '🇺🇸', 'United Kingdom': '🇬🇧', 'Canada': '🇨🇦',
+                'India': '🇮🇳', 'Germany': '🇩🇪', 'France': '🇫🇷', 'Brazil': '🇧🇷',
+                'Australia': '🇦🇺', 'China': '🇨🇳', 'Japan': '🇯🇵', 'Mexico': '🇲🇽',
+                'Italy': '🇮🇹', 'Spain': '🇪🇸', 'Netherlands': '🇳🇱', 'Russia': '🇷🇺',
+                'Egypt': '🇪🇬', 'Ethiopia': '🇪🇹', 'Morocco': '🇲🇦', 'Uganda': '🇺🇬',
+                'Tanzania': '🇹🇿', 'Cameroon': '🇨🇲', 'Ivory Coast': '🇨🇮', 'Senegal': '🇸🇳',
+                'Zambia': '🇿🇲', 'Zimbabwe': '🇿🇼', 'Rwanda': '🇷🇼', 'Local': '🏠',
+                'Unknown': '🌍'
+            };
+            return flags[countryName] || '🌍';
+        }
+
+        // FREE PLAN: Total visits + Top 5 countries only
         if(plan === 'free'){
-            document.getElementById('tab-content').innerHTML = `<div class="card"><h3>Analytics (Free)</h3><p>Total visits: <strong>${totalVisits}</strong></p><p class="sub">Upgrade to Pro for daily visits and referrers, or Premium for full analytics.</p><div class="upsell-banner"><p><i class="fa-solid fa-chart-line"></i> See where your traffic comes from!</p><button class="btn btn-sm" onclick="switchTab('activate', document.querySelectorAll('.tab')[3])">Upgrade to Pro</button></div></div>`;
+            const countries = analytics.countries || {};
+            const maxCountryCount = Math.max(...Object.values(countries), 1);
+            document.getElementById('tab-content').innerHTML = `
+                <div class="card">
+                    <h3>Analytics (Free)</h3>
+                    <p>Total visits: <strong>${totalVisits}</strong></p>
+                    <div class="analytics-section-title"><i class="fa-solid fa-globe"></i> Top Countries</div>
+                    ${renderCountryBars(countries, maxCountryCount, 5)}
+                    <div class="upsell-banner" style="margin-top:16px;">
+                        <p><i class="fa-solid fa-chart-line"></i> Upgrade to Pro for daily visits, referrers, and more country data!</p>
+                        <button class="btn btn-sm" onclick="switchTab('activate', document.querySelectorAll('.tab')[3])">Upgrade to Pro</button>
+                    </div>
+                </div>`;
             return;
         }
+
+        // PRO & PREMIUM: Full analytics
         let html = `<div class="card"><h3>Analytics (${plan.toUpperCase()})</h3><p>Total visits: <strong>${totalVisits}</strong></p>`;
 
+        // Daily visits chart
         const daily = analytics.daily_visits || {};
         const last14days = Object.entries(daily).sort((a,b)=>a[0].localeCompare(b[0])).slice(-14);
         if(last14days.length > 0){
@@ -1531,6 +1594,7 @@
             html += `<canvas id="analyticsChart" class="analytics-canvas"></canvas>`;
         }
 
+        // Monthly chart for Premium
         if(plan === 'premium'){
             const monthly = {};
             for(let [date, count] of Object.entries(daily)){
@@ -1543,6 +1607,53 @@
             }
         }
 
+        // ═══ COUNTRY ANALYTICS ═══
+        const countries = analytics.countries || {};
+        const maxCountryCount = Math.max(...Object.values(countries), 1);
+
+        if(plan === 'pro'){
+            // Pro: Daily country rankings (last 7 days)
+            html += `<div class="analytics-section-title"><i class="fa-solid fa-globe"></i> Country Rankings (Last 7 Days)</div>`;
+            const dailyCountries = analytics.daily_countries || {};
+            const last7Days = Object.keys(dailyCountries).sort().slice(-7);
+            const weeklyCountries = {};
+            last7Days.forEach(day => {
+                const dayData = dailyCountries[day] || {};
+                for(let [country, count] of Object.entries(dayData)){
+                    weeklyCountries[country] = (weeklyCountries[country] || 0) + count;
+                }
+            });
+            html += renderCountryBars(weeklyCountries, Math.max(...Object.values(weeklyCountries), 1), 5);
+
+            // Also show overall top countries
+            html += `<div class="analytics-section-title"><i class="fa-solid fa-trophy"></i> All-Time Top Countries</div>`;
+            html += renderCountryBars(countries, maxCountryCount, 5);
+        } else if(plan === 'premium'){
+            // Premium: Full country breakdown + monthly trends
+            html += `<div class="analytics-section-title"><i class="fa-solid fa-globe"></i> All Countries</div>`;
+            html += renderCountryBars(countries, maxCountryCount, 999); // Show all
+
+            // Monthly country trends
+            html += `<div class="analytics-section-title"><i class="fa-solid fa-calendar"></i> Monthly Country Trends</div>`;
+            const dailyCountries = analytics.daily_countries || {};
+            const monthlyCountries = {};
+            for(let [day, dayData] of Object.entries(dailyCountries)){
+                const month = day.slice(0,7);
+                if(!monthlyCountries[month]) monthlyCountries[month] = {};
+                for(let [country, count] of Object.entries(dayData)){
+                    monthlyCountries[month][country] = (monthlyCountries[month][country] || 0) + count;
+                }
+            }
+            const last6Months = Object.keys(monthlyCountries).sort().slice(-6);
+            last6Months.forEach(month => {
+                const monthData = monthlyCountries[month];
+                const monthMax = Math.max(...Object.values(monthData), 1);
+                html += `<h4 style="margin-top:16px;font-size:0.95rem;color:var(--text2);">${month}</h4>`;
+                html += renderCountryBars(monthData, monthMax, 5);
+            });
+        }
+
+        // Referrers
         const referrers = analytics.referrers || {};
         if(Object.keys(referrers).length){
             html += `<h4 style="margin-top:20px;margin-bottom:12px;">Top Referrers</h4>`;
@@ -1553,6 +1664,7 @@
             });
         }
 
+        // Devices (Premium only)
         if(plan === 'premium'){
             const devices = analytics.devices || {};
             html += `<h4 style="margin-top:20px;margin-bottom:12px;">Devices</h4><div class="stats-grid">`;
@@ -1564,6 +1676,7 @@
         html += `</div>`;
         document.getElementById('tab-content').innerHTML = html;
 
+        // Draw charts
         if(last14days.length > 0){
             setTimeout(() => drawAnalyticsChart('analyticsChart', last14days, '#2563eb'), 50);
         }
@@ -1736,4 +1849,4 @@
     if('serviceWorker'in navigator){navigator.serviceWorker.register('/sw.js');}
 </script>
 </body>
-                                                                          </html>
+</html>
