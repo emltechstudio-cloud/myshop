@@ -47,10 +47,7 @@
                 --border: #334155;
             }
         }
-        html { 
-            scroll-behavior: smooth;
-            scroll-padding-top: 80px;
-        }
+        html { scroll-behavior: smooth; scroll-padding-top: 80px; }
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background: var(--bg);
@@ -59,8 +56,6 @@
             -webkit-font-smoothing: antialiased;
             min-height: 100vh;
         }
-
-        /* Navbar */
         .navbar {
             position: fixed;
             top: 0; left: 0; right: 0;
@@ -149,8 +144,6 @@
             }
             .nav-toggle { display: block; }
         }
-
-        /* Hero Base (Free/Pro) */
         .hero {
             padding: 100px 24px 40px;
             text-align: center;
@@ -224,8 +217,6 @@
             border: 1.5px solid var(--border);
         }
         .hero-cta .btn-ghost:hover { border-color: var(--brand-light); color: var(--brand); }
-
-        /* Premium Hero (no image, gradient + typography) */
         .premium-hero {
             padding: 120px 24px 60px;
             text-align: center;
@@ -241,12 +232,6 @@
             max-width: 700px;
             margin: 0 auto 16px;
             line-height: 1.2;
-        }
-        .premium-hero .premium-sub {
-            font-size: 1rem;
-            opacity: 0.9;
-            max-width: 500px;
-            margin: 0 auto 16px;
         }
         .premium-hero .premium-location {
             font-size: 0.95rem;
@@ -266,8 +251,6 @@
             background: #f8fafc;
             transform: translateY(-2px);
         }
-
-        /* Verified Badge */
         .verified-mark {
             display: inline-flex;
             align-items: center;
@@ -282,8 +265,6 @@
         }
         .verified-mark.pro { background: #0084ff; }
         .verified-mark.premium { background: linear-gradient(135deg, #f59e0b, #fbbf24); }
-
-        /* Sections */
         .section { max-width: 640px; margin: 0 auto; padding: 8px 24px; }
         .section-title {
             font-size: 0.75rem;
@@ -565,7 +546,6 @@
     </div>
 
     <script>
-    // ==================== CONFIG ====================
     const API = 'https://emltechstudio-myshop-api.hf.space';
     const BASE_URL = 'https://myshop.afric.site';
 
@@ -615,7 +595,6 @@
         premium: { socials:Infinity, custom_links:Infinity, brand_colors:true,  gradients:true,  fonts:true,  ads:false, branding:false, feedback:true  }
     };
 
-    // Unsplash images for demo shops only (fixed set)
     const DEMO_UNSPLASH_LOGOS = {
         free: 'https://images.unsplash.com/photo-1556741533-6e6a3bd8e0d7?w=200&h=200&fit=crop',
         pro: 'https://images.unsplash.com/photo-1556742049-0cfed2f6c2e6?w=200&h=200&fit=crop',
@@ -627,7 +606,6 @@
     let currentPlan = 'free';
     let isDemoMode = false;
 
-    // Helper functions
     function getSocialIcon(p)  { return SOCIAL_ICON_MAP[p.toLowerCase()] || 'fa-solid fa-link'; }
     function getPlatformClass(p) { return KNOWN_PLATFORMS.includes(p.toLowerCase()) ? p.toLowerCase() : ''; }
     function fixUrl(u) {
@@ -653,7 +631,7 @@
         const qSlug = urlParams.get('slug');
         if (qSlug) return qSlug;
         const parts = window.location.pathname.split('/').filter(Boolean);
-        const reserved = ['index.html','app.html','shop.html','install.html','404.html'];
+        const reserved = ['index.html','app.html','shop.html','install.html','404.html','admin','suadmin'];
         if (parts.length && !reserved.includes(parts[0])) return parts[0];
         return '';
     }
@@ -744,8 +722,6 @@
                 document.body.style.backgroundImage = 'none';
             }
         }
-        // Apply custom fonts for ALL tiers if typography data exists (backend provides it)
-        // This ensures Free, Pro, Premium all get custom fonts when available
         if (json.typography?.body_font) {
             document.body.style.fontFamily = `${json.typography.body_font}, sans-serif`;
         }
@@ -774,7 +750,6 @@
     }
     window.addEventListener('resize', () => { if (fabEl) fabEl.style.display = window.innerWidth <= 768 ? 'flex' : 'none'; });
 
-    // Feedback functions
     window.openFeedbackModal = function() {
         document.getElementById('feedbackModal').classList.add('active');
     };
@@ -829,7 +804,6 @@
         document.getElementById('feedbackMessage').value = '';
     };
 
-    // Updated ads (removed "Digital Marketing")
     const ACTUAL_ADS = [
         { title:'Boost Your Business', desc:'Get premium tools to grow online.',  icon:'fa-solid fa-rocket',   link:'https://emltechstudio.site/app-suite', color:'#fef3c7' },
         { title:'Brand Design',        desc:'Professional logos & identity.',     icon:'fa-solid fa-palette',  link:'https://emltechstudio.site/services#brand-designs', color:'#fce7f3' },
@@ -989,13 +963,11 @@
                </div>`
             : '';
 
-        // For demo shops, use Unsplash images; for live shops, use backend logo or fallback
         const logoUrl = (isDemoMode && DEMO_UNSPLASH_LOGOS[currentPlan]) ? DEMO_UNSPLASH_LOGOS[currentPlan] : (json.logo_url || 'icon.svg');
         const businessName = json.business_name || 'My Hub';
         const tagline = json.tagline || '';
 
         let html = '';
-        // Navbar
         if (!isPremium) {
             html = `<nav class="navbar" id="navbar">
                 <div class="nav-inner">
@@ -1017,7 +989,6 @@
             </nav>`;
         }
 
-        // Hero section
         if (!isPremium) {
             html += `<header class="hero">
                 <img src="${logoUrl}" alt="${escapeHtml(businessName)}" class="hero-logo" onerror="this.src='icon.svg'">
@@ -1029,7 +1000,6 @@
         } else {
             html += `<header class="premium-hero">
                 <div class="premium-tagline">${escapeHtml(tagline || businessName)}</div>
-                ${json.description ? `<div class="premium-sub">${escapeHtml(json.description.slice(0, 120))}</div>` : ''}
                 ${location ? `<div class="premium-location"><i class="fa-solid fa-location-dot"></i> ${escapeHtml(location)}</div>` : ''}
                 ${heroCta}
             </header>`;
@@ -1057,7 +1027,6 @@
         });
     }
 
-    // Demo data with Unsplash images (logo_url now set to Unsplash for validity)
     const DEMO_DATA = {
         free: {
             plan:'free', demo:true,
@@ -1076,11 +1045,19 @@
     const urlParams = new URLSearchParams(window.location.search);
     const demoPlan = urlParams.get('plan');
     const slug = resolveSlug();
+    const isPreview = urlParams.get('preview') === '1';
+    const previewEmail = urlParams.get('email') || '';
+    const previewPassword = urlParams.get('password') || '';
 
     if (demoPlan && DEMO_DATA[demoPlan]) {
         renderShop(DEMO_DATA[demoPlan]);
     } else if (slug) {
-        fetch(`${API}/shop/live/${slug}`)
+        // FIX: Use /shop/preview for owner preview (no analytics), /shop/live for real visitors
+        const apiUrl = isPreview && previewEmail && previewPassword
+            ? `${API}/shop/preview/${slug}?email=${encodeURIComponent(previewEmail)}&password=${encodeURIComponent(previewPassword)}`
+            : `${API}/shop/live/${slug}`;
+
+        fetch(apiUrl)
             .then(res => res.ok ? res.json() : Promise.reject())
             .then(shop => renderShop(shop))
             .catch(() => {
@@ -1107,4 +1084,4 @@
     }
     </script>
 </body>
-    </html>
+</html>
