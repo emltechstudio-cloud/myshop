@@ -521,6 +521,37 @@
             .hero-logo { width: 64px; height: 64px; }
         }
         @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Demo Toast - calm white/green */
+        .demo-toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #ffffff;
+            color: #16a34a;
+            padding: 12px 28px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08), 0 0 0 1px rgba(22,163,74,0.2);
+            z-index: 9999;
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            pointer-events: none;
+            text-align: center;
+            max-width: 90%;
+            border: 1px solid #bbf7d0;
+        }
+        .demo-toast i { margin-right: 8px; }
+        @media (prefers-color-scheme: dark) {
+            .demo-toast {
+                background: #1e293b;
+                color: #4ade80;
+                border-color: #166534;
+                box-shadow: 0 8px 30px rgba(0,0,0,0.3), 0 0 0 1px rgba(74,222,128,0.2);
+            }
+        }
     </style>
     <link rel="icon" href="icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="icon.svg">
@@ -605,6 +636,26 @@
     let currentShopData = null;
     let currentPlan = 'free';
     let isDemoMode = false;
+
+    // ---------- CALM DEMO TOAST (white/green, 2s) ----------
+    function showDemoToast() {
+        let toast = document.getElementById('demoToast');
+        if (!toast) {
+            toast = document.createElement('div');
+            toast.id = 'demoToast';
+            toast.className = 'demo-toast';
+            toast.innerHTML = `<i class="fa-solid fa-lock"></i> Demo mode — create your shop to unlock full functionality.`;
+            document.body.appendChild(toast);
+        }
+        // Show
+        toast.style.opacity = '1';
+        toast.style.transform = 'translateX(-50%) translateY(0)';
+        clearTimeout(toast._hideTimer);
+        toast._hideTimer = setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.transform = 'translateX(-50%) translateY(20px)';
+        }, 2000); // 2 seconds
+    }
 
     function getSocialIcon(p)  { return SOCIAL_ICON_MAP[p.toLowerCase()] || 'fa-solid fa-link'; }
     function getPlatformClass(p) { return KNOWN_PLATFORMS.includes(p.toLowerCase()) ? p.toLowerCase() : ''; }
@@ -743,7 +794,13 @@
         if (!p) return;
         let link = p.urlTemplate(identifier);
         if (platform === 'whatsapp') link += '?text=' + encodeURIComponent('Hi ' + (businessName || 'there') + ', I found your shop on MyShop.');
-        fabEl.href = isDemo ? '#' : link;
+        if (isDemo) {
+            fabEl.href = '#';
+            fabEl.onclick = function(e) { e.preventDefault(); showDemoToast(); };
+        } else {
+            fabEl.href = link;
+            fabEl.onclick = null;
+        }
         fabEl.innerHTML = `<i class="${p.icon}"></i>`;
         fabEl.style.background = p.color;
         fabEl.style.display = window.innerWidth <= 768 ? 'flex' : 'none';
@@ -868,16 +925,21 @@
         if (socialList.length)  navLinks += '<a href="#socials">Socials</a>';
         if (otherMessaging.length || phone || email) navLinks += '<a href="#contact">Contact</a>';
 
+        // Hero CTA — with demo interception
         let heroCta = '<div class="hero-cta">';
         if (primaryMsg) {
             const mp = getMessagingPlatform(primaryMsg.platform);
             if (mp) {
                 let link = mp.urlTemplate(primaryMsg.identifier);
                 if (primaryMsg.platform === 'whatsapp') link += '?text=' + encodeURIComponent('Hi ' + (json.business_name||'there') + ', I found your shop on MyShop.');
-                heroCta += `<a href="${isDemoMode?'#':link}" class="btn-primary"><i class="${mp.icon}"></i> Chat on ${mp.name}</a>`;
+                const href = isDemoMode ? '#' : link;
+                const onclick = isDemoMode ? 'showDemoToast(); return false;' : '';
+                heroCta += `<a href="${href}" onclick="${onclick}" class="btn-primary"><i class="${mp.icon}"></i> Chat on ${mp.name}</a>`;
             }
         } else if (hasCatalog) {
-            heroCta += `<a href="${fixUrl(catalogUrl)}" class="btn-primary"><i class="fa-solid fa-store"></i> Browse Catalog</a>`;
+            const href = isDemoMode ? '#' : fixUrl(catalogUrl);
+            const onclick = isDemoMode ? 'showDemoToast(); return false;' : '';
+            heroCta += `<a href="${href}" onclick="${onclick}" class="btn-primary"><i class="fa-solid fa-store"></i> Browse Catalog</a>`;
         }
         heroCta += '</div>';
 
@@ -893,7 +955,9 @@
                 <div class="section-title fade-in"><i class="fa-solid fa-link"></i> Quick Links</div>
                 <div class="custom-links-grid fade-in">`;
             customLinks.slice(0, cfg.custom_links === Infinity ? customLinks.length : cfg.custom_links).forEach(l => {
-                sections += `<a href="${fixUrl(l.url)}" target="_blank" class="custom-link-btn">
+                const href = isDemoMode ? '#' : fixUrl(l.url);
+                const onclick = isDemoMode ? 'showDemoToast(); return false;' : '';
+                sections += `<a href="${href}" onclick="${onclick}" target="_blank" class="custom-link-btn">
                     <i class="fa-solid fa-${l.icon||'arrow-right'}"></i> ${escapeHtml(l.label)}
                 </a>`;
             });
@@ -904,11 +968,13 @@
             if (catalogPlatform === 'whatsapp') { icon = 'fa-brands fa-whatsapp'; catName = 'WhatsApp Catalog'; btn = 'View on WhatsApp'; }
             else if (catalogPlatform === 'selar')   { icon = 'fa-solid fa-bolt';     catName = 'Selar Store';      btn = 'Shop on Selar'; }
             else if (catalogPlatform === 'shopify') { icon = 'fa-brands fa-shopify'; catName = 'Shopify Store';    btn = 'Shop on Shopify'; }
+            const href = isDemoMode ? '#' : fixUrl(catalogUrl);
+            const onclick = isDemoMode ? 'showDemoToast(); return false;' : '';
             sections += `<section class="section" id="catalog">
                 <div class="section-title fade-in"><i class="fa-solid fa-bag-shopping"></i> Catalog</div>
                 <div class="card catalog-card fade-in">
                     <div class="catalog-icon"><i class="${icon}"></i></div>
-                    <a href="${fixUrl(catalogUrl)}" target="_blank" class="catalog-btn"><i class="fa-solid fa-up-right-from-square"></i> ${btn}</a>
+                    <a href="${href}" onclick="${onclick}" target="_blank" class="catalog-btn"><i class="fa-solid fa-up-right-from-square"></i> ${btn}</a>
                 </div>
             </section>`;
         }
@@ -917,7 +983,9 @@
                 <div class="section-title fade-in"><i class="fa-solid fa-share-nodes"></i> Connect</div>
                 <div class="social-grid fade-in">`;
             socialList.forEach(s => {
-                sections += `<a href="${s.url}" target="_blank" class="social-item ${getPlatformClass(s.platform)}" title="${capitalize(s.platform)}">
+                const href = isDemoMode ? '#' : s.url;
+                const onclick = isDemoMode ? 'showDemoToast(); return false;' : '';
+                sections += `<a href="${href}" onclick="${onclick}" target="_blank" class="social-item ${getPlatformClass(s.platform)}" title="${capitalize(s.platform)}">
                     <i class="${getSocialIcon(s.platform)}"></i>
                 </a>`;
             });
@@ -932,7 +1000,9 @@
                 if (!mp) return;
                 let link = mp.urlTemplate(m.identifier);
                 if (m.platform === 'whatsapp') link += '?text=' + encodeURIComponent('Hi, I found your shop on MyShop.');
-                sections += `<a href="${isDemoMode?'#':link}" target="_blank" class="msg-btn ${m.platform}">
+                const href = isDemoMode ? '#' : link;
+                const onclick = isDemoMode ? 'showDemoToast(); return false;' : '';
+                sections += `<a href="${href}" onclick="${onclick}" target="_blank" class="msg-btn ${m.platform}">
                     <i class="${mp.icon}"></i> ${mp.name}
                 </a>`;
             });
@@ -942,8 +1012,17 @@
             sections += `<section class="section" id="contact">
                 <div class="section-title fade-in"><i class="fa-solid fa-address-book"></i> Contact</div>
                 <div class="contact-icon-grid fade-in">`;
-            if (phone) sections += `<a href="tel:${phone}" class="contact-icon-item"><i class="fa-solid fa-phone"></i><span>Call</span></a>`;
-            if (email) sections += `<a href="mailto:${email}" class="contact-icon-item"><i class="fa-solid fa-envelope"></i><span>Email</span></a>`;
+            // Phone
+            if (phone) {
+                const href = isDemoMode ? '#' : `tel:${phone}`;
+                const onclick = isDemoMode ? 'showDemoToast(); return false;' : '';
+                sections += `<a href="${href}" onclick="${onclick}" class="contact-icon-item"><i class="fa-solid fa-phone"></i><span>Call</span></a>`;
+            }
+            if (email) {
+                const href = isDemoMode ? '#' : `mailto:${email}`;
+                const onclick = isDemoMode ? 'showDemoToast(); return false;' : '';
+                sections += `<a href="${href}" onclick="${onclick}" class="contact-icon-item"><i class="fa-solid fa-envelope"></i><span>Email</span></a>`;
+            }
             sections += `</div></section>`;
         }
 
@@ -1027,21 +1106,93 @@
         });
     }
 
-    const DEMO_DATA = {
-        free: {
-            plan:'free', demo:true,
-            shop_json:{ business_name:'Demo Free Shop', tagline:'5 socials, no custom links', description:'Free plan demo. Get started with 5 social platforms and a catalog link.', logo_url:DEMO_UNSPLASH_LOGOS.free, phone:'+2348012345678', email:'demo@myshop.afric.site', location:'Lagos, Nigeria', catalog_url:'https://selar.co/demo', brand_colors:{ primary:'#1e40af' }, typography:{ heading_font:'Inter', body_font:'Inter' }, socials:{ facebook:'https://facebook.com/demo', instagram:'https://instagram.com/demo', tiktok:'https://tiktok.com/@demo', twitter:'https://x.com/demo', whatsapp:'+2348012345678' }, custom_links:[] }
+        // ═══════════════════════════════════════════════════════════════
+    //  AMARA'S GLOW BEAUTY — ONE BRAND, THREE PLAN SLICES
+    // ═══════════════════════════════════════════════════════════════
+
+    const AMARA_FULL = {
+        business_name: "Amara's Glow Beauty",
+        tagline: "Premium skincare & beauty products delivered to your door",
+        description: "Hi, I'm Amara! I curate the best skincare and beauty products for melanin-rich skin. From vitamin C serums to hydrating moisturizers, everything is tested and trusted. Based in Lagos, I deliver nationwide within 48 hours. DM me for personalized recommendations!",
+        logo_url: "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&h=400&fit=crop&crop=face",
+        phone: "+2348034567890",
+        email: "amaraglowbeauty@gmail.com",
+        location: "Lekki, Lagos, Nigeria",
+        catalog_url: "https://selar.co/amaraglowbeauty",
+        brand_colors: {
+            primary: "#d946ef",
+            secondary: "#fdf4ff",
+            gradient: true,
+            gradient_colors: ["#d946ef", "#f97316"]
         },
-        pro: {
-            plan:'pro', demo:true,
-            shop_json:{ business_name:'Demo Pro Shop', tagline:'Brand colors, custom links', description:'Pro plan demo. Customize your brand colors, add up to 3 custom links, and remove ads.', logo_url:DEMO_UNSPLASH_LOGOS.pro, phone:'+2348012345678', email:'demo@myshop.afric.site', location:'Abuja, Nigeria', catalog_url:'https://selar.co/demo', brand_colors:{ primary:'#7c3aed', secondary:'#f5f3ff' }, typography:{ heading_font:'Poppins', body_font:'Inter' }, socials:{ facebook:'https://facebook.com/demo', instagram:'https://instagram.com/demo', tiktok:'https://tiktok.com/@demo', twitter:'https://x.com/demo', youtube:'https://youtube.com/@demo', linkedin:'https://linkedin.com/in/demo', whatsapp:'+2348012345678', telegram:'demo' }, custom_links:[{ label:'Book Appointment', url:'https://calendly.com/demo', icon:'calendar' }] }
+        typography: {
+            heading_font: "Poppins",
+            body_font: "Inter"
         },
-        premium: {
-            plan:'premium', demo:true,
-            shop_json:{ business_name:'Demo Premium Shop', tagline:'Unlimited everything, gradients', description:'Premium plan demo. Unlimited socials, custom links, gradient backgrounds, and white-label experience.', logo_url:DEMO_UNSPLASH_LOGOS.premium, phone:'+2348012345678', email:'demo@myshop.afric.site', location:'Port Harcourt, Nigeria', catalog_url:'https://selar.co/demo', brand_colors:{ primary:'#f59e0b', secondary:'#fff7ed', gradient:true, gradient_colors:['#f59e0b','#ef4444'] }, typography:{ heading_font:'Space Grotesk', body_font:'DM Sans' }, socials:{ facebook:'https://facebook.com/demo', instagram:'https://instagram.com/demo', tiktok:'https://tiktok.com/@demo', twitter:'https://x.com/demo', youtube:'https://youtube.com/@demo', linkedin:'https://linkedin.com/in/demo', pinterest:'https://pinterest.com/demo', whatsapp:'+2348012345678', telegram:'demo' }, custom_links:[{ label:'Book Now', url:'https://calendly.com/demo', icon:'calendar' }] }
-        }
+        socials: {
+            instagram: "https://instagram.com/amaraglowbeauty",
+            tiktok: "https://tiktok.com/@amaraglowbeauty",
+            facebook: "https://facebook.com/amaraglowbeauty",
+            twitter: "https://x.com/amaraglowbeauty",
+            youtube: "https://youtube.com/@amaraglowbeauty",
+            pinterest: "https://pinterest.com/amaraglowbeauty",
+            snapchat: "https://snapchat.com/add/amaraglow",
+            linkedin: "https://linkedin.com/in/amara-ogunleye",
+            threads: "https://threads.net/@amaraglowbeauty",
+            reddit: "https://reddit.com/u/amaraglowbeauty",
+            whatsapp: "+2348034567890",
+            telegram: "amaraglowbeauty",
+            messenger: "amaraglowbeauty",
+            signal: "+2348034567890",
+            shopify: "https://amaraglowbeauty.myshopify.com",
+            selar: "https://selar.co/amaraglowbeauty",
+            paystack: "https://paystack.shop/amaraglow",
+            etsy: "https://etsy.com/shop/AmaraGlowBeauty",
+            amazon: "https://amazon.com/shop/amaraglow",
+            patreon: "https://patreon.com/amaraglowbeauty"
+        },
+        custom_links: [
+            { label: "Book a Skincare Consultation", url: "https://calendly.com/amaraglowbeauty/consultation", icon: "calendar-check" },
+            { label: "Join Our Beauty Community", url: "https://t.me/amaraglowcommunity", icon: "users" },
+            { label: "Download Our Product Guide", url: "https://drive.google.com/amaraglow-guide", icon: "download" },
+            { label: "Watch Tutorial Videos", url: "https://youtube.com/playlist?list=PLamaraglow", icon: "play-circle" },
+            { label: "Read Customer Reviews", url: "https://trustpilot.com/amaraglowbeauty", icon: "star" },
+            { label: "Wholesale & Bulk Orders", url: "https://wa.me/2348034567890?text=Hi%20Amara,%20I%20want%20to%20place%20a%20wholesale%20order", icon: "boxes-stacked" }
+        ]
     };
 
+    function buildDemoData(plan) {
+        const cfg = PLAN_CONFIG[plan] || PLAN_CONFIG.free;
+        const data = JSON.parse(JSON.stringify(AMARA_FULL));
+        const allSocialEntries = Object.entries(data.socials);
+        const messagingEntries = allSocialEntries.filter(([k]) => isMessagingPlatform(k));
+        const nonMessagingEntries = allSocialEntries.filter(([k]) => !isMessagingPlatform(k));
+        let allowedSocials = {};
+        if (plan === 'free') {
+            const msgToInclude = messagingEntries.filter(([k]) => k === 'whatsapp');
+            const socialToInclude = nonMessagingEntries.slice(0, 4);
+            [...msgToInclude, ...socialToInclude].forEach(([k, v]) => allowedSocials[k] = v);
+        } else if (plan === 'pro') {
+            const msgToInclude = messagingEntries.slice(0, 3);
+            const socialToInclude = nonMessagingEntries.slice(0, 7);
+            [...msgToInclude, ...socialToInclude].forEach(([k, v]) => allowedSocials[k] = v);
+        } else {
+            allowedSocials = data.socials;
+        }
+        data.socials = allowedSocials;
+        if (cfg.custom_links === 0) data.custom_links = [];
+        else if (cfg.custom_links !== Infinity) data.custom_links = data.custom_links.slice(0, cfg.custom_links);
+        if (!cfg.brand_colors) data.brand_colors = { primary: "#1e40af" };
+        else if (!cfg.gradients) data.brand_colors = { primary: "#d946ef", secondary: "#fdf4ff" };
+        if (!cfg.fonts) data.typography = { heading_font: "Inter", body_font: "Inter" };
+        return { plan, demo: true, shop_json: data };
+    }
+
+    const DEMO_DATA = {
+        free: buildDemoData('free'),
+        pro: buildDemoData('pro'),
+        premium: buildDemoData('premium')
+    };
     const urlParams = new URLSearchParams(window.location.search);
     const demoPlan = urlParams.get('plan');
     const slug = resolveSlug();
@@ -1052,11 +1203,9 @@
     if (demoPlan && DEMO_DATA[demoPlan]) {
         renderShop(DEMO_DATA[demoPlan]);
     } else if (slug) {
-        // FIX: Use /shop/preview for owner preview (no analytics), /shop/live for real visitors
         const apiUrl = isPreview && previewEmail && previewPassword
             ? `${API}/shop/preview/${slug}?email=${encodeURIComponent(previewEmail)}&password=${encodeURIComponent(previewPassword)}`
             : `${API}/shop/live/${slug}`;
-
         fetch(apiUrl)
             .then(res => res.ok ? res.json() : Promise.reject())
             .then(shop => renderShop(shop))
