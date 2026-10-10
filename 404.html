@@ -831,9 +831,9 @@
 
     // Updated ads (removed "Digital Marketing")
     const ACTUAL_ADS = [
-        { title:'Boost Your Business', desc:'Get premium tools to grow online.',  icon:'fa-solid fa-rocket',   link:'https://emltechstudio.site/app-suite', color:'#fef3c7' },
-        { title:'Brand Design',        desc:'Professional logos & identity.',     icon:'fa-solid fa-palette',  link:'https://emltechstudio.site/services#brand-designs', color:'#fce7f3' },
-        { title:'Web Development',     desc:'Custom websites built for you.',     icon:'fa-solid fa-code',     link:'https://emltechstudio.site/services', color:'#d1fae5' }
+        { title:'Boost Your Business', desc:'Get premium tools to grow online.',  icon:'fa-solid fa-rocket',   link:'https://emltechstudio.space/app-suite', color:'#fef3c7' },
+        { title:'Brand Design',        desc:'Professional logos & identity.',     icon:'fa-solid fa-palette',  link:'https://emltechstudio.space/services#brand-designs', color:'#fce7f3' },
+        { title:'Web Development',     desc:'Custom websites built for you.',     icon:'fa-solid fa-code',     link:'https://emltechstudio.space/services', color:'#d1fae5' }
     ];
     function renderActualAds() {
         let html = `<div class="actual-ads-container fade-in"><div class="actual-ads-grid">`;
@@ -977,7 +977,7 @@
         if (cfg.branding || cfg.ads) {
             footerHtml = `<footer class="site-footer">`;
             if (cfg.branding) footerHtml += `<a href="index.html" class="footer-brand"><img src="icon.svg" alt="MyShop"> MyShop</a>
-                <p class="footer-text">Powered by <a href="index.html">MyShop</a> — <a href="https://emltechstudio.site" target="_blank">EML Tech Studio</a></p>`;
+                <p class="footer-text">Powered by <a href="index.html">MyShop</a> — <a href="https://emltechstudio.space" target="_blank">EML Tech Studio</a></p>`;
             footerHtml += `</footer>`;
         }
         const adsHtml = cfg.ads && currentPlan === 'free' ? renderActualAds() : '';
